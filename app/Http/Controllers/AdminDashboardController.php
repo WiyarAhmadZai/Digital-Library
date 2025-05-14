@@ -7,19 +7,21 @@ use App\Charts\SalesChart;
 
 class AdminDashboardController extends Controller
 {
-    //
     public function index()
     {
         // ✅ Create the chart instance
         $salesChart = new SalesChart();
-
-        // ✅ Configure the chart
         $salesChart->title('کلني پلور');
         $salesChart->labels(['2019', '2020', '2021', '2022', '2023']);
+
+        // ✅ Add dataset
         $salesChart->dataset('پلور مقدار', 'bar', [15000, 23000, 18000, 22000, 27000])
-                   ->options(['color' => '#3490dc']);
+                   ->options(['backgroundColor' => '#3490dc']);
 
-        return view('admin.dashboard', compact('salesChart'));
+        // ✅ Extract labels and data for JavaScript rendering
+        $labels = $salesChart->labels;
+        $dataset = $salesChart->datasets[0]->values;
+
+        return view('admin.dashboard', compact('labels', 'dataset'));
     }
-
 }
