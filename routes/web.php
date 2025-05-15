@@ -7,10 +7,14 @@ use Illuminate\Support\Facades\View;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\BookController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/',  [BookController::class,'index'])->name('gethomedata');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
