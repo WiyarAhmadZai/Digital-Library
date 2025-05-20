@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Author;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -32,5 +33,35 @@ class BookController extends Controller
 
     public function home(){
         return view('welcome');
+    }
+
+
+     public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $imagePath = $request->file('image')->store('books', 'public');
+
+        $book = Book::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'image_path' => $imagePath
+        ]);
+
+        if ($book) {
+            return response()->json(['success' => true, 'message' => 'Book uploaded successfully!', 'data' => $book], 201);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Failed to upload book.'], 500);
+    }
+
+    public function getDat()
+    {
+        $books = Book::latest()->get();
+        return response()->json($books);
     }
 }

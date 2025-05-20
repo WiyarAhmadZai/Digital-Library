@@ -99,7 +99,7 @@
             height: 550px;
         }
         .hero {
-            height: 500px;
+            height: 470px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -155,7 +155,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/Login">Login</a>
+                    <a class="nav-link active" aria-current="page" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="register">Register</a>

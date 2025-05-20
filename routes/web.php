@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\TestController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -16,8 +17,8 @@ use App\Http\Controllers\BookController;
 Route::get('/',  [BookController::class,'index'])->name('gethomedata');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/user-dashboard', function () {
+    return view('/user-dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
@@ -35,10 +36,23 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/user-dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware(['admin'])->group(function () {
     });
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 });
+
+Route::group(['prefix'=> 'books/'], function () {
+    Route::post('/store', [BookController::class, 'store'])->name('books.store');
+    Route::get('/gatdata', [BookController::class, 'getDat'])->name('books.index');
+});
+
+Route::get('/test', [TestController::class,'index'])->name('test.home');
+Route::post('/save', [TestController::class,'save'])->name('test.save');
+Route::get('/getdata', [TestController::class,'getData'])->name('test.getData');
+Route::get('delete/{id}', [TestController::class,'delete'])->name('test.delete');
+Route::get('edit/{id}', [TestController::class,'edit'])->name('test.edit');
+Route::put('update/{id}', [TestController::class,'update'])->name('test.update');
+
 

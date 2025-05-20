@@ -8,25 +8,23 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->date('published_at');        // Add the published_at column
+        Schema::create('tests', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('note');
+            $table->text('email');
+            $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->dropColumn(['title', 'author_id', 'description', 'published_at']);
-        });
+        Schema::dropIfExists('tests');
     }
 };
