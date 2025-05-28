@@ -22,6 +22,6 @@ class AdminDashboardController extends Controller
         $labels = $salesChart->labels;
         $dataset = $salesChart->datasets[0]->values;
 
-        return view('admin.dashboard', compact('labels', 'dataset'));
+        return view('admin/dashboard', compact('labels', 'dataset'));
     }
 }

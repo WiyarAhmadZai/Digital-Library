@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->date('published_at');        // Add the published_at column
+            // $table->date('published_at');        // Add the published_at column
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->dropColumn(['title', 'author_id', 'description', 'published_at']);
+            // $table->dropColumn(['title', 'author_id', 'description', 'published_at']);
         });
     }
 };

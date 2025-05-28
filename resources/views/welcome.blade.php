@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>کتابخانه دیجیتال</title>
+    <title>Digital library</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -129,36 +129,43 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">📚 کتابخانه دیجیتال</a>
+        <a class="navbar-brand" href="#">📚 {{__('language.title')}}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">خانه</a>
+                    <a class="nav-link active" aria-current="page" href="#">{{__('language.home_link')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">درباره ما</a>
+                    <a class="nav-link" href="#">{{__('language.about_link')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">کتاب ها</a>
+                    <a class="nav-link" href="#">{{__('language.books_link')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">نویسندگان</a>
+                    <a class="nav-link" href="#">{{__('language.authors_link')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">تماس با ما</a>
+                    <a class="nav-link" href="#">{{__('language.contact_link')}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Setlang/pe">{{__('language.lang')}}</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Setlang/en">{{__('language.lang2')}}</a>
                 </li>
             </ul>
         </div>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/login">Login</a>
+                    <a class="nav-link active" aria-current="page" href="/login">{{__('language.login')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="register">Register</a>
+                    <a class="nav-link active" aria-current="page" href="register">{{__('language.register')}}</a>
                 </li>
             </ul>
         </div>
@@ -170,12 +177,12 @@
 <div class="super-hero">
     <div class="hero text-center">
         <div>
-            <h1>به کتابخانه دیجیتال خوش آمدید</h1>
+            <h1>{{__('language.welcome_message')}}</h1>
             <div class="ms-3 d-flex search">
-                <input type="text" class="form-control search-bar" placeholder="🔍 جستجو ...">
+                <input type="text" class="form-control search-bar" placeholder="{{__('language.search')}}">
                 <i class="fa fa-search text-white ms-2" id="searchIcon" onclick="toggleSearch()"></i>
             </div>
-            <h6>کرایی || فروشی || رایګان</h6>
+            <h6> {{__('language.free_m')}} || {{__('language.sell_m')}} || {{__('language.rent_m')}} </h6>
 
         </div>
     </div>
@@ -220,7 +227,7 @@
 
 <!-- Main Content -->
 <div class="container my-5">
-    <h3 class="text-primary mb-4">📚 کتاب ها</h3>
+    <h3 class="text-primary mb-4">📚{{__('language.books_link')}}</h3>
     <div class="row" id="book-list">
         @foreach ($books as $book)
             <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
@@ -243,7 +250,7 @@
 </div>
 
 
-    <h3 class="text-primary mt-5 mb-4">📰 پست های اخیر</h3>
+    <h3 class="text-primary mt-5 mb-4">📰{{__('language.last_posts')}}</h3>
     <div class="row">
         @foreach ($posts as $post)
             <div class="col-md-6 mb-4">
@@ -258,7 +265,7 @@
         @endforeach
     </div>
 
-    <h3 class="text-primary mt-5 mb-4">✍️ نویسندگان</h3>
+    <h3 class="text-primary mt-5 mb-4">✍️{{__('language.authors_link')}}</h3>
     <ul class="list-group mb-5" id="authors-list">
         @foreach ($authors as $author)
             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -275,7 +282,7 @@
 
 <!-- Footer -->
 <footer class="footer text-center">
-    <div>&copy; 2025 کتابخانه دیجیتال | همه حقوق محفوظ است</div>
+    <div>&copy;{{__('language.rights_m')}}</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
