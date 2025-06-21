@@ -234,9 +234,19 @@
                                                 <li>
                                                     <a href="{{ route('frontend.contact.index') }}">Contact</a>
                                                 </li>
-                                                <li>
-                                                    <a href="/logout">Logout</a>
-                                                </li>
+                                                @auth
+                                                    <li>
+                                                        <form method="POST" action="{{ route('logout') }}">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                style="background: none; border: none; padding: 0; color: inherit; cursor: pointer;">
+                                                                <a type="submit">Logout</a>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endauth
+
+
                                             </ul>
                                         </nav>
                                     </div>
