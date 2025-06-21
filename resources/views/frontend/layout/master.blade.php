@@ -4,6 +4,7 @@
 
 
 <!-- Mirrored from gramentheme.com/html/bookle/index-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 25 May 2025 13:55:20 GMT -->
+
 <head>
     <!-- ========== Meta Tags ========== -->
     <meta charset="UTF-8">
@@ -14,25 +15,25 @@
     <!-- ======== Page title ============ -->
     <title>Bookle - Book Store WooCommerce Html Template</title>
     <!--<< Favcion >>-->
-    <link rel="shortcut icon" href="{{asset('assets/img/favicon.png')}}">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}">
     <!--<< Bootstrap min.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <!--<< All Min Css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
     <!--<< Animate.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/animate.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
     <!--<< Magnific Popup.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.css') }}">
     <!--<< MeanMenu.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/meanmenu.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/meanmenu.css') }}">
     <!--<< Swiper Bundle.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/swiper-bundle.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.min.css') }}">
     <!--<< Nice Select.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/nice-select.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/nice-select.css') }}">
     <!--<< Icomoon.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/icomoon.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/icomoon.css') }}">
     <!--<< Main.css >>-->
-    <link rel="stylesheet" href="{{asset('assets/css/main.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 </head>
 
 <body>
@@ -91,15 +92,15 @@
     </button>
 
     <!-- Offcanvas Area Start -->
-      <!-- Offcanvas Area Start -->
-      <div class="fix-area">
+    <!-- Offcanvas Area Start -->
+    <div class="fix-area">
         <div class="offcanvas__info">
             <div class="offcanvas__wrapper">
                 <div class="offcanvas__content">
                     <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                         <div class="offcanvas__logo">
                             <a href="index.html">
-                                <img src="{{asset('assets/img/logo/black-logo.svg')}}" alt="logo-img">
+                                <img src="{{ asset('assets/img/logo/black-logo.svg') }}" alt="logo-img">
                             </a>
                         </div>
                         <div class="offcanvas__close">
@@ -167,7 +168,7 @@
         </div>
     </div>
     <div class="offcanvas__overlay"></div>
-   
+
     <!-- Sticky Header Section start  -->
     <header class="header-2 sticky-header">
         <div class="mega-menu-wrapper">
@@ -178,7 +179,7 @@
                             <div class="header-left">
                                 <div class="logo">
                                     <a href="index.html" class="header-logo">
-                                        <img src="{{asset('assets/img/logo/black-logo.svg')}}" alt="logo-img">
+                                        <img src="{{ asset('assets/img/logo/black-logo.svg') }}" alt="logo-img">
                                     </a>
                                 </div>
                                 <div class="mean__menu-wrapper">
@@ -189,7 +190,7 @@
                                                     <a href="/">
                                                         Home
                                                     </a>
-                                                  
+
                                                 </li>
                                                 <li>
                                                     <a href="#">
@@ -197,9 +198,12 @@
                                                         <i class="fas fa-angle-down"></i>
                                                     </a>
                                                     <ul class="submenu">
-                                                        <li><a href="{{route('shoplist')}}">Shop List</a></li>
-                                                        <li><a href="{{route('shopdetails')}}">Shop Details</a></li>
-                                                        <li><a href="{{route('shopcart')}}">Shop Cart</a></li>
+                                                        <li><a href="{{ route('frontend.shoplist') }}">Shop List</a>
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.shopdetails') }}">Shop
+                                                                Details</a></li>
+                                                        <li><a href="{{ route('frontend.shop.shopCart') }}">Shop
+                                                                Cart</a></li>
                                                     </ul>
                                                 </li>
                                                 <li class="has-dropdown">
@@ -208,25 +212,30 @@
                                                         <i class="fas fa-angle-down"></i>
                                                     </a>
                                                     <ul class="submenu">
-                                                        <li><a href="{{route('about.index')}}">About Us</a></li>
-                                                        <li class="has-dropdown">
-                                                            <a href="{{route('author.index')}}">
-                                                                Author
-                                                            
-                                                            </a>
-                                                            
+                                                        <li><a href="{{ route('frontend.about.index') }}">About Us</a>
                                                         </li>
-                                                        <li><a href="{{route('error.index')}}">404 Page</a></li>
+                                                        <li class="has-dropdown">
+                                                            <a href="{{ route('frontend.author.author') }}">
+                                                                Author
+
+                                                            </a>
+
+                                                        </li>
+                                                        <li><a href="{{ route('frontend.error.index') }}">404 Page</a>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                                 <li>
-                                                    <a href="{{route('blog.index')}}">
+                                                    <a href="{{ route('frontend.blog.index') }}">
                                                         Blog
                                                     </a>
-                                                    
+
                                                 </li>
                                                 <li>
-                                                    <a href="{{route('contact.index')}}">Contact</a>
+                                                    <a href="{{ route('frontend.contact.index') }}">Contact</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/logout">Logout</a>
                                                 </li>
                                             </ul>
                                         </nav>
@@ -276,7 +285,7 @@
                                     <div class="header-humbager ml-30">
                                         <a class="sidebar__toggle" href="javascript:void(0)">
                                             <div class="bar-icon-2">
-                                                <img src="{{asset('assets/img/icon/icon-13.svg')}}" alt="img">
+                                                <img src="{{ asset('assets/img/icon/icon-13.svg') }}" alt="img">
                                             </div>
                                         </a>
                                     </div>
@@ -297,7 +306,8 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="close-btn">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="identityBox">
                         <div class="form-wrapper">
@@ -320,13 +330,13 @@
                             </div>
                             <div>
                                 <a class="another-option" href="https://www.google.com/">
-                                    <img src="{{asset('assets/img/google.png')}}" alt="google">
+                                    <img src="{{ asset('assets/img/google.png') }}" alt="google">
                                     Continue With Google
                                 </a>
                             </div>
                             <div>
                                 <a class="another-option another-option-two" href="https://www.facebook.com/">
-                                    <img src="{{asset('assets/img/facebook.png')}}" alt="google">
+                                    <img src="{{ asset('assets/img/facebook.png') }}" alt="google">
                                     Continue With Facebook
                                 </a>
                             </div>
@@ -346,7 +356,7 @@
                                 data-bs-target="#registrationModal">Create
                                 Account</button>
                             <div class="loginBg">
-                                <img src="{{asset('assets/img/signUpbg.jpg')}}" alt="signUpBg">
+                                <img src="{{ asset('assets/img/signUpbg.jpg') }}" alt="signUpBg">
                             </div>
                         </div>
                     </div>
@@ -354,7 +364,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Registration Modal -->
     <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
         aria-hidden="true">
@@ -362,12 +372,14 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="close-btn">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="identityBox">
                         <div class="form-wrapper">
                             <h1 id="registrationModalLabel">Create account!</h1>
-                            <input class="inputField" type="text" name="name" id="name" placeholder="User Name">
+                            <input class="inputField" type="text" name="name" id="name"
+                                placeholder="User Name">
                             <input class="inputField" type="email" name="email" placeholder="Email Address">
                             <input class="inputField" type="password" name="password" placeholder="Enter Password">
                             <input class="inputField" type="password" name="password"
@@ -388,13 +400,13 @@
                             </div>
                             <div>
                                 <a class="another-option" href="https://www.google.com/">
-                                    <img src="{{asset('assets/img/google.png')}}" alt="google">
+                                    <img src="{{ asset('assets/img/google.png') }}" alt="google">
                                     Continue With Google
                                 </a>
                             </div>
                             <div>
                                 <a class="another-option another-option-two" href="https://www.facebook.com/">
-                                    <img src="{{asset('assets/img/facebook.png')}}" alt="google">
+                                    <img src="{{ asset('assets/img/facebook.png') }}" alt="google">
                                     Continue With Facebook
                                 </a>
                             </div>
@@ -413,7 +425,7 @@
                                 data-bs-target="#registrationModal">Create
                                 Account</button>
                             <div class="signUpBg">
-                                <img src="{{asset('assets/img/registrationbg.jpg')}}" alt="signUpBg">
+                                <img src="{{ asset('assets/img/registrationbg.jpg') }}" alt="signUpBg">
                             </div>
                         </div>
                     </div>
@@ -422,7 +434,7 @@
         </div>
     </div>
 
-   @yield('content')
+    @yield('content')
 
     <!-- Footer Section Start -->
     <footer class="footer-section footer-bg">
@@ -595,22 +607,22 @@
                     <ul class="brand-logo wow fadeInRight" data-wow-delay=".5s">
                         <li>
                             <a href="contact.html">
-                                <img src="{{asset('assets/img/visa-logo.png')}}" alt="img">
+                                <img src="{{ asset('assets/img/visa-logo.png') }}" alt="img">
                             </a>
                         </li>
                         <li>
                             <a href="contact.html">
-                                <img src="{{asset('assets/img/mastercard.png')}}" alt="img">
+                                <img src="{{ asset('assets/img/mastercard.png') }}" alt="img">
                             </a>
                         </li>
                         <li>
                             <a href="contact.html">
-                                <img src="{{asset('assets/img/payoneer.png')}}" alt="img">
+                                <img src="{{ asset('assets/img/payoneer.png') }}" alt="img">
                             </a>
                         </li>
                         <li>
                             <a href="contact.html">
-                                <img src="{{asset('assets/img/affirm.png')}}" alt="img">
+                                <img src="{{ asset('assets/img/affirm.png') }}" alt="img">
                             </a>
                         </li>
                     </ul>
@@ -620,31 +632,32 @@
     </footer>
 
     <!--<< All JS Plugins >>-->
-    <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
     <!--<< Viewport Js >>-->
-    <script src="{{asset('assets/js/viewport.jquery.js')}}"></script>
+    <script src="{{ asset('assets/js/viewport.jquery.js') }}"></script>
     <!--<< Bootstrap Js >>-->
-    <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <!--<< Nice Select Js >>-->
-    <script src="{{asset('assets/js/jquery.nice-select.min.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.nice-select.min.js') }}"></script>
     <!--<< Waypoints Js >>-->
-    <script src="{{asset('assets/js/jquery.waypoints.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.waypoints.js') }}"></script>
     <!--<< Counterup Js >>-->
-    <script src="{{asset('assets/js/jquery.counterup.min.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
     <!--<< Swiper Slider Js >>-->
-    <script src="{{asset('assets/js/swiper-bundle.min.js')}}"></script>
+    <script src="{{ asset('assets/js/swiper-bundle.min.js') }}"></script>
     <!--<< MeanMenu Js >>-->
-    <script src="{{asset('assets/js/jquery.meanmenu.min.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.meanmenu.min.js') }}"></script>
     <!--<< Magnific Popup Js >>-->
-    <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.magnific-popup.min.js') }}"></script>
     <!--<< Wow Animation Js >>-->
-    <script src="{{asset('assets/js/wow.min.js')}}"></script>
+    <script src="{{ asset('assets/js/wow.min.js') }}"></script>
     <!-- Gsap -->
-    <script src="{{asset('assets/js/gsap.min.js')}}"></script>
+    <script src="{{ asset('assets/js/gsap.min.js') }}"></script>
     <!--<< Main.js >>-->
-    <script src="{{asset('assets/js/main.js')}}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
 </body>
 
 
 <!-- Mirrored from gramentheme.com/html/bookle/index-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 25 May 2025 13:55:36 GMT -->
+
 </html>

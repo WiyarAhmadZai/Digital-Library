@@ -8,26 +8,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\homeController;
-use App\Http\Controllers\contactController;
-use App\Http\Controllers\shoplistController;
-use App\Http\Controllers\shopdetailsController;
-use App\Http\Controllers\shopcartController;
+use App\Http\Controllers\FrondendRouteController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\aboutController;
-use App\Http\Controllers\AuthorController;
-use App\Http\Controllers\errorController;
-use App\Http\Controllers\blogController;
 
-Route::get('/', [homeController::class, 'index']);
-Route::get('contact', [contactController::class, 'index'])->name('contact.index');
-route::get('shoplist', [shoplistController::class, 'index'])->name('shoplist');
-route::get('shopdetails', [shopdetailsController::class, 'index'])->name('shopdetails');
-route::get('shopcart', [shopcartController::class, 'index'])->name('shopcart');
-route::get('blog', [blogController::class, 'index'])->name('blog.index');
-route::get('about', [aboutController::class, 'index'])->name('about.index');
-route::get('author', [AuthorController::class, 'index'])->name('author.index');
-route::get('error', [errorController::class, 'index'])->name('error.index');
+
 
 Route::middleware('Setlang')->group(function () {
     // Route::get('/',  [BookController::class,'index'])->name('gethomedata');
@@ -37,6 +21,9 @@ Route::middleware('Setlang')->group(function () {
         return redirect('/');
     });
 });
+
+Route::get('/', [FrondendRouteController::class, 'home']);
+
 
 
 Route::get('/user-dashboard', function () {
@@ -63,7 +50,17 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     });
-    Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::prefix('frontend/')->group(function () {
+        Route::get('/contact', [FrondendRouteController::class, 'contact'])->name('frontend.contact.index');
+        route::get('/shoplist', [FrondendRouteController::class, 'shoplist'])->name('frontend.shoplist');
+        route::get('/shopdetails', [FrondendRouteController::class, 'shopdetails'])->name('frontend.shopdetails');
+        route::get('/shopcart', [FrondendRouteController::class, 'shopcart'])->name('frontend.shop.shopCart');
+        route::get('/blog', [FrondendRouteController::class, 'blog'])->name('frontend.blog.index');
+        route::get('/about', [FrondendRouteController::class, 'about'])->name('frontend.about.index');
+        route::get('/author', [FrondendRouteController::class, 'author'])->name('frontend.author.author');
+        route::get('/error', [FrondendRouteController::class, 'error'])->name('frontend.error.index');
+    });
 });
 
 Route::group(['prefix' => 'books/'], function () {
