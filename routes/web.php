@@ -39,8 +39,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user-dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware(['admin'])->group(function () {
+        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     });
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 });
 
 Route::group(['prefix'=> 'books/'], function () {
