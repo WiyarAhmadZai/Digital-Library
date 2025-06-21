@@ -453,7 +453,7 @@
             <div class="contact-info-area">
                 <div class="contact-info-items wow fadeInUp" data-wow-delay=".2s">
                     <div class="icon">
-                        <i class="icon-icon-5"></i>
+                        <i class="icon-icon-5 mt-3"></i>
                     </div>
                     <div class="content">
                         <p>Call Us 7/24</p>
@@ -464,7 +464,7 @@
                 </div>
                 <div class="contact-info-items wow fadeInUp" data-wow-delay=".4s">
                     <div class="icon">
-                        <i class="icon-icon-6"></i>
+                        <i class="icon-icon-6 mt-3"></i>
                     </div>
                     <div class="content">
                         <p>Make a Quote</p>
@@ -475,7 +475,7 @@
                 </div>
                 <div class="contact-info-items wow fadeInUp" data-wow-delay=".6s">
                     <div class="icon">
-                        <i class="icon-icon-7"></i>
+                        <i class="icon-icon-7 mt-3"></i>
                     </div>
                     <div class="content">
                         <p>Opening Hour</p>
@@ -486,7 +486,7 @@
                 </div>
                 <div class="contact-info-items wow fadeInUp" data-wow-delay=".8s">
                     <div class="icon">
-                        <i class="icon-icon-8"></i>
+                        <i class="icon-icon-8 mt-3"></i>
                     </div>
                     <div class="content">
                         <p>Location</p>
