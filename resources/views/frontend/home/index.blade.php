@@ -1,4 +1,5 @@
 @extends('frontend.layout.master');
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
 @section('content')
     <!-- Hero Section start  -->
@@ -99,252 +100,15 @@
                         class="fa-solid fa-arrow-right-long"></i></a>
             </div>
             <div class="swiper book-slider">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-2">
-                            <div class="book-thumb center">
-                                <a href="{{ route('frontend.shopdetails') }}">
-                                    <img src="{{ asset('assets/img/book/01.png') }}" alt="img">
-                                </a>
-                                <ul class="post-box">
-                                    <li>
-                                        Hot
-                                    </li>
-                                    <li>
-                                        -30%
-                                    </li>
-                                </ul>
-                                <ul class="shop-icon d-grid justify-content-center align-items-center">
-                                    <li>
-                                        <a href="{{ route('frontend.shop.shopCart') }}"><i class="far fa-heart"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('frontend.shop.shopCart') }}">
-                                            <img class="icon" src="{{ asset('assets/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('frontend.shopdetails') }}"><i class="far fa-eye"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="shop-button">
-                                    <a href="{{ route('frontend.shopdetails') }}" class="theme-btn"><i
-                                            class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
-                                </div>
-                            </div>
-                            <div class="shop-content">
-                                <h5> Design Low Book </h5>
-                                <h3><a href="shop-details.html">Simple Things You To <br> Save BOOK</a></h3>
-                                <ul class="price-list">
-                                    <li>$30.00</li>
-                                    <li>
-                                        <del>$39.99</del>
-                                    </li>
-                                </ul>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-1.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Wilson</span>
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        3.4 (25)
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-2">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/02.png') }}"
-                                        alt="img"></a>
-                                <ul class="shop-icon d-grid justify-content-center align-items-center">
-                                    <li>
-                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-cart.html">
-                                            <img class="icon" src="{{ asset('assets/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="shop-button">
-                                    <a href="shop-details.html" class="theme-btn"><i
-                                            class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
-                                </div>
-                            </div>
-                            <div class="shop-content">
-                                <h5> Design Low Book </h5>
-                                <h3><a href="shop-details.html">How Deal With Very <br> Bad BOOK</a></h3>
-                                <ul class="price-list">
-                                    <li>$39.00</li>
-                                </ul>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-2.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Esther</span>
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        3.4 (25)
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-2">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/03.png') }}"
-                                        alt="img"></a>
-                                <ul class="shop-icon d-grid justify-content-center align-items-center">
-                                    <li>
-                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-cart.html">
-                                            <img class="icon" src="{{ asset('assets/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="shop-button">
-                                    <a href="shop-details.html" class="theme-btn"><i
-                                            class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
-                                </div>
-                            </div>
-                            <div class="shop-content">
-                                <h5> Design Low Book </h5>
-                                <h3><a href="shop-details.html">The Hidden Mystery <br> Behind</a></h3>
-                                <ul class="price-list">
-                                    <li>
-                                        $29.00
-                                    </li>
-                                </ul>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-3.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Hawkins</span>
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        3.4 (25)
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-2">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/04.png') }}"
-                                        alt="img"></a>
-                                <ul class="post-box">
-                                    <li>
-                                        -12%
-                                    </li>
-                                </ul>
-                                <ul class="shop-icon d-grid justify-content-center align-items-center">
-                                    <li>
-                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-cart.html">
-                                            <img class="icon" src="{{ asset('assets/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="shop-button">
-                                    <a href="shop-details.html" class="theme-btn"><i
-                                            class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
-                                </div>
-                            </div>
-                            <div class="shop-content">
-                                <h5> Design Low Book </h5>
-                                <h3><a href="shop-details.html">Qple GPad With Retina <br> Sisplay</a></h3>
-                                <ul class="price-list">
-                                    <li>$19.00</li>
-                                </ul>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-4.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">(Author) Albert </span>
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        3.4 (25)
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-2">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="assets/img/book/05.png" alt="img"></a>
-                                <ul class="shop-icon d-grid justify-content-center align-items-center">
-                                    <li>
-                                        <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-cart.html">
-                                            <img class="icon" src="{{ asset('assets/img/icon/shuffle.svg') }}"
-                                                alt="svg-icon">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="shop-button">
-                                    <a href="shop-details.html" class="theme-btn"><i
-                                            class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
-                                </div>
-                            </div>
-                            <div class="shop-content">
-                                <h5> Design Low Book </h5>
-                                <h3><a href="shop-details.html">Flovely and Unicom <br> Erna</a></h3>
-                                <ul class="price-list">
-                                    <li>$30.00</li>
-                                </ul>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-5.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Alexander</span>
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        3.4 (25)
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                <div class="swiper-wrapper" id="book-swiper-wrapper">
+                    <!-- Slides injected here -->
                 </div>
+                <!-- Add navigation buttons -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
             </div>
+
+
         </div>
     </section>
 
@@ -1485,4 +1249,92 @@
             </div>
         </div>
     </section>
+@endsection
+@section('scripts')
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/book/getBooks")
+                .then(response => response.json())
+                .then(books => {
+                    const wrapper = document.getElementById("book-swiper-wrapper");
+                    wrapper.innerHTML = "";
+
+                    // Ensure minimum 5 slides
+                    while (books.length < 5) {
+                        books.push({
+                            id: 0,
+                            name: "Placeholder Book",
+                            category: "Category",
+                            price: 0,
+                            currency_type: "$",
+                            discount: 0,
+                            image_path: "default-book.png",
+                            author: {
+                                name: "Unknown Author",
+                                image_path: "default-author.png"
+                            }
+                        });
+                    }
+
+                    books.forEach(book => {
+                        wrapper.innerHTML += `
+                    <div class="swiper-slide">
+                        <div class="shop-box-items style-2">
+                            <div class="book-thumb center">
+                                <a href="/book/${book.id}">
+                                    <img src="/storage/${book.image_path}" alt="Book Image">
+                                </a>
+                                <ul class="post-box">
+                                    <li>Hot</li>
+                                    <li>-${book.discount || 0}%</li>
+                                </ul>
+                                <ul class="shop-icon d-grid justify-content-center align-items-center">
+                                    <li><a href="#"><i class="far fa-heart"></i></a></li>
+                                    <li><a href="#"><img class="icon" src="/assets/img/icon/shuffle.svg" alt="icon"></a></li>
+                                    <li><a href="#"><i class="far fa-eye"></i></a></li>
+                                </ul>
+                                <div class="shop-button">
+                                    <a href="#" class="theme-btn">
+                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="shop-content">
+                                <h5>${book.category}</h5>
+                                <h3><a href="/book/${book.id}">${book.name}</a></h3>
+                                <ul class="price-list">
+                                    <li>${book.currency_type} ${book.price}</li>
+                                </ul>
+                                <ul class="author-post">
+                                    <li class="authot-list">
+                                        <span class="thumb">
+                                            <img src="/storage/${book.author?.image_path || 'default-author.png'}" alt="Author">
+                                        </span>
+                                        <span class="content">${book.author?.name || 'Unknown Author'}</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-star"></i> 4.0 (100)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    });
+
+                    // Initialize Swiper
+                    new Swiper('.book-slider', {
+                        loop: true,
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                        navigation: {
+                            nextEl: ".swiper-button-next",
+                            prevEl: ".swiper-button-prev",
+                        },
+                    });
+                })
+                .catch(error => console.error("Error loading books:", error));
+        });
+    </script>
 @endsection

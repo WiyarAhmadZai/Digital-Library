@@ -641,6 +641,7 @@
             </div>
         </div>
     </footer>
+    @yield('scripts')
 
     <!--<< All JS Plugins >>-->
     <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
