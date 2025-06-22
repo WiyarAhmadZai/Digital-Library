@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
 }
