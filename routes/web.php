@@ -61,10 +61,9 @@ Route::middleware(['auth'])->group(function () {
         route::get('/author', [FrondendRouteController::class, 'author'])->name('frontend.author.author');
         route::get('/error', [FrondendRouteController::class, 'error'])->name('frontend.error.index');
     });
-
-    Route::prefix('book')->group(function () {
-        Route::get('/getBooks', [BookController::class, 'getBooks'])->name('book.getBooks');
-    });
+});
+Route::prefix('book')->group(function () {
+    Route::get('/getBooks', [BookController::class, 'getBooks'])->name('book.getBooks');
 });
 
 Route::group(['prefix' => 'books/'], function () {
