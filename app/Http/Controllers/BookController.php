@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Post;
 use App\Models\Author;
-
+use App\Http\Requests\StoreBookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,27 +38,57 @@ class BookController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreBookRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+        // Get validated data from the request
+        $validated = $request->validated();
 
-        $imagePath = $request->file('image')->store('books', 'public');
+        // Calculate final price after discount
+        $discount = $validated['discount'] ?? 0;
+        $price = $validated['price'];
+        $finalPrice = $price - ($price * $discount / 100);
+        $validated['final_price'] = $finalPrice;
 
-        $book = Book::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image_path' => $imagePath
-        ]);
+        // Handle image uploads (assumes images sent as Base64 URLs in 'image_path')
+        if (!empty($validated['image_path']) && is_array($validated['image_path'])) {
+            $savedImages = [];
 
-        if ($book) {
-            return response()->json(['success' => true, 'message' => 'Book uploaded successfully!', 'data' => $book], 201);
+            foreach ($validated['image_path'] as $image) {
+                if (isset($image['url']) && Str::startsWith($image['url'], 'data:image')) {
+                    // Extract image extension from Base64 string
+                    preg_match("/^data:image\/(.*);base64,/i", $image['url'], $matches);
+                    $extension = $matches[1] ?? 'png';
+
+                    // Create unique filename
+                    $filename = uniqid('book_') . '.' . $extension;
+
+                    // Decode Base64 to binary
+                    $imageData = preg_replace('/^data:image\/\w+;base64,/', '', $image['url']);
+                    $imageData = base64_decode($imageData);
+
+                    // Save file to public/uploads/books/
+                    $path = public_path('uploads/books/' . $filename);
+                    file_put_contents($path, $imageData);
+
+                    $savedImages[] = 'uploads/books/' . $filename;
+                }
+            }
+
+            // Store saved image paths as JSON string (casted to array in model)
+            $validated['image_path'] = json_encode($savedImages);
+        } else {
+            $validated['image_path'] = json_encode([]);
         }
 
-        return response()->json(['success' => false, 'message' => 'Failed to upload book.'], 500);
+        // Create the book record
+        $book = Book::create($validated);
+
+        // Redirect back with success message
+        if ($book) {
+            return redirect()->back()->with('success', 'کتاب با موفقیت ذخیره شد.');
+        } else {
+            return response('error', 'خطا در ثبت کتاب');
+        }
     }
 
     public function getDat()
@@ -77,5 +107,11 @@ class BookController extends Controller
     {
         $books = Book::with('author')->latest()->take(10)->get();
         return response()->json($books);
+    }
+
+    public function create()
+    {
+        $authors = Author::all();
+        return view('admin.books.create', compact('authors'));
     }
 }

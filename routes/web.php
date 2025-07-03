@@ -48,7 +48,13 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::middleware(['admin'])->group(function () {});
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::prefix('book')->group(function () {
+            Route::get('create', [BookController::class, 'create'])->name('admin.book.create');
+            Route::post('store', [BookController::class, 'store'])->name('admin.book.store');
+        });
+    });
 
     Route::prefix('frontend/')->group(function () {
         Route::get('/contact', [FrondendRouteController::class, 'contact'])->name('frontend.contact.index');

@@ -49,6 +49,49 @@
                 </li>
             </ul>
         </li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-plus'></i>
+                </div>
+                <div class="menu-title">Adding</div>
+            </a>
+            <ul>
+                <li>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class='bx bx-book'></i>
+                        </div>
+                        <div class="menu-title">
+                            <span
+                                style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
+                            </span> Book
+                        </div>
+                    </a>
+                    <ul>
+                        <li> <a href="{{ route('admin.book.create') }}"><i class='bx bx-radio-circle'></i>
+                                create </a>
+                        </li>
+                        <li> <a href="ecommerce-products-details.html"><i class='bx bx-radio-circle'></i>
+                                Book List </a>
+                        </li>
+                    </ul>
+                </li>
+                <li> <a href="ecommerce-products-details.html"><i class='bx bx-radio-circle'></i>
+                        <span
+                            style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
+                        </span> author </a>
+                </li>
+                <li> <a href="ecommerce-add-new-products.html"><i class='bx bx-radio-circle'></i>
+                        <span
+                            style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
+                        </span> Employee </a>
+                </li>
+                <li> <a href="ecommerce-orders.html"><i class='bx bx-radio-circle'></i>
+                        <span
+                            style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
+                        </span> Post </a>
+                </li>
+            </ul>
+        </li>
         <li class="menu-label">UI Elements</li>
         <li>
             <a href="widgets.html">
@@ -57,25 +100,7 @@
                 <div class="menu-title">Widgets</div>
             </a>
         </li>
-        <li>
-            <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class='bx bx-cart'></i>
-                </div>
-                <div class="menu-title">eCommerce</div>
-            </a>
-            <ul>
-                <li> <a href="ecommerce-products.html"><i class='bx bx-radio-circle'></i>Products</a>
-                </li>
-                <li> <a href="ecommerce-products-details.html"><i class='bx bx-radio-circle'></i>Product
-                        Details</a>
-                </li>
-                <li> <a href="ecommerce-add-new-products.html"><i class='bx bx-radio-circle'></i>Add New
-                        Products</a>
-                </li>
-                <li> <a href="ecommerce-orders.html"><i class='bx bx-radio-circle'></i>Orders</a>
-                </li>
-            </ul>
-        </li>
+
         <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class='bx bx-bookmark-heart'></i>

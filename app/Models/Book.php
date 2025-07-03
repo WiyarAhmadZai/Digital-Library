@@ -10,6 +10,30 @@ class Book extends Model
     //
     use HasFactory;
 
+    protected $casts = [
+        'image_path' => 'array',
+        'publish_year' => 'date',
+        'tags' => 'array', // optional, if you store tags as json or comma-separated string
+    ];
+    protected $fillable = [
+        'name',
+        'description',
+        'author_id',
+        'category',
+        'final_price',
+        'price',
+        'currency_type',
+        'language',
+        'publish_year',
+        'status',
+        'total_pages',
+        'sku',
+        'format',
+        'country',
+        'discount',
+        'tags',
+        'image_path'
+    ];
 
     public function author()
     {

@@ -12,15 +12,26 @@ class BookFactory extends Factory
 
     public function definition()
     {
-        // Get a random author id or null if no authors
+        // Random author
         $authorId = Author::inRandomOrder()->value('id');
+
+        // Price and Discount
+        $price = $this->faker->numberBetween(5, 100);
+        $discountPercent = $this->faker->randomElement([0, 5, 10, 15]);
+
+        // Calculate final price
+        $finalPrice = $price - ($price * $discountPercent / 100);
 
         return [
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
-            'image_path' => $this->faker->imageUrl(200, 300, 'books'),
+            'image_path' => json_encode([
+                $this->faker->imageUrl(200, 300, 'books'),
+                $this->faker->imageUrl(200, 300, 'books')
+            ]), // encoded as JSON array
             'category' => $this->faker->word(),
-            'price' => $this->faker->numberBetween(5, 100),
+            'final_price' => $finalPrice,
+            'price' => $price,
             'currency_type' => $this->faker->randomElement(['USD', 'EUR', 'GBP']),
             'language' => $this->faker->languageCode(),
             'publish_year' => $this->faker->date('Y-m-d'),
@@ -29,8 +40,8 @@ class BookFactory extends Factory
             'sku' => strtoupper($this->faker->bothify('???-#####')),
             'format' => $this->faker->randomElement(['hardcover', 'paperback', 'ebook']),
             'country' => $this->faker->country(),
-            'discount' => $this->faker->randomElement(['0%', '5%', '10%', '15%']),
-            'tags' => implode(',', $this->faker->words(3)),
+            'discount' => $discountPercent, // stored as integer (e.g., 10 for 10%)
+            'tags' => json_encode($this->faker->words(3)), // stored as JSON array
             'author_id' => $authorId,
             'created_at' => now(),
             'updated_at' => now(),

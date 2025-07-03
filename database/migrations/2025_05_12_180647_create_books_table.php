@@ -17,7 +17,10 @@ return new class extends Migration
             $table->text('description');
             $table->string('image_path');
             $table->string('category');
-            $table->integer('price');
+
+            $table->decimal('price', 10, 2); // ✅ ADD THIS
+            $table->decimal('final_price', 10, 2)->nullable(); // ✅ Keep this
+
             $table->string('currency_type');
             $table->string('language');
             $table->date('publish_year');
@@ -29,7 +32,6 @@ return new class extends Migration
             $table->string('discount');
             $table->text('tags');
 
-            // Fix here:
             $table->foreignId('author_id')
                 ->nullable()
                 ->constrained('authors')
@@ -38,6 +40,8 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+
+
 
 
 

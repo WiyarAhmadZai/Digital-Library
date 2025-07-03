@@ -724,7 +724,9 @@
     <!--end header -->
 
     <!--start page wrapper -->
-    @yield('content')
+    <div class="container" style="margin: 6rem 16rem;">
+        @yield('content')
+    </div>
     <!--end page wrapper -->
 
 
@@ -924,6 +926,9 @@
     <!--end switcher-->
     <!-- Bootstrap JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- alpine js  --}}
+    <script src="https://unpkg.com/alpinejs" defer></script>
+
     <!--plugins-->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
