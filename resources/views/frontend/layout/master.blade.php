@@ -259,23 +259,7 @@
                                     <div class="icon">
                                         <i class="fa-sharp fa-solid fa-grid-2"></i>
                                     </div>
-                                    <select name="cate" class="category">
-                                        <option value="1">
-                                            Category
-                                        </option>
-                                        <option value="1">
-                                            Web Design
-                                        </option>
-                                        <option value="1">
-                                            Web Development
-                                        </option>
-                                        <option value="1">
-                                            Graphic Design
-                                        </option>
-                                        <option value="1">
-                                            Softwer Eng
-                                        </option>
-                                    </select>
+                                    
                                     <form action="#" class="search-toggle-box d-md-block">
                                         <div class="input-area">
                                             <input type="text" placeholder="Author">
