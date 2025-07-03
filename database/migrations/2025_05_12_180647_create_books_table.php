@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('country');
             $table->string('discount');
             $table->text('tags');
+            $table->softDeletes();
 
             $table->foreignId('author_id')
                 ->nullable()

@@ -724,9 +724,9 @@
     <!--end header -->
 
     <!--start page wrapper -->
-    <div class="container" style="margin: 6rem 16rem;">
-        @yield('content')
-    </div>
+
+    @yield('content')
+
     <!--end page wrapper -->
 
 

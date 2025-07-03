@@ -49,10 +49,17 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['admin'])->group(function () {});
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::prefix('book')->group(function () {
             Route::get('create', [BookController::class, 'create'])->name('admin.book.create');
             Route::post('store', [BookController::class, 'store'])->name('admin.book.store');
+            Route::get('list', [BookController::class, 'bookList'])->name('admin.book.list');
+
+            // This is the important AJAX data route
+            Route::get('books-data', [BookController::class, 'getBooksData'])->name('books.data');
+
+            Route::delete('books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+            Route::get('books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+            // Add update/post routes as needed
         });
     });
 

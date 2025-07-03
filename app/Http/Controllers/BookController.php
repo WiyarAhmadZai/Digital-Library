@@ -8,6 +8,9 @@ use App\Models\Author;
 use App\Http\Requests\StoreBookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
+
+
 
 class BookController extends Controller
 {
@@ -49,48 +52,37 @@ class BookController extends Controller
         $finalPrice = $price - ($price * $discount / 100);
         $validated['final_price'] = $finalPrice;
 
-        // Handle image uploads (assumes images sent as Base64 URLs in 'image_path')
-        if (!empty($validated['image_path']) && is_array($validated['image_path'])) {
-            $savedImages = [];
+        $savedImages = [];
 
-            foreach ($validated['image_path'] as $image) {
-                if (isset($image['url']) && Str::startsWith($image['url'], 'data:image')) {
-                    // Extract image extension from Base64 string
-                    preg_match("/^data:image\/(.*);base64,/i", $image['url'], $matches);
-                    $extension = $matches[1] ?? 'png';
+        // Handle image uploads from real files (input name 'image_path[]')
+        if ($request->hasFile('image_path')) {
+            foreach ($request->file('image_path') as $file) {
+                if ($file->isValid()) {
+                    // Generate unique filename with original extension
+                    $filename = uniqid('book_') . '.' . $file->getClientOriginalExtension();
 
-                    // Create unique filename
-                    $filename = uniqid('book_') . '.' . $extension;
+                    // Move the file to public/uploads/books directory
+                    $file->move(public_path('uploads/books'), $filename);
 
-                    // Decode Base64 to binary
-                    $imageData = preg_replace('/^data:image\/\w+;base64,/', '', $image['url']);
-                    $imageData = base64_decode($imageData);
-
-                    // Save file to public/uploads/books/
-                    $path = public_path('uploads/books/' . $filename);
-                    file_put_contents($path, $imageData);
-
+                    // Save relative path
                     $savedImages[] = 'uploads/books/' . $filename;
                 }
             }
-
-            // Store saved image paths as JSON string (casted to array in model)
-            $validated['image_path'] = json_encode($savedImages);
-        } else {
-            $validated['image_path'] = json_encode([]);
         }
 
-        // Create the book record
+        // Store saved image paths as JSON string
+        $validated['image_path'] = json_encode($savedImages);
+
+        // Create the book record with all data including images
         $book = Book::create($validated);
 
-        // Redirect back with success message
+        // Redirect back with success message or error
         if ($book) {
             return redirect()->back()->with('success', 'کتاب با موفقیت ذخیره شد.');
         } else {
-            return response('error', 'خطا در ثبت کتاب');
+            return response('error', 'خطا در ثبت کتاب', 500);
         }
     }
-
     public function getDat()
     {
         $books = Book::latest()->get();
@@ -113,5 +105,61 @@ class BookController extends Controller
     {
         $authors = Author::all();
         return view('admin.books.create', compact('authors'));
+    }
+
+    public function bookList()
+    {
+        return view('admin.books.list');
+    }
+
+
+    public function getBooksData(Request $request)
+    {
+        $query = Book::with('author')->select('books.*');
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('product', function ($book) {
+                return $book->name;
+            })
+            ->addColumn('photo', function ($book) {
+                $url = $book->image_path ? asset('storage/' . $book->image_path) : asset('assets/images/no-image.png');
+                return '<img src="' . $url . '" style="width: 50px; height: 50px; object-fit: cover;" alt="Book Image">';
+            })
+            ->addColumn('product_id', function ($book) {
+                return '#' . $book->id;
+            })
+            ->addColumn('status', function ($book) {
+                $color = match ($book->status) {
+                    'Paid' => 'bg-success',
+                    'Pending' => 'bg-warning',
+                    'Failed' => 'bg-danger',
+                    default => 'bg-secondary',
+                };
+                return '<span class="badge ' . $color . ' text-white shadow-sm w-100">' . $book->status . '</span>';
+            })
+            ->addColumn('amount', function ($book) {
+                return '$' . number_format($book->price, 2);
+            })
+            ->addColumn('date', function ($book) {
+                return $book->created_at->format('d M Y');
+            })
+            ->addColumn('shipping', function ($book) {
+                // Example progress bar, adjust logic as needed
+                return '
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                </div>';
+            })
+            ->addColumn('action', function ($book) {
+                $editUrl = route('books.edit', $book->id);
+                $deleteUrl = route('books.destroy', $book->id);
+                return '
+                    <a href="' . $editUrl . '" class="btn btn-sm btn-primary me-1">Edit</a>
+                    <button data-url="' . $deleteUrl . '" class="btn btn-sm btn-danger delete-btn">Delete</button>
+                ';
+            })
+            ->rawColumns(['photo', 'status', 'shipping', 'action'])
+            ->make(true);
     }
 }

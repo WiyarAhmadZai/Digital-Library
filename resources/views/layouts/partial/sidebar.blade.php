@@ -70,7 +70,7 @@
                         <li> <a href="{{ route('admin.book.create') }}"><i class='bx bx-radio-circle'></i>
                                 create </a>
                         </li>
-                        <li> <a href="ecommerce-products-details.html"><i class='bx bx-radio-circle'></i>
+                        <li> <a href="{{ route('admin.book.list') }}"><i class='bx bx-radio-circle'></i>
                                 Book List </a>
                         </li>
                     </ul>

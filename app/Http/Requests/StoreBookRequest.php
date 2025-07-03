@@ -30,10 +30,18 @@ class StoreBookRequest extends FormRequest
             'country' => 'required|string|max:100',
             'discount' => 'nullable|numeric|min:0|max:100',
             'tags' => 'nullable|string',
-            'image_path' => 'nullable|array',
-            'image_path.*.url' => 'nullable|string', // Optional: validate each image url if needed
+
+            // ✅ Validate image array with minimum 2 and max 11
+            'image_path' => 'required|array|min:2|max:11',
+
+            // ✅ Validate each image as a proper base64 format
+            'image_path.*.url' => [
+                'required',
+                'regex:/^data:image\/(png|jpg|jpeg|gif);base64,[A-Za-z0-9+\/=]+$/',
+            ],
         ];
     }
+
 
     public function messages()
     {
@@ -41,7 +49,12 @@ class StoreBookRequest extends FormRequest
             'name.required' => 'کتاب باید نام داشته باشد.',
             'description.required' => 'شرح کتاب لازم است.',
             'author_id.exists' => 'نویسنده انتخاب شده معتبر نیست.',
-            // Add more custom messages as needed
+
+            'image_path.required' => 'لطفاً حداقل دو تصویر برای کتاب آپلود کنید.',
+            'image_path.min' => 'حداقل باید :min تصویر آپلود کنید.',
+            'image_path.max' => 'حداکثر تعداد تصاویر :max می‌باشد.',
+            'image_path.*.url.required' => 'آدرس تصویر الزامی است.',
+            'image_path.*.url.regex' => 'فرمت تصویر باید معتبر باشد (Base64).',
         ];
     }
 }
