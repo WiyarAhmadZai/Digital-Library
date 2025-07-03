@@ -1,6 +1,9 @@
 @extends('layouts.layout')
 
 @section('content')
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
     <div class="page-wrapper">
         <div class="card radius-10">
             <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
@@ -15,6 +18,7 @@
                                 <th>Product</th>
                                 <th>Photo</th>
                                 <th>Product ID</th>
+                                <th>author</th>
                                 <th>Status</th>
                                 <th>Amount</th>
                                 <th>Date</th>
@@ -28,12 +32,18 @@
         </div>
     </div>
 
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
         $(document).ready(function() {
-            let table = $('#booksTable').DataTable({
+            $('#booksTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('books.data') }}", // This must be /admin/book/books-data
+                ajax: "{{ route('books.data') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -43,7 +53,7 @@
                     },
                     {
                         data: 'product',
-                        name: 'name',
+                        name: 'product',
                         className: 'text-center'
                     },
                     {
@@ -55,22 +65,30 @@
                     },
                     {
                         data: 'product_id',
-                        name: 'id',
+                        name: 'product_id',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'author',
+                        name: 'author.name',
                         className: 'text-center'
                     },
                     {
                         data: 'status',
                         name: 'status',
+                        orderable: false,
+                        searchable: false,
                         className: 'text-center'
                     },
+
                     {
                         data: 'amount',
-                        name: 'price',
+                        name: 'amount',
                         className: 'text-center'
                     },
                     {
                         data: 'date',
-                        name: 'created_at',
+                        name: 'date',
                         className: 'text-center'
                     },
                     {
@@ -93,33 +111,25 @@
                 ]
             });
 
-            // Delete button with SweetAlert confirmation
+            // Delete button with confirmation (example)
             $('#booksTable').on('click', '.delete-btn', function() {
                 let url = $(this).data('url');
-                swal({
-                    title: "Are you sure?",
-                    text: "This will soft delete the book!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: url,
-                            type: 'DELETE',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(response) {
-                                swal("Deleted!", "Book has been deleted.", "success");
-                                table.ajax.reload();
-                            },
-                            error: function() {
-                                swal("Error!", "Something went wrong.", "error");
-                            }
-                        });
-                    }
-                });
+                if (confirm('Are you sure you want to delete this book?')) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function() {
+                            $('#booksTable').DataTable().ajax.reload();
+                            alert('Book deleted successfully.');
+                        },
+                        error: function() {
+                            alert('Error deleting book.');
+                        }
+                    });
+                }
             });
         });
     </script>

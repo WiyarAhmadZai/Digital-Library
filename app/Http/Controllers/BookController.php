@@ -8,7 +8,8 @@ use App\Models\Author;
 use App\Http\Requests\StoreBookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
+
 
 
 
@@ -78,7 +79,7 @@ class BookController extends Controller
 
         // Redirect back with success message or error
         if ($book) {
-            return redirect()->back()->with('success', 'کتاب با موفقیت ذخیره شد.');
+            return redirect()->route('admin.book.list')->with('success', 'کتاب با موفقیت ذخیره شد.');
         } else {
             return response('error', 'خطا در ثبت کتاب', 500);
         }
@@ -115,49 +116,46 @@ class BookController extends Controller
 
     public function getBooksData(Request $request)
     {
-        $query = Book::with('author')->select('books.*');
+        // Load books with author relation for searching and displaying author name
+        $books = Book::with('author')->orderBy('created_at', 'desc');
 
-        return DataTables::of($query)
+        return DataTables::of($books)
             ->addIndexColumn()
-            ->addColumn('product', function ($book) {
-                return $book->name;
-            })
+            ->addColumn('product', fn($book) => $book->name)
+            ->addColumn('author', fn($book) => $book->author?->name ?? '—') // Add author column here
             ->addColumn('photo', function ($book) {
-                $url = $book->image_path ? asset('storage/' . $book->image_path) : asset('assets/images/no-image.png');
-                return '<img src="' . $url . '" style="width: 50px; height: 50px; object-fit: cover;" alt="Book Image">';
+                $url = $book->image_path
+                    ? asset('uploads/books/' . $book->image_path)
+                    : asset('assets/img/avatars/avatar-1.png');
+                return '<img src="' . $url . '" style="width: 50px; height: 50px; object-fit: cover;">';
             })
-            ->addColumn('product_id', function ($book) {
-                return '#' . $book->id;
-            })
+            ->addColumn('product_id', fn($book) => '#' . $book->id)
             ->addColumn('status', function ($book) {
-                $color = match ($book->status) {
-                    'Paid' => 'bg-success',
-                    'Pending' => 'bg-warning',
-                    'Failed' => 'bg-danger',
-                    default => 'bg-secondary',
-                };
-                return '<span class="badge ' . $color . ' text-white shadow-sm w-100">' . $book->status . '</span>';
+                return '<span class="badge bg-success">Paid</span>';
             })
-            ->addColumn('amount', function ($book) {
-                return '$' . number_format($book->price, 2);
-            })
-            ->addColumn('date', function ($book) {
-                return $book->created_at->format('d M Y');
-            })
-            ->addColumn('shipping', function ($book) {
-                // Example progress bar, adjust logic as needed
-                return '
-                <div class="progress" style="height: 6px;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-                </div>';
+            ->addColumn('amount', fn($book) => '$' . number_format($book->price ?? 0, 2))
+            ->addColumn('date', fn($book) => $book->created_at?->format('d M Y') ?? '')
+            ->addColumn('shipping', function () {
+                return '<div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                        </div>';
             })
             ->addColumn('action', function ($book) {
                 $editUrl = route('books.edit', $book->id);
                 $deleteUrl = route('books.destroy', $book->id);
-                return '
-                    <a href="' . $editUrl . '" class="btn btn-sm btn-primary me-1">Edit</a>
-                    <button data-url="' . $deleteUrl . '" class="btn btn-sm btn-danger delete-btn">Delete</button>
-                ';
+                return '<a href="' . $editUrl . '" class="btn btn-sm btn-primary me-1">Edit</a>
+                    <button data-url="' . $deleteUrl . '" class="btn btn-sm btn-danger delete-btn">Delete</button>';
+            })
+            ->filter(function ($query) use ($request) {
+                if ($search = $request->get('search')['value']) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
+                            ->orWhere('id', 'like', "%{$search}%")
+                            ->orWhereHas('author', function ($q2) use ($search) {
+                                $q2->where('name', 'like', "%{$search}%");
+                            });
+                    });
+                }
             })
             ->rawColumns(['photo', 'status', 'shipping', 'action'])
             ->make(true);
