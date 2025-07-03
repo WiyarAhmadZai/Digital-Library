@@ -47,9 +47,8 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth'])->group(function () {
 
 
-    Route::middleware(['admin'])->group(function () {
-        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    });
+    Route::middleware(['admin'])->group(function () {});
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::prefix('frontend/')->group(function () {
         Route::get('/contact', [FrondendRouteController::class, 'contact'])->name('frontend.contact.index');
@@ -64,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::prefix('book')->group(function () {
     Route::get('/getBooks', [BookController::class, 'getBooks'])->name('book.getBooks');
+    Route::get('/getFeaturedBooks', [BookController::class, 'getFeaturedBooks'])->name('book.getFeaturedBooks');
 });
 
 Route::group(['prefix' => 'books/'], function () {

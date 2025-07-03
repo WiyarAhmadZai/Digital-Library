@@ -1,5 +1,6 @@
 @extends('frontend.layout.master');
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
 @section('content')
     <!-- Hero Section start  -->
@@ -113,277 +114,23 @@
     </section>
 
     <!-- Featured Books Section Start -->
-    <section class="featured-books-section pt-100 pb-145 fix section-bg">
+    <section class="featured-books-section pt-100  fix section-bg">
         <div class="container">
             <div class="section-title-area justify-content-center">
                 <div class="section-title wow fadeInUp" data-wow-delay=".3s">
                     <h2>Featured Books</h2>
                 </div>
             </div>
-
             <div class="swiper featured-books-slider">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/07.png') }}"
-                                        alt="img"></a>
-                            </div>
-                            <div class="shop-content">
-                                <ul class="book-category">
-                                    <li class="book-category-badge">Adventure</li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        (459)
-                                    </li>
-                                </ul>
-                                <h3><a href="shop-details.html">Qple GPad With Retina <br> Sisplay</a></h3>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-1.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="book-availablity">
-                                    <div class="details">
-                                        <ul class="price-list">
-                                            <li>$30.00</li>
-                                            <li>
-                                                <del>$39.99</del>
-                                            </li>
-                                        </ul>
-                                        <div class="progress-line">
-
-                                        </div>
-                                        <p>25 Books in stock</p>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a href="shop-cart.html">
-                                            <i class="fa-regular fa-basket-shopping"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/11.png') }}"
-                                        alt="img"></a>
-                            </div>
-                            <div class="shop-content">
-                                <ul class="book-category">
-                                    <li class="book-category-badge">Adventure</li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        (459)
-                                    </li>
-                                </ul>
-                                <h3><a href="shop-details.html">Qple GPad With Retina <br> Sisplay</a></h3>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-2.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Hawkins</span>
-                                    </li>
-                                </ul>
-                                <div class="book-availablity">
-                                    <div class="details">
-                                        <ul class="price-list">
-                                            <li>$30.00</li>
-                                            <li>
-                                                <del>$39.99</del>
-                                            </li>
-                                        </ul>
-                                        <div class="progress-line">
-
-                                        </div>
-                                        <p>25 Books in stock</p>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a href="shop-cart.html">
-                                            <i class="fa-regular fa-basket-shopping"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/10.png') }}"
-                                        alt="img"></a>
-                            </div>
-                            <div class="shop-content">
-                                <ul class="book-category">
-                                    <li class="book-category-badge">Adventure</li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        (459)
-                                    </li>
-                                </ul>
-                                <h3><a href="shop-details.html">The Hidden Mystery <br> Behind</a></h3>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-3.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Esther</span>
-                                    </li>
-                                </ul>
-                                <div class="book-availablity">
-                                    <div class="details">
-                                        <ul class="price-list">
-                                            <li>$30.00</li>
-                                            <li>
-                                                <del>$39.99</del>
-                                            </li>
-                                        </ul>
-                                        <div class="progress-line">
-
-                                        </div>
-                                        <p>25 Books in stock</p>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a href="shop-cart.html">
-                                            <i class="fa-regular fa-basket-shopping"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/07.png') }}"
-                                        alt="img"></a>
-                            </div>
-                            <div class="shop-content">
-                                <ul class="book-category">
-                                    <li class="book-category-badge">Adventure</li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        (459)
-                                    </li>
-                                </ul>
-                                <h3><a href="shop-details.html">Qple GPad With Retina <br> Sisplay</a></h3>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-1.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="book-availablity">
-                                    <div class="details">
-                                        <ul class="price-list">
-                                            <li>$30.00</li>
-                                            <li>
-                                                <del>$39.99</del>
-                                            </li>
-                                        </ul>
-                                        <div class="progress-line">
-
-                                        </div>
-                                        <p>25 Books in stock</p>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a href="shop-cart.html">
-                                            <i class="fa-regular fa-basket-shopping"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
-                            <div class="book-thumb center">
-                                <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/11.png') }}"
-                                        alt="img"></a>
-                            </div>
-                            <div class="shop-content">
-                                <ul class="book-category">
-                                    <li class="book-category-badge">Adventure</li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        (459)
-                                    </li>
-                                </ul>
-                                <h3><a href="shop-details.html">Qple GPad With Retina <br> Sisplay</a></h3>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="{{ asset('assets/img/testimonial/client-2.png') }}" alt="img">
-                                        </span>
-                                        <span class="content">Hawkins</span>
-                                    </li>
-                                </ul>
-                                <div class="book-availablity">
-                                    <div class="details">
-                                        <ul class="price-list">
-                                            <li>$30.00</li>
-                                            <li>
-                                                <del>$39.99</del>
-                                            </li>
-                                        </ul>
-                                        <div class="progress-line">
-
-                                        </div>
-                                        <p>25 Books in stock</p>
-                                    </div>
-                                    <div class="shop-btn">
-                                        <a href="shop-cart.html">
-                                            <i class="fa-regular fa-basket-shopping"></i>
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                <div class="swiper-wrapper" id="featured-book-swiper-wrapper">
+                    <!-- JS will inject slides here -->
                 </div>
-
                 <div class="swiper-pagination"></div>
             </div>
         </div>
     </section>
+
+
 
 
     <!-- Best Seller Section Start -->
@@ -1252,6 +999,7 @@
 @endsection
 @section('scripts')
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch("/book/getBooks")
@@ -1335,6 +1083,134 @@
                     });
                 })
                 .catch(error => console.error("Error loading books:", error));
+        });
+
+        // ajax request for feature books data \
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/book/getFeaturedBooks')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(books => {
+                    const wrapper = document.getElementById("featured-book-swiper-wrapper");
+                    if (!wrapper) {
+                        console.error("Featured books wrapper not found.");
+                        return;
+                    }
+
+                    wrapper.innerHTML = "";
+
+                    books.forEach(book => {
+                        const author = book.author ? book.author.name : 'Unknown Author';
+                        const imagePath = `/storage/${book.image_path}`;
+                        const clientImage =
+                            `/assets/img/testimonial/client-${Math.floor(Math.random() * 3) + 1}.png`;
+
+                        const slide = `
+<div class="swiper-slide">
+    <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s" style="
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        padding: 10px;
+        height: 300px;
+    ">
+        <!-- Book Image (Left) -->
+        <div class="book-thumb" style="
+
+            height: 250px;
+            overflow: hidden;
+            border-radius: 8px;
+
+        ">
+            <a href="/book/${book.id}">
+                <img src="${imagePath}" alt="${book.name}" style="
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    display: block;
+                ">
+            </a>
+        </div>
+
+        <!-- Book Info (Right) -->
+        <div class="shop-content" style="flex: 1;">
+            <ul class="book-category" style="margin: 0 0 4px 0;">
+                <li class="book-category-badge" style="
+                    display: inline-block;
+                    background: #3b82f6;
+                    color: white;
+                    font-size: 12px;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                ">${book.category}</li>
+            </ul>
+            <h3 style="margin: 4px 0 6px; font-size: 16px;">
+                <a href="/book/${book.id}" style="text-decoration: none; color: #111;">
+                    ${book.name}
+                </a>
+            </h3>
+            <ul class="author-post" style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                <li class="authot-list" style="display: flex; align-items: center;">
+                    <span class="thumb" style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; display: inline-block; margin-right: 5px;">
+                        <img src="${clientImage}" alt="author" style="width: 100%; height: 100%; object-fit: cover;">
+                    </span>
+                    <span class="content" style="font-size: 13px; color: #333;">${author}</span>
+                </li>
+            </ul>
+            <ul class="price-list" style="display: flex; gap: 10px; margin-bottom: 4px;">
+                <li style="color: green; font-size: 15px; font-weight: bold;">${book.currency_type} ${book.price}</li>
+                <li style="text-decoration: line-through; color: red; font-size: 12px;">${book.currency_type} ${(book.price * 1.3).toFixed(2)}</li>
+            </ul>
+            <p style="font-size: 12px; color: #666; margin: 0;">
+                ${Math.floor(Math.random() * 40 + 10)} Books In Stock
+            </p>
+        </div>
+    </div>
+</div>
+`;
+
+
+                        wrapper.insertAdjacentHTML('beforeend', slide);
+                    });
+
+                    // Initialize Swiper AFTER DOM updates
+                    setTimeout(() => {
+                        new Swiper('.featured-books-slider', {
+                            loop: true,
+                            slidesPerView: 1,
+                            spaceBetween: 20,
+                            pagination: {
+                                el: '.swiper-pagination',
+                                clickable: true,
+                            },
+                            autoplay: {
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            },
+                            breakpoints: {
+                                640: {
+                                    slidesPerView: 1
+                                },
+                                768: {
+                                    slidesPerView: 2
+                                },
+                                1024: {
+                                    slidesPerView: 3
+                                },
+                            }
+                        });
+                    }, 100);
+                })
+                .catch(error => {
+                    console.error("Error fetching featured books:", error);
+                });
         });
     </script>
 @endsection

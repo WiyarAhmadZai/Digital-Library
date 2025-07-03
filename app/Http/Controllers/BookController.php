@@ -73,4 +73,9 @@ class BookController extends Controller
 
         return response()->json($books);
     }
+    public function getFeaturedBooks()
+    {
+        $books = Book::with('author')->latest()->take(10)->get();
+        return response()->json($books);
+    }
 }

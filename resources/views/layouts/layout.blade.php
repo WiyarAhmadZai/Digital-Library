@@ -1,760 +1,964 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
+
+<!-- Mirrored from codervent.com/rocker/demo/vertical/index2.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 24 Jun 2025 13:40:34 GMT -->
+
 <head>
-
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--favicon-->
+    <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
+    <!--plugins-->
+    <link href="{{ asset('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
+    <!-- loader-->
+    <link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('assets/js/pace.min.js') }}"></script>
+    <!-- Bootstrap CSS -->
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap-extended.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
+    <!-- Theme Style CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/dark-theme.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/semi-dark.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/header-colors.css') }}" />
 
-    <title>SB Admin 2 - Dashboard</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="{{asset('Fontawesome/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheet">
-
+    <title>Digital Library</title>
 </head>
 
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+<body>
+    <!--wrapper-->
+    <div class="wrapper">
+        <!--sidebar wrapper -->
+        @include('layouts.partial.sidebar')
+        <!--end navigation-->
+    </div>
+    <!--end sidebar wrapper -->
+    <!--start header -->
+    <header>
+        <div class="topbar d-flex align-items-center">
+            <nav class="navbar navbar-expand gap-3">
+                <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
                 </div>
-                <div class="sidebar-brand-text mx-3" style="font-size: 12px;">Digiatal Library</div>
-            </a>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
+                <div class="search-bar d-lg-block d-none" data-bs-toggle="modal" data-bs-target="#SearchModal">
+                    <a href="avascript:;" class="btn d-flex align-items-center"><i class='bx bx-search'></i>Search</a>
                 </div>
-            </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-            <!-- Sidebar Message -->
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
+                <div class="top-menu ms-auto">
+                    <ul class="navbar-nav align-items-center gap-1">
+                        <li class="nav-item mobile-search-icon d-flex d-lg-none" data-bs-toggle="modal"
+                            data-bs-target="#SearchModal">
+                            <a class="nav-link" href="avascript:;"><i class='bx bx-search'></i>
                             </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                        </li>
+                        <li class="nav-item dropdown dropdown-laungauge d-none d-sm-flex">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="avascript:;"
+                                data-bs-toggle="dropdown"><img src="assets/images/county/02.png" width="22"
+                                    alt="">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/01.png') }}" width="20"
+                                            alt=""><span class="ms-2">English</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/02.png') }}" width="20"
+                                            alt=""><span class="ms-2">Catalan</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/03.png') }}" width="20"
+                                            alt=""><span class="ms-2">French</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/04.png') }}" width="20"
+                                            alt=""><span class="ms-2">Belize</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/05.png') }}" width="20"
+                                            alt=""><span class="ms-2">Colombia</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/06.png') }}" width="20"
+                                            alt=""><span class="ms-2">Spanish</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/07.png') }}" width="20"
+                                            alt=""><span class="ms-2">Georgian</span></a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+                                            src="{{ asset('assets/img/county/08.png') }}" width="20"
+                                            alt=""><span class="ms-2">Hindi</span></a>
+                                </li>
+                            </ul>
+
+                        </li>
+                        <li class="nav-item dark-mode d-none d-sm-flex">
+                            <a class="nav-link dark-mode-icon" href="javascript:;"><i class='bx bx-moon'></i>
+                            </a>
                         </li>
 
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Earnings (Annual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
+                        <li class="nav-item dropdown dropdown-app">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown"
+                                href="javascript:;"><i class='bx bx-grid-alt'></i></a>
+                            <div class="dropdown-menu dropdown-menu-end p-0">
+                                <div class="app-container p-2 my-2">
+                                    <div class="row gx-0 gy-2 row-cols-3 justify-content-center p-2">
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/images/app/slack.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Slack</p>
                                                     </div>
                                                 </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/images/app/behance.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Behance</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/images/app/google-drive.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Dribble</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/images/app/outlook.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Outlook</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/github.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">GitHub</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/stack-overflow.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Stack</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/figma.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Stack</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/twitter.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Twitter</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/google-calendar.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Calendar</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/spotify.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Spotify</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/google-photos.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Photos</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/pinterest.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Photos</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/linkedin.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">LinkedIn</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/dribble.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Dribble</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/youtube.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">YouTube</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/google.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">News</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/envato.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Envato</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="javascript:;">
+                                                <div class="app-box text-center">
+                                                    <div class="app-icon">
+                                                        <img src="{{ asset('assets/img/app/safari.png') }}"
+                                                            width="30" alt="">
+                                                    </div>
+                                                    <div class="app-name">
+                                                        <p class="mb-0 mt-1">Safari</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+
+
+                                    </div><!--end row-->
+
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown dropdown-large">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative"
+                                href="#" data-bs-toggle="dropdown"><span class="alert-count">7</span>
+                                <i class='bx bx-bell'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="javascript:;">
+                                    <div class="msg-header">
+                                        <p class="msg-header-title">Notifications</p>
+                                        <p class="msg-header-badge">8 New</p>
+                                    </div>
+                                </a>
+                                <div class="header-notifications-list">
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="{{ asset('assets/img/avatars/avatar-1.png') }}"
+                                                    class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Daisy Anderson<span class="msg-time float-end">5
+                                                        sec ago</span></h6>
+                                                <p class="msg-info">The standard chunk of lorem</p>
                                             </div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-danger text-danger">dc
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New Orders <span class="msg-time float-end">2 min
+                                                        ago</span></h6>
+                                                <p class="msg-info">You have recived new orders</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="{{ asset('assets/img/avatars/avatar-2.png') }}"
+                                                    class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Althea Cabardo <span
+                                                        class="msg-time float-end">14 sec ago</span></h6>
+                                                <p class="msg-info">Many desktop publishing packages</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-success text-success">
+                                                <img src="{{ asset('assets/img/app/outlook.png') }}" width="25"
+                                                    alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Account Created<span
+                                                        class="msg-time float-end">28 min ago</span></h6>
+                                                <p class="msg-info">Successfully created new email</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-info text-info">Ss
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New Product Approved <span
+                                                        class="msg-time float-end">2 hrs ago</span></h6>
+                                                <p class="msg-info">Your new product has approved</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="{{ asset('assets/img/avatars/avatar-4.png') }}"
+                                                    class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Katherine Pechon <span
+                                                        class="msg-time float-end">15 min ago</span></h6>
+                                                <p class="msg-info">Making this the first true generator</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-success text-success"><i
+                                                    class='bx bx-check-square'></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Your item is shipped <span
+                                                        class="msg-time float-end">5 hrs ago</span></h6>
+                                                <p class="msg-info">Successfully shipped your item</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="notify bg-light-primary">
+                                                <img src="{{ asset('assets/img/app/github.png') }}" width="25"
+                                                    alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1
+                                                        day ago</span></h6>
+                                                <p class="msg-info">24 new authors joined last week</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="user-online">
+                                                <img src="{{ asset('assets/img/avatars/avatar-8.png') }}"
+                                                    class="msg-avatar" alt="user avatar">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="msg-name">Peter Costanzo <span class="msg-time float-end">6
+                                                        hrs ago</span></h6>
+                                                <p class="msg-info">It was popularised in the 1960s</p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
+                                <a href="javascript:;">
+                                    <div class="text-center msg-footer">
+                                        <button class="btn btn-primary w-100">View All Notifications</button>
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
+                        </li>
+                        <li class="nav-item dropdown dropdown-large">
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative"
+                                href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="alert-count">8</span>
+                                <i class='bx bx-shopping-bag'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="javascript:;">
+                                    <div class="msg-header">
+                                        <p class="msg-header-title">My Cart</p>
+                                        <p class="msg-header-badge">10 Items</p>
                                     </div>
+                                </a>
+                                <div class="header-message-list">
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/11.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/02.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/03.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/04.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/05.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/06.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/07.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/08.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
+
+                                    <a class="dropdown-item" href="javascript:;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="position-relative">
+                                                <div class="cart-product rounded-circle bg-light">
+                                                    <img src="{{ asset('assets/img/products/09.png') }}"
+                                                        alt="product image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="cart-product-title mb-0">Men White T-Shirt</h6>
+                                                <p class="cart-product-price mb-0">1 X $29.00</p>
+                                            </div>
+                                            <div class="">
+                                                <p class="cart-price mb-0">$250</p>
+                                            </div>
+                                            <div class="cart-product-cancel"><i class="bx bx-x"></i></div>
+                                        </div>
+                                    </a>
                                 </div>
+                                <a href="javascript:;">
+                                    <div class="text-center msg-footer">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h5 class="mb-0">Total</h5>
+                                            <h5 class="mb-0 ms-auto">$489.00</h5>
+                                        </div>
+                                        <button class="btn btn-primary w-100">Checkout</button>
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Project Card Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="small font-weight-bold">Server Migration <span
-                                            class="float-right">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Customer Database <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Payout Details <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Color System -->
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-primary text-white shadow">
-                                        <div class="card-body">
-                                            Primary
-                                            <div class="text-white-50 small">#4e73df</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-success text-white shadow">
-                                        <div class="card-body">
-                                            Success
-                                            <div class="text-white-50 small">#1cc88a</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-info text-white shadow">
-                                        <div class="card-body">
-                                            Info
-                                            <div class="text-white-50 small">#36b9cc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-warning text-white shadow">
-                                        <div class="card-body">
-                                            Warning
-                                            <div class="text-white-50 small">#f6c23e</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-danger text-white shadow">
-                                        <div class="card-body">
-                                            Danger
-                                            <div class="text-white-50 small">#e74a3b</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-secondary text-white shadow">
-                                        <div class="card-body">
-                                            Secondary
-                                            <div class="text-white-50 small">#858796</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-light text-black shadow">
-                                        <div class="card-body">
-                                            Light
-                                            <div class="text-black-50 small">#f8f9fc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-dark text-white shadow">
-                                        <div class="card-body">
-                                            Dark
-                                            <div class="text-white-50 small">#5a5c69</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Illustrations -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="img/undraw_posting_photo.svg" alt="...">
-                                    </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
-                                </div>
-                            </div>
-
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
+                        </li>
+                    </ul>
                 </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
+                <div class="user-box dropdown px-3">
+                    <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('assets/img/avatars/avatar-2.png') }}" class="user-img"
+                            alt="user avatar">
+                        <div class="user-info">
+                            <p class="user-name mb-0">Pauline Seitz</p>
+                            <p class="designattion mb-0">Web Designer</p>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                    class="bx bx-user fs-5"></i><span>Profile</span></a>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                    class="bx bx-cog fs-5"></i><span>Settings</span></a>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                    class="bx bx-home-circle fs-5"></i><span>Dashboard</span></a>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                    class="bx bx-dollar-circle fs-5"></i><span>Earnings</span></a>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                    class="bx bx-download fs-5"></i><span>Downloads</span></a>
+                        </li>
+                        <li>
+                            <div class="dropdown-divider mb-0"></div>
+                        </li>
+                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                    class="bx bx-log-out-circle"></i><span>Logout</span></a>
+                        </li>
+                    </ul>
                 </div>
-            </footer>
-            <!-- End of Footer -->
-
+            </nav>
         </div>
-        <!-- End of Content Wrapper -->
+    </header>
+    <!--end header -->
 
+    <!--start page wrapper -->
+    @yield('content')
+    <!--end page wrapper -->
+
+
+    <!--start overlay-->
+    <div class="overlay toggle-icon"></div>
+    <!--end overlay-->
+    <!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i
+            class='bx bxs-up-arrow-alt'></i></a>
+    <!--End Back To Top Button-->
+    <footer class="page-footer">
+        <p class="mb-0">Copyright © 2025. All right reserved.</p>
+    </footer>
     </div>
-    <!-- End of Page Wrapper -->
+    <!--end wrapper-->
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!-- search modal -->
+    <div class="modal" id="SearchModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                <div class="modal-header gap-2">
+                    <div class="position-relative popup-search w-100">
+                        <input class="form-control form-control-lg ps-5 border border-3 border-primary" type="search"
+                            placeholder="Search">
+                        <span
+                            class="position-absolute top-50 search-show ms-3 translate-middle-y start-0 top-50 fs-4"><i
+                                class='bx bx-search'></i></span>
+                    </div>
+                    <button type="button" class="btn-close d-md-none" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                <div class="modal-body">
+                    <div class="search-list">
+                        <p class="mb-1">Html Templates</p>
+                        <div class="list-group">
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action active align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-angular fs-4'></i>Best Html Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-vuejs fs-4'></i>Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-magento fs-4'></i>Responsive Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-shopify fs-4'></i>eCommerce Html Templates</a>
+                        </div>
+                        <p class="mb-1 mt-3">Web Designe Company</p>
+                        <div class="list-group">
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-windows fs-4'></i>Best Html Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-dropbox fs-4'></i>Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-opera fs-4'></i>Responsive Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-wordpress fs-4'></i>eCommerce Html Templates</a>
+                        </div>
+                        <p class="mb-1 mt-3">Software Development</p>
+                        <div class="list-group">
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-mailchimp fs-4'></i>Best Html Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-zoom fs-4'></i>Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-sass fs-4'></i>Responsive Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-vk fs-4'></i>eCommerce Html Templates</a>
+                        </div>
+                        <p class="mb-1 mt-3">Online Shoping Portals</p>
+                        <div class="list-group">
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-slack fs-4'></i>Best Html Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-skype fs-4'></i>Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-twitter fs-4'></i>Responsive Html5 Templates</a>
+                            <a href="javascript:;"
+                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
+                                    class='bx bxl-vimeo fs-4'></i>eCommerce Html Templates</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- end search modal -->
 
-    Bootstrap core JavaScript
-    <script src="{{asset('js/jquery.min.js')}}"></script>
-    <script src="{{asset('Bootstrap/js/bootstrap.bundle.min.js.map')}}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{asset('js/jquery.easing.min.js')}}"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
-
-    <!-- Page level plugins -->
-    <script src="{{asset('js/Chart.min.js')}}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{asset('js/chart-area-demo.js')}}"></script>
-    <script src="{{asset('js/chart-pie-demo.js')}}"></script>
+    <!--start switcher-->
+    <div class="switcher-wrapper">
+        <div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
+        </div>
+        <div class="switcher-body">
+            <div class="d-flex align-items-center">
+                <h5 class="mb-0 text-uppercase">Theme Customizer</h5>
+                <button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
+            </div>
+            <hr />
+            <h6 class="mb-0">Theme Styles</h6>
+            <hr />
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="lightmode" checked>
+                    <label class="form-check-label" for="lightmode">Light</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="darkmode">
+                    <label class="form-check-label" for="darkmode">Dark</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="semidark">
+                    <label class="form-check-label" for="semidark">Semi Dark</label>
+                </div>
+            </div>
+            <hr />
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="minimaltheme" name="flexRadioDefault">
+                <label class="form-check-label" for="minimaltheme">Minimal Theme</label>
+            </div>
+            <hr />
+            <h6 class="mb-0">Header Colors</h6>
+            <hr />
+            <div class="header-colors-indigators">
+                <div class="row row-cols-auto g-3">
+                    <div class="col">
+                        <div class="indigator headercolor1" id="headercolor1"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor2" id="headercolor2"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor3" id="headercolor3"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor4" id="headercolor4"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor5" id="headercolor5"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor6" id="headercolor6"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor7" id="headercolor7"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator headercolor8" id="headercolor8"></div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h6 class="mb-0">Sidebar Colors</h6>
+            <hr />
+            <div class="header-colors-indigators">
+                <div class="row row-cols-auto g-3">
+                    <div class="col">
+                        <div class="indigator sidebarcolor1" id="sidebarcolor1"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor2" id="sidebarcolor2"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor3" id="sidebarcolor3"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor4" id="sidebarcolor4"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor5" id="sidebarcolor5"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor6" id="sidebarcolor6"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor7" id="sidebarcolor7"></div>
+                    </div>
+                    <div class="col">
+                        <div class="indigator sidebarcolor8" id="sidebarcolor8"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end switcher-->
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <!--plugins-->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+    <script src="{{ asset('assets/plugins/chartjs/js/chart.js') }}"></script>
+    <script src="{{ asset('assets/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
+    <!--Morris JavaScript -->
+    <script src="{{ asset('assets/plugins/raphael/raphael-min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/morris/js/morris.js') }}"></script>
+    <script src="{{ asset('assets/js/index2.js') }}"></script>
+    <!--app JS-->
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 
 </body>
+
+<script>
+    'undefined' === typeof _trfq || (window._trfq = []);
+    'undefined' === typeof _trfd && (window._trfd = []), _trfd.push({
+        'tccl.baseHost': 'secureserver.net'
+    }, {
+        'ap': 'cpsh-oh'
+    }, {
+        'server': 'p3plzcpnl509132'
+    }, {
+        'dcenter': 'p3'
+    }, {
+        'cp_id': '10399385'
+    }, {
+        'cp_cl': '8'
+    }) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.
+</script>
+<script src='../../../../img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js'></script>
+<!-- Mirrored from codervent.com/rocker/demo/vertical/index2.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 24 Jun 2025 13:41:34 GMT -->
 
 </html>
