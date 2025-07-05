@@ -8,6 +8,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!--favicon-->
     <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
     <!--plugins-->
@@ -29,7 +31,25 @@
     <link rel="stylesheet" href="{{ asset('assets/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/header-colors.css') }}" />
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome Free 6.5.1 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+
+
+
+
     <title>Digital Library</title>
+
+
 </head>
 
 <body>
@@ -101,9 +121,11 @@
 
                         </li>
                         <li class="nav-item dark-mode d-none d-sm-flex">
-                            <a class="nav-link dark-mode-icon" href="javascript:;"><i class='bx bx-moon'></i>
+                            <a class="nav-link dark-mode-icon" href="javascript:;" id="darkModeToggle">
+                                <i class='bx bx-moon'></i>
                             </a>
                         </li>
+
 
                         <li class="nav-item dropdown dropdown-app">
                             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown"
@@ -924,13 +946,19 @@
         </div>
     </div>
     <!--end switcher-->
-    <!-- Bootstrap JS -->
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    {{-- alpine js  --}}
-    <script src="https://unpkg.com/alpinejs" defer></script>
+    <!-- ✅ jQuery must be first -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
-    <!--plugins-->
-    {{-- <script src="{{ asset('assets/js/jquery.min.js') }}"></script> --}}
+    <!-- ✅ Then Bootstrap -->
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
+
+
+    <!-- ✅ Then plugins -->
     <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
@@ -938,13 +966,36 @@
     <script src="{{ asset('assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
     <script src="{{ asset('assets/plugins/chartjs/js/chart.js') }}"></script>
     <script src="{{ asset('assets/plugins/sparkline-charts/jquery.sparkline.min.js') }}"></script>
-    <!--Morris JavaScript -->
     <script src="{{ asset('assets/plugins/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('assets/plugins/morris/js/morris.js') }}"></script>
+
+    <!-- ✅ App-specific JS -->
     <script src="{{ asset('assets/js/index2.js') }}"></script>
-    <!--app JS-->
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
+    <!-- ✅ Alpine (must be last and with defer) -->
+    <script src="https://unpkg.com/alpinejs" defer></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+
+    <script>
+        // On page load, apply saved mode
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedMode = localStorage.getItem('theme') || 'light';
+            if (savedMode === 'dark') {
+                document.body.classList.add('dark-mode');
+                // Optionally toggle icon here, if you want to change moon/sun icon
+            }
+        });
+
+        // Toggle dark mode on click and save preference
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    </script>
 
 
 
@@ -966,6 +1017,8 @@
         'cp_cl': '8'
     }) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.
 </script>
+
+
 <script src='../../../../img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js'></script>
 <!-- Mirrored from codervent.com/rocker/demo/vertical/index2.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 24 Jun 2025 13:41:34 GMT -->
 

@@ -32,7 +32,7 @@
                         <!-- STEP 1 -->
                         <div x-show="step === 1" class="mb-4">
                             <label class="form-label">Book Name</label>
-                            <input type="text" x-model="form.name" @input="errors.name = null"
+                            <input type="text" x-model="form.name" @input="errors.name = null; updateProgress()"
                                 :class="errors.name ? 'is-invalid' : (form.name.trim().length > 0 ? 'is-valid' : '')"
                                 class="form-control" name="name" />
                             <div class="text-danger" x-show="errors.name" x-text="errors.name"></div>
@@ -42,8 +42,8 @@
                             @enderror
 
                             <label class="form-label mt-3">Description</label>
-                            <textarea name="description" x-model="form.description" @input="errors.description = null" rows="3"
-                                class="form-control"
+                            <textarea name="description" x-model="form.description" @input="errors.description = null; updateProgress()"
+                                rows="3" class="form-control"
                                 :class="errors.description ? 'is-invalid' : (form.description.trim().length > 0 ? 'is-valid' :
                                     '')"></textarea>
                             <div class="text-danger" x-show="errors.description" x-text="errors.description"></div>
@@ -52,8 +52,8 @@
                             @enderror
 
                             <label class="form-label mt-3">Author</label>
-                            <select name="author_id" x-model="form.author_id" @change="errors.author_id = null"
-                                class="form-select"
+                            <select name="author_id" x-model="form.author_id"
+                                @change="errors.author_id = null; updateProgress()" class="form-select"
                                 :class="errors.author_id ? 'is-invalid' : (form.author_id ? 'is-valid' : '')">
                                 <option value="">Select Author</option>
                                 @foreach ($authors as $author)
