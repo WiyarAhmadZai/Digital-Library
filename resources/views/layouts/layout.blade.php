@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!--favicon-->
-    <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('assets/img/favicon-32x32.png') }}" type="image/png" />
     <!--plugins-->
     <link href="{{ asset('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
@@ -980,22 +980,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 
-    <script>
-        // On page load, apply saved mode
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedMode = localStorage.getItem('theme') || 'light';
-            if (savedMode === 'dark') {
-                document.body.classList.add('dark-mode');
-                // Optionally toggle icon here, if you want to change moon/sun icon
-            }
-        });
 
-        // Toggle dark mode on click and save preference
-        document.getElementById('darkModeToggle').addEventListener('click', () => {
-            const isDark = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    </script>
 
 
 

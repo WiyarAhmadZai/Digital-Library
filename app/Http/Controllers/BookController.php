@@ -172,8 +172,11 @@ class BookController extends Controller
                 $deleteBtn = '<button class="btn btn-danger btn-sm px-2 py-1 delete-btn" data-id="' . $row->id . '">
                             <i class="bi bi-trash"></i>
                         </button>';
+                $viewUrl = '<a href="' . route('admin.book.view', $row->id) . '" class="btn btn-info btn-sm px-2 py-1 ">
+                        <i class="bi bi-eye"></i>
+                    </a>';
 
-                return '<div class="d-inline-flex align-items-center gap-1">' . $editBtn . $deleteBtn .  '</div>';
+                return '<div class="d-inline-flex align-items-center gap-1">' . $editBtn . $deleteBtn . $viewUrl .  '</div>';
             })
             ->filter(function ($query) use ($search) {
                 if ($search) {
@@ -198,5 +201,11 @@ class BookController extends Controller
         }
         $book->delete();
         return response()->json(['message' => 'Book deleted successfully']);
+    }
+
+    public function bookView($id)
+    {
+        $book = Book::findOrFail($id);
+        dd($book);
     }
 }
