@@ -147,8 +147,7 @@ class BookController extends Controller
                     return '
                     <div class="swiper-container" id="' . $swiperId . '" style="width: 60px; height: 50px; position: relative; user-select:none;">
                         <div class="swiper-wrapper">' . $slidesHtml . '</div>
-                    </div>
-                ';
+                    </div>';
                 } else {
                     // Fallback image if none exists
                     $url = asset('assets/img/avatars/avatar-1.png');

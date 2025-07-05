@@ -45,10 +45,6 @@
 
 
     {{-- frontend links --}}
-    <!--<< Favcion >>-->
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}">
-    <!--<< Bootstrap min.css >>-->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <!--<< All Min Css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
     <!--<< Animate.css >>-->
@@ -57,8 +53,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.css') }}">
     <!--<< MeanMenu.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/meanmenu.css') }}">
-    <!--<< Swiper Bundle.css >>-->
-    <link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.min.css') }}">
+
     <!--<< Nice Select.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/nice-select.css') }}">
     <!--<< Icomoon.css >>-->
@@ -981,8 +976,6 @@
     <!-- ✅ Then Bootstrap -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
-
-
     <!-- ✅ Then plugins -->
     <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
@@ -1005,6 +998,22 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     {{-- frontend scripts  --}}
+    <script src="{{ asset('assets/js/viewport.jquery.js') }}"></script>
+
+    <script src="{{ asset('assets/js/jquery.nice-select.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/jquery.waypoints.js') }}"></script>
+
+    <script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/jquery.meanmenu.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.magnific-popup.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/wow.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/gsap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
 
 
 
