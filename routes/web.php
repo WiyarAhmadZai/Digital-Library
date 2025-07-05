@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('delete/{id}', [BookController::class, 'destroy'])->name('books.destroy');
             Route::get('books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
             Route::get('view/{id}', [BookController::class, 'bookView'])->name('admin.book.view');
+            Route::post('/reviews', [BookController::class, 'reviewStore'])->name('reviews.store');
             // Add update/post routes as needed
         });
     });

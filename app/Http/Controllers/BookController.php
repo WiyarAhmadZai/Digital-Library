@@ -9,7 +9,7 @@ use App\Http\Requests\StoreBookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
-
+use App\Models\Review;
 
 
 
@@ -202,10 +202,30 @@ class BookController extends Controller
         $book->delete();
         return response()->json(['message' => 'Book deleted successfully']);
     }
+    // app/Http/Controllers/Admin/BookController.php
 
     public function bookView($id)
     {
-        $book = Book::findOrFail($id);
-        dd($book);
+        $book = Book::with(['author', 'category', 'reviews'])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->findOrFail($id);
+
+        return view('admin.books.book-view', compact('book'));
+    }
+
+    public function reviewStore(Request $request)
+    {
+        $validated = $request->validate([
+            'book_id' => 'required|exists:books,id',
+            'user_name' => 'required|string|max:255',
+            'user_email' => 'required|email|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+        ]);
+
+        Review::create($validated);
+
+        return redirect()->back()->with('success', 'Review added successfully!');
     }
 }

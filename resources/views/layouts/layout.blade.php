@@ -44,6 +44,31 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
 
+    {{-- frontend links --}}
+    <!--<< Favcion >>-->
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}">
+    <!--<< Bootstrap min.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <!--<< All Min Css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}">
+    <!--<< Animate.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
+    <!--<< Magnific Popup.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.css') }}">
+    <!--<< MeanMenu.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/meanmenu.css') }}">
+    <!--<< Swiper Bundle.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.min.css') }}">
+    <!--<< Nice Select.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/nice-select.css') }}">
+    <!--<< Icomoon.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/icomoon.css') }}">
+    <!--<< Main.css >>-->
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
+    {{-- end fron end links  --}}
+
+
 
 
 
@@ -978,6 +1003,9 @@
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    {{-- frontend scripts  --}}
+
 
 
 
