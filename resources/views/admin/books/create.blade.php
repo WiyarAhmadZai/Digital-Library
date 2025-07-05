@@ -124,15 +124,7 @@
                             @error('publish_year')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
-
-                            <label class="form-label mt-3">Status</label>
-                            <input type="text" name="status" x-model="form.status"
-                                @input="errors.status = null; updateProgress()" class="form-control"
-                                :class="errors.status ? 'is-invalid' : (form.status.trim().length > 0 ? 'is-valid' : '')" />
-                            <div class="text-danger" x-show="errors.status" x-text="errors.status"></div>
-                            @error('status')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                            <input type="hidden" name="status" x-model="form.status" value="active" />
 
                             <label class="form-label mt-3">Total Pages</label>
                             <input type="number" name="total_pages" x-model="form.total_pages"
@@ -270,7 +262,7 @@
                     currency_type: @json(old('currency_type', $book->currency_type ?? '')),
                     language: @json(old('language', $book->language ?? '')),
                     publish_year: @json(old('publish_year', $book->publish_year ?? '')),
-                    status: @json(old('status', $book->status ?? '')),
+                    status: @json(old('status', isset($book) && $book->deleted_at ? 'deactive' : 'active')),
                     total_pages: @json(old('total_pages', $book->total_pages ?? '')),
                     sku: @json(old('sku', $book->sku ?? '')),
                     format: @json(old('format', $book->format ?? '')),

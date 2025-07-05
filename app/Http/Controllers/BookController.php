@@ -125,6 +125,7 @@ class BookController extends Controller
         return DataTables::of($books)
             ->addIndexColumn()
             ->addColumn('name', fn($row) => $row->name ?? '')
+            ->addColumn('final_price', fn($row) => $row->final_price ?? '')
             ->addColumn('author', fn($row) => optional($row->author)->name ?? '')
             ->addColumn('photo', function ($book) {
                 $imagePaths = json_decode($book->image_path, true);

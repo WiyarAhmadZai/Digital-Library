@@ -52,6 +52,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Final Price</th>
                                     <th>Photo</th>
                                     <th>Book ID</th>
                                     <th>Author</th>
@@ -99,6 +100,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'final_price',
+                        name: 'final_price'
                     },
                     {
                         data: 'photo',
