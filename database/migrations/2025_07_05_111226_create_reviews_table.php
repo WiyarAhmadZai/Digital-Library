@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('parent_id')->nullable(); // no ->after()
+
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
+
             $table->string('user_name');
             $table->string('user_email');
-            $table->tinyInteger('rating'); // 1 to 5 rating
+            $table->tinyInteger('rating')->nullable();
             $table->text('comment')->nullable();
+
             $table->timestamps();
+
+            // Define foreign key AFTER defining the columns
+            $table->foreign('parent_id')->references('id')->on('reviews')->onDelete('cascade');
         });
     }
 

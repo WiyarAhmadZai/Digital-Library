@@ -34,6 +34,10 @@
     <link rel="stylesheet" href="{{ asset('assets/css/icomoon.css') }}">
     <!--<< Main.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
+    {{-- Include Swiper CSS (put in your layout head ideally) --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" /> --}}
+
 </head>
 
 <body>
@@ -259,7 +263,7 @@
                                     <div class="icon">
                                         <i class="fa-sharp fa-solid fa-grid-2"></i>
                                     </div>
-                                    
+
                                     <form action="#" class="search-toggle-box d-md-block">
                                         <div class="input-area">
                                             <input type="text" placeholder="Author">

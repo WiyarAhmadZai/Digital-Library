@@ -219,12 +219,17 @@ class BookController extends Controller
             'book_id' => 'required|exists:books,id',
             'user_name' => 'required|string|max:255',
             'user_email' => 'required|email|max:255',
-            'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string',
+            'rating' => 'required_if:parent_id,null|integer|min:1|max:5',  // rating required only for top-level reviews
+            'parent_id' => 'nullable|exists:reviews,id',
+            'terms' => 'accepted',
         ]);
+
+        // If it's a reply (parent_id set), rating is optional (or you can skip rating for replies)
+        // You can set rating null or 0 for replies if you want
 
         Review::create($validated);
 
-        return redirect()->back()->with('success', 'Review added successfully!');
+        return redirect()->back()->with('success', 'Your review or reply has been submitted.');
     }
 }

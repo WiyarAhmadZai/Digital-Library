@@ -244,7 +244,7 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="assets/images/county/01.png" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/01.png') }}" width="35" alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">United States <span class="float-end">50%</span></p>
@@ -259,7 +259,7 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="assets/images/county/02.png" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/02.png') }}" width="35" alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">65%</span></p>
@@ -274,7 +274,7 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="assets/images/county/03.png" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/03.png') }}" width="35" alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">75%</span></p>
@@ -288,7 +288,7 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="assets/images/county/04.png" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/04.png') }}" width="35" alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">85%</span></p>
@@ -302,7 +302,7 @@
                             <div class="mb-0">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="assets/images/county/05.png" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/05.png') }}" width="35" alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">95%</span></p>
@@ -411,7 +411,8 @@
                             <tbody>
                                 <tr>
                                     <td>Iphone 5</td>
-                                    <td><img src="assets/images/products/01.png" class="product-img-2" alt="product img">
+                                    <td><img src="{{ asset('assets/img/products/01.png') }}" class="product-img-2"
+                                            alt="product img">
                                     </td>
                                     <td>#9405822</td>
                                     <td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span>
@@ -428,7 +429,8 @@
 
                                 <tr>
                                     <td>Earphone GL</td>
-                                    <td><img src="assets/images/products/02.png" class="product-img-2" alt="product img">
+                                    <td><img src="{{ asset('assets/img/products/02.png') }}" class="product-img-2"
+                                            alt="product img">
                                     </td>
                                     <td>#8304620</td>
                                     <td><span class="badge bg-gradient-blooker text-white shadow-sm w-100">Pending</span>
@@ -445,7 +447,8 @@
 
                                 <tr>
                                     <td>HD Hand Camera</td>
-                                    <td><img src="assets/images/products/03.png" class="product-img-2" alt="product img">
+                                    <td><img src="{{ asset('assets/img/products/03.png') }}" class="product-img-2"
+                                            alt="product img">
                                     </td>
                                     <td>#4736890</td>
                                     <td><span class="badge bg-gradient-bloody text-white shadow-sm w-100">Failed</span>
@@ -462,7 +465,8 @@
 
                                 <tr>
                                     <td>Clasic Shoes</td>
-                                    <td><img src="assets/images/products/04.png" class="product-img-2" alt="product img">
+                                    <td><img src="{{ asset('assets/img/products/04.png"') }} class="product-img-2"
+                                            alt="product img">
                                     </td>
                                     <td>#8543765</td>
                                     <td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span>
@@ -478,7 +482,8 @@
                                 </tr>
                                 <tr>
                                     <td>Sitting Chair</td>
-                                    <td><img src="assets/images/products/06.png" class="product-img-2" alt="product img">
+                                    <td><img src="{{ asset('assets/img/products/06.png') }}" class="product-img-2"
+                                            alt="product img">
                                     </td>
                                     <td>#9629240</td>
                                     <td><span class="badge bg-gradient-blooker text-white shadow-sm w-100">Pending</span>
@@ -494,7 +499,8 @@
                                 </tr>
                                 <tr>
                                     <td>Hand Watch</td>
-                                    <td><img src="assets/images/products/05.png" class="product-img-2" alt="product img">
+                                    <td><img src="{{ asset('assets/img/products/05.png') }}" class="product-img-2"
+                                            alt="product img">
                                     </td>
                                     <td>#8506790</td>
                                     <td><span class="badge bg-gradient-bloody text-white shadow-sm w-100">Failed</span>

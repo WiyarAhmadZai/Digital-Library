@@ -101,12 +101,61 @@
                         class="fa-solid fa-arrow-right-long"></i></a>
             </div>
             <div class="swiper book-slider">
-                <div class="swiper-wrapper" id="book-swiper-wrapper">
-                    <!-- Slides injected here -->
+                <div class="swiper-wrapper">
+                    @foreach ($books as $book)
+                        <div class="swiper-slide">
+                            <div class="shop-box-items style-2">
+                                <div class="book-thumb center">
+                                    <a href="{{ route('frontend.shopdetails', ['id' => $book->id]) }}">
+                                        <img src="{{ asset($book->image_path ?? 'assets/img/default-book.png') }}"
+                                            alt="{{ $book->title }}">
+                                    </a>
+                                    <ul class="post-box">
+                                        <li>Hot</li>
+                                        <li>-{{ round((($book->price - $book->discount_price) / $book->price) * 100) }}%
+                                        </li>
+                                    </ul>
+                                    <ul class="shop-icon d-grid justify-content-center align-items-center">
+                                        <li><a href="#"><i class="far fa-heart"></i></a></li>
+                                        <li><a href="#"><img class="icon"
+                                                    src="{{ asset('assets/img/icon/shuffle.svg') }}" alt="shuffle"></a>
+                                        </li>
+                                        <li><a href="{{ route('frontend.shopDetailsData', ['id' => $book->id]) }}"><i
+                                                    class="far fa-eye"></i></a></li>
+                                    </ul>
+                                    <div class="shop-button">
+                                        <a href="#" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
+                                            To Cart</a>
+                                    </div>
+                                </div>
+                                <div class="shop-content">
+                                    <h5>{{ $book->category->name ?? 'Category' }}</h5>
+                                    <h3><a
+                                            href="{{ route('frontend.shopdetails', ['id' => $book->id]) }}">{{ $book->title }}</a>
+                                    </h3>
+                                    <ul class="price-list">
+                                        <li>${{ number_format($book->discount_price, 2) }}</li>
+                                        <li><del>${{ number_format($book->price, 2) }}</del></li>
+                                    </ul>
+                                    <ul class="author-post">
+                                        <li class="authot-list">
+                                            <span class="thumb">
+                                                <img src="{{ asset($book->author->photo ?? 'assets/img/testimonial/default.png') }}"
+                                                    alt="author">
+                                            </span>
+                                            <span class="content">{{ $book->author->name ?? 'Author' }}</span>
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-star"></i> {{ number_format($book->rating ?? 0, 1) }}
+                                            ({{ $book->reviews_count ?? 0 }})
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <!-- Add navigation buttons -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+
             </div>
 
 
@@ -310,7 +359,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="shop-details.html"><i class="far fa-eye"></i></a>
+                                <a href=""><i class="far fa-eye"></i></a>
                             </li>
                         </ul>
                         <div class="shop-button">
@@ -1000,217 +1049,5 @@
 @section('scripts')
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("/book/getBooks")
-                .then(response => response.json())
-                .then(books => {
-                    const wrapper = document.getElementById("book-swiper-wrapper");
-                    wrapper.innerHTML = "";
-
-                    // Ensure minimum 5 slides
-                    while (books.length < 5) {
-                        books.push({
-                            id: 0,
-                            name: "Placeholder Book",
-                            category: "Category",
-                            price: 0,
-                            currency_type: "$",
-                            discount: 0,
-                            image_path: "default-book.png",
-                            author: {
-                                name: "Unknown Author",
-                                image_path: "default-author.png"
-                            }
-                        });
-                    }
-
-                    books.forEach(book => {
-                        wrapper.innerHTML += `
-                    <div class="swiper-slide">
-                        <div class="shop-box-items style-2">
-                            <div class="book-thumb center">
-                                <a href="/book/${book.id}">
-                                    <img src="/storage/${book.image_path}" alt="Book Image">
-                                </a>
-                                <ul class="post-box">
-                                    <li>Hot</li>
-                                    <li>-${book.discount || 0}%</li>
-                                </ul>
-                                <ul class="shop-icon d-grid justify-content-center align-items-center">
-                                    <li><a href="#"><i class="far fa-heart"></i></a></li>
-                                    <li><a href="#"><img class="icon" src="/assets/img/icon/shuffle.svg" alt="icon"></a></li>
-                                    <li><a href="#"><i class="far fa-eye"></i></a></li>
-                                </ul>
-                                <div class="shop-button">
-                                    <a href="#" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="shop-content">
-                                <h5>${book.category}</h5>
-                                <h3><a href="/book/${book.id}">${book.name}</a></h3>
-                                <ul class="price-list">
-                                    <li>${book.currency_type} ${book.price}</li>
-                                </ul>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="/storage/${book.author?.image_path || 'default-author.png'}" alt="Author">
-                                        </span>
-                                        <span class="content">${book.author?.name || 'Unknown Author'}</span>
-                                    </li>
-                                    <li>
-                                        <i class="fa-solid fa-star"></i> 4.0 (100)
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                    });
-
-                    // Initialize Swiper
-                    new Swiper('.book-slider', {
-                        loop: true,
-                        slidesPerView: 3,
-                        spaceBetween: 30,
-                        navigation: {
-                            nextEl: ".swiper-button-next",
-                            prevEl: ".swiper-button-prev",
-                        },
-                    });
-                })
-                .catch(error => console.error("Error loading books:", error));
-        });
-
-        // ajax request for feature books data \
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('/book/getFeaturedBooks')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(books => {
-                    const wrapper = document.getElementById("featured-book-swiper-wrapper");
-                    if (!wrapper) {
-                        console.error("Featured books wrapper not found.");
-                        return;
-                    }
-
-                    wrapper.innerHTML = "";
-
-                    books.forEach(book => {
-                        const author = book.author ? book.author.name : 'Unknown Author';
-                        const imagePath = `/storage/${book.image_path}`;
-                        const clientImage =
-                            `/assets/img/testimonial/client-${Math.floor(Math.random() * 3) + 1}.png`;
-
-                        const slide = `
-<div class="swiper-slide">
-    <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s" style="
-        display: flex;
-        align-items: center;
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        padding: 10px;
-        height: 300px;
-    ">
-        <!-- Book Image (Left) -->
-        <div class="book-thumb" style="
-
-            height: 250px;
-            overflow: hidden;
-            border-radius: 8px;
-
-        ">
-            <a href="/book/${book.id}">
-                <img src="${imagePath}" alt="${book.name}" style="
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    display: block;
-                ">
-            </a>
-        </div>
-
-        <!-- Book Info (Right) -->
-        <div class="shop-content" style="flex: 1;">
-            <ul class="book-category" style="margin: 0 0 4px 0;">
-                <li class="book-category-badge" style="
-                    display: inline-block;
-                    background: #3b82f6;
-                    color: white;
-                    font-size: 12px;
-                    padding: 2px 8px;
-                    border-radius: 4px;
-                ">${book.category}</li>
-            </ul>
-            <h3 style="margin: 4px 0 6px; font-size: 16px;">
-                <a href="/book/${book.id}" style="text-decoration: none; color: #111;">
-                    ${book.name}
-                </a>
-            </h3>
-            <ul class="author-post" style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                <li class="authot-list" style="display: flex; align-items: center;">
-                    <span class="thumb" style="width: 24px; height: 24px; border-radius: 50%; overflow: hidden; display: inline-block; margin-right: 5px;">
-                        <img src="${clientImage}" alt="author" style="width: 100%; height: 100%; object-fit: cover;">
-                    </span>
-                    <span class="content" style="font-size: 13px; color: #333;">${author}</span>
-                </li>
-            </ul>
-            <ul class="price-list" style="display: flex; gap: 10px; margin-bottom: 4px;">
-                <li style="color: green; font-size: 15px; font-weight: bold;">${book.currency_type} ${book.price}</li>
-                <li style="text-decoration: line-through; color: red; font-size: 12px;">${book.currency_type} ${(book.price * 1.3).toFixed(2)}</li>
-            </ul>
-            <p style="font-size: 12px; color: #666; margin: 0;">
-                ${Math.floor(Math.random() * 40 + 10)} Books In Stock
-            </p>
-        </div>
-    </div>
-</div>
-`;
-
-
-                        wrapper.insertAdjacentHTML('beforeend', slide);
-                    });
-
-                    // Initialize Swiper AFTER DOM updates
-                    setTimeout(() => {
-                        new Swiper('.featured-books-slider', {
-                            loop: true,
-                            slidesPerView: 1,
-                            spaceBetween: 20,
-                            pagination: {
-                                el: '.swiper-pagination',
-                                clickable: true,
-                            },
-                            autoplay: {
-                                delay: 3000,
-                                disableOnInteraction: false,
-                            },
-                            breakpoints: {
-                                640: {
-                                    slidesPerView: 1
-                                },
-                                768: {
-                                    slidesPerView: 2
-                                },
-                                1024: {
-                                    slidesPerView: 3
-                                },
-                            }
-                        });
-                    }, 100);
-                })
-                .catch(error => {
-                    console.error("Error fetching featured books:", error);
-                });
-        });
-    </script>
+    <script></script>
 @endsection

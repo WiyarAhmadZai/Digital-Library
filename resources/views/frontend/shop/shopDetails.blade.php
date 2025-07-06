@@ -1,4 +1,33 @@
-@extends('frontend.layout.master');
+@extends('frontend.layout.master')
+
+
+<style>
+    .review-wrap-area {
+        display: flex;
+        /* default visible style */
+    }
+
+    .review-thumb img {
+        object-fit: cover;
+    }
+
+    .review-content .head-area h5,
+    .review-content .head-area h6 {
+        margin: 0;
+    }
+
+    .review-content p {
+        margin-bottom: 0;
+    }
+
+    .review-content .star i {
+        margin-right: 2px;
+    }
+
+    .review-form {
+        margin-top: 2rem;
+    }
+</style>
 
 @section('content')
     <!-- Breadcumb Section Start -->
@@ -36,219 +65,170 @@
         <div class="container">
             <div class="shop-details-wrapper">
                 <div class="row g-4">
+                    {{-- === LEFT SIDE IMAGE PREVIEW === --}}
                     <div class="col-lg-5">
                         <div class="shop-details-image">
+                            {{-- Main Images --}}
                             <div class="tab-content">
-                                <div id="thumb1" class="tab-pane fade show active">
-                                    <div class="shop-details-thumb">
-                                        <img src="{{ asset('assets/img/shop-details/01.png') }}" alt="img">
+                                @php $images = json_decode($book->image_path, true); @endphp
+                                @foreach ($images as $index => $image)
+                                    @php $imageUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image); @endphp
+                                    <div id="thumb{{ $index + 1 }}"
+                                        class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}">
+                                        <div class="shop-details-thumb">
+                                            <img src="{{ $imageUrl }}" alt="img"
+                                                style="height: 380px; width: 100%; object-fit: contain;">
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="thumb2" class="tab-pane fade">
-                                    <div class="shop-details-thumb">
-                                        <img src="{{ asset('assets/img/shop-details/02.png') }}" alt="img">
-                                    </div>
-                                </div>
-                                <div id="thumb3" class="tab-pane fade">
-                                    <div class="shop-details-thumb">
-                                        <img src="{{ asset('assets/img/shop-details/03.png') }}" alt="img">
-                                    </div>
-                                </div>
-                                <div id="thumb4" class="tab-pane fade">
-                                    <div class="shop-details-thumb">
-                                        <img src="{{ asset('assets/img/shop-details/04.png') }}" alt="img">
-                                    </div>
-                                </div>
-                                <div id="thumb5" class="tab-pane fade">
-                                    <div class="shop-details-thumb">
-                                        <img src="{{ asset('assets/img/shop-details/05.png') }}" alt="img">
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
-                            <ul class="nav">
-                                <li class="nav-item">
-                                    <a href="#thumb1" data-bs-toggle="tab" class="nav-link active">
-                                        <img src="{{ asset('assets/img/shop-details/sm-1.png') }}" alt="img">
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#thumb2" data-bs-toggle="tab" class="nav-link">
-                                        <img src="assets/img/shop-details/sm-2.png" alt="img">
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#thumb3" data-bs-toggle="tab" class="nav-link">
-                                        <img src="{{ asset('assets/img/shop-details/sm-3.png') }}" alt="img">
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#thumb4" data-bs-toggle="tab" class="nav-link">
-                                        <img src="{{ asset('assets/img/shop-details/sm-4.png') }}" alt="img">
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#thumb5" data-bs-toggle="tab" class="nav-link">
-                                        <img src="{{ asset('assets/img/shop-details/sm-5.png') }}" alt="img">
-                                    </a>
-                                </li>
+
+                            {{-- Thumbnail Tabs --}}
+                            <ul class="nav flex-nowrap overflow-auto mt-3" style="gap: 5px;">
+                                @foreach ($images as $index => $image)
+                                    @php $thumbUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image); @endphp
+                                    <li class="nav-item" style="flex: 0 0 auto;">
+                                        <a href="#thumb{{ $index + 1 }}" data-bs-toggle="tab"
+                                            class="nav-link {{ $index == 0 ? 'active' : '' }}">
+                                            <img src="{{ $thumbUrl }}" alt="img"
+                                                style="height: 60px; width: 60px; object-fit: cover;">
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
+
+                    {{-- === RIGHT SIDE BOOK DETAILS === --}}
                     <div class="col-lg-7">
                         <div class="shop-details-content">
-                            <div class="title-wrapper">
-                                <h2>Castle The Sky</h2>
-                                <h5>Stock availability.</h5>
+                            <div class="title-wrapper mb-2">
+                                <h2>{{ $book->name }}</h2>
+                                <h5 class="text-muted">{{ $book->in_stock ? 'In Stock' : 'Out of Stock' }}</h5>
                             </div>
-                            <div class="star">
-                                <a href="shop-details.html"> <i class="fas fa-star"></i></a>
-                                <a href="shop-details.html"><i class="fas fa-star"></i></a>
-                                <a href="shop-details.html"> <i class="fas fa-star"></i></a>
-                                <a href="shop-details.html"><i class="fas fa-star"></i></a>
-                                <a href="shop-details.html"><i class="fa-regular fa-star"></i></a>
-                                <span>(1 Customer Reviews)</span>
+
+                            {{-- Rating Display --}}
+                            <div class="star mb-3">
+                                @php
+                                    $rating = round($book->reviews_avg_rating ?? 0);
+                                    $reviewCount = $book->reviews_count ?? 0;
+                                @endphp
+
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $rating)
+                                        <i class="fas fa-star text-warning"></i>
+                                    @else
+                                        <i class="fa-regular fa-star text-warning"></i>
+                                    @endif
+                                @endfor
+                                <span>({{ $reviewCount }} Review{{ $reviewCount != 1 ? 's' : '' }})</span>
                             </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar, tortor quis
-                                varius pretium est felis scelerisque nulla, vitae placerat justo nunc a massa. Aenean
-                                nec montes vestibulum urna vel imperdiet ipsum. Orci varius natoque penatibus et magnis
-                                dis ridicul parturient montes.
+
+                            {{-- Book Description --}}
+                            <p class="text-justify mb-3">
+                                {{ $book->description ?? 'No description available.' }}
                             </p>
-                            <div class="price-list">
-                                <h3>$160.00</h3>
-                            </div>
-                            <div class="cart-wrapper">
-                                <div class="quantity-basket">
-                                    <p class="qty">
-                                        <button class="qtyminus" aria-hidden="true">−</button>
-                                        <input type="number" name="qty" id="qty2" min="1" max="10"
-                                            step="1" value="1">
-                                        <button class="qtyplus" aria-hidden="true">+</button>
-                                    </p>
+
+                            {{-- Price & Quantity --}}
+                            <div class="d-flex align-items-center flex-wrap gap-3 mb-3">
+                                <div class="price-list">
+                                    <h4 class="mb-0">Total: $<span id="totalPrice">{{ $book->final_price }}</span></h4>
+                                    <input type="hidden" id="unitPrice" value="{{ $book->final_price }}">
                                 </div>
-                                <button type="button" class="theme-btn style-2" data-bs-toggle="modal"
+
+                                {{-- Quantity Input --}}
+                                <div class="quantity-basket d-flex align-items-center">
+                                    <button class="qtyminus btn btn-outline-secondary btn-sm" type="button">−</button>
+                                    <input type="number" name="qty" id="qty2"
+                                        class="form-control form-control-sm mx-2" min="1" max="10"
+                                        value="1" style="width: 60px;">
+                                    <button class="qtyplus btn btn-outline-secondary btn-sm" type="button">+</button>
+                                </div>
+
+                                {{-- Buttons --}}
+                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#readMoreModal">
-                                    Read A little
+                                    Read A Little
                                 </button>
-                                <!-- Read More Modal -->
-                                <div class="modal fade" id="readMoreModal" tabindex="-1"
-                                    aria-labelledby="readMoreModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-body"
-                                                style="background-image: url({{ asset('assets/img/popupBg.png') }});">
-                                                <div class="close-btn">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="readMoreBox">
-                                                    <div class="content">
-                                                        <h3 id="readMoreModalLabel">The Role Of Book</h3>
-                                                        <p>
-                                                            Educating the Public <br>
-                                                            Political books play a crucial role in educating the public
-                                                            about political theories, historical events, policies, and the
-                                                            workings of governments. They provide readers with insights into
-                                                            complex political concepts and the historical context behind
-                                                            current events, helping to foster a more informed citizenry.
-                                                            <br><br>
+                                <a href="#" class="btn btn-success btn-sm">
+                                    <i class="fa-solid fa-basket-shopping me-1"></i> Add To Cart
+                                </a>
+                            </div>
 
-                                                            Shaping Public Opinion <br>
-                                                            Authors of political books often aim to influence public opinion
-                                                            by presenting arguments and perspectives on various issues.
-                                                            These books can sway readers' views, either reinforcing their
-                                                            existing beliefs or challenging them to consider alternative
-                                                            viewpoints. This influence can extend to political debates and
-                                                            discussions in the public sphere. <br><br>
-
-                                                            Documenting History <br>
-                                                            Political books serve as valuable records of historical events
-                                                            and political movements. They document the thoughts, actions,
-                                                            and decisions of political leaders and activists, providing
-                                                            future generations with a detailed account of significant
-                                                            periods and events. This historical documentation is essential
-                                                            for understanding the evolution of political systems and
-                                                            ideologies.
-
+                            {{-- Read More Modal --}}
+                            <div class="modal fade" id="readMoreModal" tabindex="-1" aria-labelledby="readMoreModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content"
+                                        style="background-image: url('{{ asset('assets/img/affirm.png') }}'); background-size: cover;">
+                                        <div class="modal-body">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="readMoreBox px-3">
+                                                <div class="content">
+                                                    <h4 id="readMoreModalLabel" class="mb-3">{{ $book->name }}</h4>
+                                                    @if (!empty($book->short_description))
+                                                        <p class="text-justify">{{ $book->short_description }}</p>
+                                                    @else
+                                                        <p class="text-muted fst-italic">No preview available for this book.
                                                         </p>
-                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <a href="shop-details.html" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
-                                    Add To Cart</a>
-                                <div class="icon-box">
-                                    <a href="shop-details.html" class="icon">
-                                        <i class="far fa-heart"></i>
-                                    </a>
-                                    <a href="shop-details.html" class="icon-2">
-                                        <img src="{{ asset('assets/img/icon/shuffle.svg') }}" alt="svg-icon">
-                                    </a>
-                                </div>
                             </div>
-                            <div class="category-box">
+
+
+                            {{-- Book Meta --}}
+                            <div class="category-box mt-4">
                                 <div class="category-list">
                                     <ul>
-                                        <li>
-                                            <span>SKU:</span> FTC1020B65D
-                                        </li>
-                                        <li>
-                                            <span>Category:</span> Kids Toys
-                                        </li>
+                                        <li><span>SKU:</span> {{ $book->sku ?? 'N/A' }}</li>
+                                        <li><span>Category:</span> {{ $book->category->name ?? 'Uncategorized' }}</li>
                                     </ul>
                                     <ul>
-                                        <li>
-                                            <span>Tags:</span> Design Low Book
+                                        <li><span>Tags:</span>
+                                            @php
+                                                $tags = is_array($book->tags) ? $book->tags : explode(',', $book->tags);
+                                            @endphp
+                                            @foreach ($tags as $tag)
+                                                <span class="badge bg-secondary me-1">{{ trim($tag) }}</span>
+                                            @endforeach
                                         </li>
-                                        <li>
-                                            <span>Format:</span> Hardcover
-                                        </li>
+                                        <li><span>Format:</span> {{ $book->format ?? 'Hardcover' }}</li>
                                     </ul>
                                     <ul>
-                                        <li>
-                                            <span>Total page:</span> 330
-                                        </li>
-                                        <li>
-                                            <span>Language:</span> English
-                                        </li>
+                                        <li><span>Total page:</span> {{ $book->pages ?? 'N/A' }}</li>
+                                        <li><span>Language:</span> {{ $book->language ?? 'English' }}</li>
                                     </ul>
                                     <ul>
-                                        <li>
-                                            <span>Publish Years:</span> 2021
-                                        </li>
-                                        <li>
-                                            <span>Century:</span> United States
-                                        </li>
+                                        <li><span>Publish Year:</span>
+                                            {{ \Carbon\Carbon::parse($book->publish_year)->format('Y') }}</li>
+                                        <li><span>Country:</span> {{ $book->country ?? 'N/A' }}</li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="box-check">
+
+                            {{-- Feature List --}}
+                            <div class="box-check mt-4">
                                 <div class="check-list">
                                     <ul>
-                                        <li>
-                                            <i class="fa-solid fa-check"></i>
-                                            Free shipping orders from $150
-                                        </li>
-                                        <li>
-                                            <i class="fa-solid fa-check"></i>
-                                            30 days exchange & return
-                                        </li>
+                                        <li><i class="fa-solid fa-check"></i> Free shipping orders from $150</li>
+                                        <li><i class="fa-solid fa-check"></i> 30 days exchange & return</li>
                                     </ul>
                                     <ul>
-                                        <li>
-                                            <i class="fa-solid fa-check"></i>
-                                            Mamaya Flash Discount: Starting at 30% Off
-                                        </li>
-                                        <li>
-                                            <i class="fa-solid fa-check"></i>
-                                            Safe & Secure online shopping
-                                        </li>
+                                        <li><i class="fa-solid fa-check"></i> Flash Discount: Starting at 30% Off</li>
+                                        <li><i class="fa-solid fa-check"></i> Safe & Secure online shopping</li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="social-icon">
+
+                            {{-- Social Icons --}}
+                            <div class="social-icon mt-4">
                                 <h6>Also Available On:</h6>
                                 <a href="https://www.customer.io/"><img src="{{ asset('assets/img/cutomerio.png') }}"
                                         alt="cutomer.io"></a>
@@ -260,6 +240,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="single-tab section-padding pb-0">
                     <ul class="nav mb-5" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -270,164 +251,260 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#additional" data-bs-toggle="tab" class="nav-link" aria-selected="false"
-                                tabindex="-1" role="tab">
-                                <h6>Additional Information </h6>
+                                role="tab">
+                                <h6>Additional Information</h6>
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#review" data-bs-toggle="tab" class="nav-link" aria-selected="false"
-                                tabindex="-1" role="tab">
-                                <h6>reviews (3)</h6>
+                                role="tab">
+                                <h6>Reviews ({{ $book->reviews->whereNull('parent_id')->whereNotNull('rating')->count() }})
+                                </h6>
                             </a>
                         </li>
                     </ul>
+
                     <div class="tab-content">
+                        {{-- Description --}}
                         <div id="description" class="tab-pane fade show active" role="tabpanel">
                             <div class="description-items">
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis erat
-                                    interdum, tempor turpis in, sodales ex. In hac habitasse platea dictumst. Etiam
-                                    accumsan scelerisque urna, a lobortis velit vehicula ut. Maecenas porttitor dolor a
-                                    velit aliquet, et euismod nibh vulputate. Duis nunc velit, lacinia vel risus in,
-                                    finibus sodales augue. Aliquam lacinia imperdiet dictum. Etiam tempus finibus
-                                    tortor, quis placerat arcu tristique in. Sed vitae dui a diam luctus maximus.
-                                    Quisque nec felis dapibus, dapibus enim vitae, vestibulum libero. Aliquam erat
-                                    volutpat. Phasellus luctus rhoncus justo. Duis a nulla sit amet justo aliquam
-                                    ullamcorper. Phasellus nulla lorem, pretium et libero in, porta auctor dui. In a
-                                    ornare purus, et efficitur elit. Etiam consectetur sit amet quam ut tincidunt. Donec
-                                    gravida ultricies tellus ac pharetra.
-                                    Praesent a pulvinar purus. Proin sollicitudin leo eget mi sagittis aliquam. Donec
-                                    sollicitudin ex ac lobortis mollis. Sed eget libero nec mi
-                                </p>
+                                <p>{!! isset($book->description) ? nl2br(e($book->description)) : 'No description available.' !!}</p>
                             </div>
                         </div>
+
+                        {{-- Additional Information --}}
                         <div id="additional" class="tab-pane fade" role="tabpanel">
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
                                             <td class="text-1">Availability</td>
-                                            <td class="text-2">Available</td>
+                                            <td class="text-2">{{ $book->availability ?? 'Available' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Categories</td>
-                                            <td class="text-2">Adventure</td>
+                                            <td class="text-2">{{ $book->category->name ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Publish Date</td>
-                                            <td class="text-2">2022-10-24</td>
+                                            <td class="text-2">
+                                                {{ $book->publish_date ? \Carbon\Carbon::parse($book->publish_date)->format('Y') : 'N/A' }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Total Page</td>
-                                            <td class="text-2">330</td>
+                                            <td class="text-2">{{ $book->total_pages ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Format</td>
-                                            <td class="text-2">Hardcover</td>
+                                            <td class="text-2">{{ $book->format ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Country</td>
-                                            <td class="text-2">United States</td>
+                                            <td class="text-2">{{ $book->country ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Language</td>
-                                            <td class="text-2">English</td>
+                                            <td class="text-2">{{ $book->language ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Dimensions</td>
-                                            <td class="text-2">30 × 32 × 46 Inches</td>
+                                            <td class="text-2">{{ $book->dimensions ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-1">Weight</td>
-                                            <td class="text-2">2.5 Pounds</td>
+                                            <td class="text-2">{{ $book->weight ?? 'N/A' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+
+                        {{-- Reviews --}}
                         <div id="review" class="tab-pane fade" role="tabpanel">
                             <div class="review-items">
-                                <div class="review-wrap-area d-flex gap-4">
-                                    <div class="review-thumb">
-                                        <img src="{{ asset('assets/img/shop-details/review.png') }}" alt="img">
-                                    </div>
-                                    <div class="review-content">
-                                        <div
-                                            class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                            <div class="cont">
-                                                <h5><a href="news-details.html">Leslie Alexander</a></h5>
-                                                <span>February 10, 2024 at 2:37 pm</span>
-                                            </div>
-                                            <div class="star">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-regular fa-star"></i>
+
+                                {{-- Add Review Form --}}
+                                <div class="review-title mt-3 py-3 mb-3">
+                                    <h4>Add Your Review</h4>
+                                </div>
+                                <div class="review-form mb-5">
+                                    <form action="{{ route('reviews.store') }}" method="POST" class="row g-3">
+                                        @csrf
+                                        <input type="hidden" name="book_id" value="{{ $book->id ?? '' }}">
+                                        <div class="col-lg-6">
+                                            <label for="user_name" class="form-label">Your Name *</label>
+                                            <input type="text" class="form-control" name="user_name" id="user_name"
+                                                required>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="user_email" class="form-label">Your Email *</label>
+                                            <input type="email" class="form-control" name="user_email" id="user_email"
+                                                required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="comment" class="form-label">Comment *</label>
+                                            <textarea class="form-control" name="comment" id="comment" rows="4" required></textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="rating" class="form-label">Rating *</label>
+                                            <select class="form-select" name="rating" id="rating" required>
+                                                <option value="" disabled selected>Select Rating</option>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <option value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 d-flex align-items-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="terms"
+                                                    name="terms" required>
+                                                <label class="form-check-label" for="terms">I accept terms &
+                                                    conditions</label>
                                             </div>
                                         </div>
-                                        <p class="mt-30 mb-4">
-                                            Neque porro est qui dolorem ipsum quia quaed inventor veritatis et quasi
-                                            architecto var sed efficitur turpis gilla sed sit amet finibus eros. Lorem
-                                            Ipsum is <br> simply dummy
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="review-title mt-5 py-15 mb-30">
-                                    <h4>Your Rating*</h4>
-                                    <div class="rate-now d-flex align-items-center">
-                                        <p>Your Rating*</p>
-                                        <div class="star">
-                                            <i class="fa-light fa-star"></i>
-                                            <i class="fa-light fa-star"></i>
-                                            <i class="fa-light fa-star"></i>
-                                            <i class="fa-light fa-star"></i>
-                                            <i class="fa-light fa-star"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-form">
-                                    <form action="#" id="contact-form" method="POST">
-                                        <div class="row g-4">
-                                            <div class="col-lg-6">
-                                                <div class="form-clt">
-                                                    <span>Your Name*</span>
-                                                    <input type="text" name="name" id="name"
-                                                        placeholder="Your Name">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-clt">
-                                                    <span>Your Email*</span>
-                                                    <input type="text" name="email" id="email"
-                                                        placeholder="Your Email">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12 wow fadeInUp animated" data-wow-delay=".8">
-                                                <div class="form-clt">
-                                                    <span>Message*</span>
-                                                    <textarea name="message" id="message" placeholder="Write Message"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12 wow fadeInUp animated" data-wow-delay=".9">
-                                                <div class="form-check d-flex gap-2 from-customradio">
-                                                    <input type="checkbox" class="form-check-input"
-                                                        name="flexRadioDefault" id="flexRadioDefault12">
-                                                    <label class="form-check-label" for="flexRadioDefault12">
-                                                        i accept your terms & conditions
-                                                    </label>
-                                                </div>
-                                                <button type="submit" class="theme-btn">
-                                                    Submit now
-                                                </button>
-                                            </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">Submit Review</button>
                                         </div>
                                     </form>
                                 </div>
+
+                                <div id="reviews-list">
+                                    @php
+                                        function renderReplies($review, $level = 1)
+                                        {
+                                            foreach ($review->replies as $reply) {
+                                                echo '<div class="review-wrap-area d-flex gap-3 mb-3 ms-' .
+                                                    min($level * 2, 5) .
+                                                    '">';
+                                                echo '  <div class="review-thumb">';
+                                                echo '    <img src="' .
+                                                    asset('assets/img/shop-details/review.png') .
+                                                    '" alt="Reply User" class="rounded-circle" width="48" height="48">';
+                                                echo '  </div>';
+                                                echo '  <div class="review-content flex-grow-1">';
+                                                echo '    <div class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">';
+                                                echo '      <div class="cont">';
+                                                echo '        <h6>' . ($reply->user_name ?? 'Anonymous') . '</h6>';
+                                                echo '        <span>' .
+                                                    $reply->created_at?->format('F d, Y \a\t h:i a') .
+                                                    '</span>';
+                                                echo '      </div>';
+                                                echo '    </div>';
+                                                echo '    <p class="mb-0">' . $reply->comment . '</p>';
+                                                echo '    <button class="btn btn-sm btn-link mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#replyFormReply' .
+                                                    $reply->id .
+                                                    '">Reply</button>';
+                                                echo '    <div class="collapse mt-2" id="replyFormReply' .
+                                                    $reply->id .
+                                                    '">';
+                                                echo '      <form action="' .
+                                                    route('reviews.store') .
+                                                    '" method="POST" class="row g-3">';
+                                                echo csrf_field();
+                                                echo '        <input type="hidden" name="book_id" value="' .
+                                                    $reply->book_id .
+                                                    '">';
+                                                echo '        <input type="hidden" name="parent_id" value="' .
+                                                    $reply->id .
+                                                    '">';
+                                                echo '        <div class="col-md-6"><input type="text" name="user_name" class="form-control" placeholder="Your Name" required></div>';
+                                                echo '        <div class="col-md-6"><input type="email" name="user_email" class="form-control" placeholder="Your Email" required></div>';
+                                                echo '        <div class="col-12"><textarea name="comment" rows="2" class="form-control" placeholder="Your Reply" required></textarea></div>';
+                                                echo '        <div class="col-12"><button type="submit" class="btn btn-sm btn-primary">Submit Reply</button></div>';
+                                                echo '      </form>';
+                                                echo '    </div>';
+
+                                                if ($reply->replies->count()) {
+                                                    echo '<button class="btn btn-sm btn-outline-secondary mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#replies' .
+                                                        $reply->id .
+                                                        '">Show Replies (' .
+                                                        $reply->replies->count() .
+                                                        ')</button>';
+                                                    echo '<div class="collapse mt-2" id="replies' . $reply->id . '">';
+                                                    renderReplies($reply, $level + 1);
+                                                    echo '</div>';
+                                                }
+
+                                                echo '  </div>';
+                                                echo '</div>';
+                                            }
+                                        }
+                                    @endphp
+
+                                    @foreach ($book->reviews->whereNull('parent_id')->whereNotNull('rating') as $review)
+                                        <div class="review-wrap-area d-flex gap-4 mb-4 border-bottom pb-3 review-item">
+                                            <div class="review-thumb">
+                                                <img src="{{ asset('assets/img/shop-details/review.png') }}"
+                                                    alt="Reviewer" class="rounded-circle" width="64" height="64">
+                                            </div>
+                                            <div class="review-content flex-grow-1">
+                                                <div
+                                                    class="head-area d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                                    <div class="cont">
+                                                        <h5>{{ $review->user_name ?? 'Anonymous' }}</h5>
+                                                        <span>{{ $review->created_at?->format('F d, Y \a\t h:i a') }}</span>
+                                                    </div>
+                                                    <div class="star">
+                                                        @for ($i = 1; $i <= 5; $i++)
+                                                            @if ($i <= ($review->rating ?? 0))
+                                                                <i class="fa-solid fa-star text-warning"></i>
+                                                            @else
+                                                                <i class="fa-regular fa-star text-warning"></i>
+                                                            @endif
+                                                        @endfor
+                                                    </div>
+                                                </div>
+                                                <p class="mt-3 mb-2">{{ $review->comment ?? '' }}</p>
+                                                <button class="btn btn-sm btn-link mt-2" type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#replyForm{{ $review->id }}">Reply</button>
+                                                <div class="collapse mt-2" id="replyForm{{ $review->id }}">
+                                                    <form action="{{ route('reviews.store') }}" method="POST"
+                                                        class="row g-3">
+                                                        @csrf
+                                                        <input type="hidden" name="book_id"
+                                                            value="{{ $book->id }}">
+                                                        <input type="hidden" name="parent_id"
+                                                            value="{{ $review->id }}">
+                                                        <div class="col-md-6"><input type="text" name="user_name"
+                                                                class="form-control" placeholder="Your Name" required>
+                                                        </div>
+                                                        <div class="col-md-6"><input type="email" name="user_email"
+                                                                class="form-control" placeholder="Your Email" required>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <textarea name="comment" rows="2" class="form-control" placeholder="Your Reply" required></textarea>
+                                                        </div>
+                                                        <div class="col-12"><button type="submit"
+                                                                class="btn btn-sm btn-primary">Submit Reply</button></div>
+                                                    </form>
+                                                </div>
+                                                @if ($review->replies->count())
+                                                    <button class="btn btn-sm btn-outline-secondary mt-3" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#replies{{ $review->id }}">Show Replies
+                                                        ({{ $review->replies->count() }})</button>
+                                                    <div class="collapse mt-2" id="replies{{ $review->id }}">
+                                                        @php renderReplies($review); @endphp
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
+
+
+
+
+
                     </div>
                 </div>
+
+
+
             </div>
         </div>
     </section>
@@ -732,3 +809,76 @@
         </div>
     </section>
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const minusBtn = document.querySelector(".qtyminus");
+        const plusBtn = document.querySelector(".qtyplus");
+        const qtyInput = document.getElementById("qty2");
+        const totalPriceEl = document.getElementById("totalPrice");
+        const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+
+        function updatePrice() {
+            const qty = Math.max(1, parseInt(qtyInput.value) || 1);
+            totalPriceEl.textContent = (qty * unitPrice).toFixed(2);
+        }
+
+        minusBtn.addEventListener("click", () => {
+            let current = parseInt(qtyInput.value);
+            if (current > 1) {
+                qtyInput.value = current - 1;
+                updatePrice();
+            }
+        });
+
+        plusBtn.addEventListener("click", () => {
+            let current = parseInt(qtyInput.value);
+            qtyInput.value = current + 1;
+            updatePrice();
+        });
+
+        qtyInput.addEventListener("input", updatePrice);
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        const showMoreBtn = $('#showMoreReviewsBtn');
+        const reviewItems = $('.review-item');
+
+        // Ensure only the first 3 reviews are shown initially
+        reviewItems.each(function(index) {
+            if (index < 3) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
+        showMoreBtn.on('click', function() {
+            if ($(this).text().trim() === "Show more reviews") {
+                reviewItems.show();
+                $(this).text("Hide reviews");
+            } else {
+                reviewItems.each(function(index) {
+                    if (index < 3) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+                $(this).text("Show more reviews");
+            }
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.show-more-replies').forEach(button => {
+            button.addEventListener('click', function() {
+                const reviewId = this.getAttribute('data-review-id');
+                // Optional: Add AJAX fetch if lazy loading is preferred
+                this.style.display = 'none';
+            });
+        });
+    });
+</script>

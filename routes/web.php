@@ -59,19 +59,22 @@ Route::middleware(['auth'])->group(function () {
             Route::get('books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
             Route::get('view/{id}', [BookController::class, 'bookView'])->name('admin.book.view');
             Route::post('/reviews', [BookController::class, 'reviewStore'])->name('reviews.store');
-            // Add update/post routes as needed
+            Route::get('/edit/{id}', [BookController::class, 'reviewsEdit'])->name('reviews.edit');
+            Route::delete('/review/delete/{id}', [BookController::class, 'reviewsDelete'])->name('reviews.destroy');
+            Route::post('/review/update/{id}', [BookController::class, 'update'])->name('reviews.update');
         });
     });
 
     Route::prefix('frontend/')->group(function () {
         Route::get('/contact', [FrondendRouteController::class, 'contact'])->name('frontend.contact.index');
-        route::get('/shoplist', [FrondendRouteController::class, 'shoplist'])->name('frontend.shoplist');
-        route::get('/shopdetails', [FrondendRouteController::class, 'shopdetails'])->name('frontend.shopdetails');
-        route::get('/shopcart', [FrondendRouteController::class, 'shopcart'])->name('frontend.shop.shopCart');
-        route::get('/blog', [FrondendRouteController::class, 'blog'])->name('frontend.blog.index');
-        route::get('/about', [FrondendRouteController::class, 'about'])->name('frontend.about.index');
-        route::get('/author', [FrondendRouteController::class, 'author'])->name('frontend.author.author');
-        route::get('/error', [FrondendRouteController::class, 'error'])->name('frontend.error.index');
+        Route::get('/shoplist', [FrondendRouteController::class, 'shoplist'])->name('frontend.shoplist');
+        Route::get('/shopdetails', [FrondendRouteController::class, 'shopdetails'])->name('frontend.shopdetails');
+        Route::get('/shopdetails-data/{id}', [FrondendRouteController::class, 'shoplistData'])->name('frontend.shopDetailsData');
+        Route::get('/shopcart', [FrondendRouteController::class, 'shopcart'])->name('frontend.shop.shopCart');
+        Route::get('/blog', [FrondendRouteController::class, 'blog'])->name('frontend.blog.index');
+        Route::get('/about', [FrondendRouteController::class, 'about'])->name('frontend.about.index');
+        Route::get('/author', [FrondendRouteController::class, 'author'])->name('frontend.author.author');
+        Route::get('/error', [FrondendRouteController::class, 'error'])->name('frontend.error.index');
     });
 });
 Route::prefix('book')->group(function () {

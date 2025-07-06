@@ -101,8 +101,8 @@
                         </li>
                         <li class="nav-item dropdown dropdown-laungauge d-none d-sm-flex">
                             <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="avascript:;"
-                                data-bs-toggle="dropdown"><img src="assets/images/county/02.png" width="22"
-                                    alt="">
+                                data-bs-toggle="dropdown"><img src="{{ asset('assets/img/county/02.png') }}"
+                                    width="22" alt="">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
@@ -157,7 +157,7 @@
                                             <a href="javascript:;">
                                                 <div class="app-box text-center">
                                                     <div class="app-icon">
-                                                        <img src="{{ asset('assets/images/app/slack.png') }}"
+                                                        <img src="{{ asset('assets/img/app/slack.png') }}"
                                                             width="30" alt="">
                                                     </div>
                                                     <div class="app-name">
@@ -170,7 +170,7 @@
                                             <a href="javascript:;">
                                                 <div class="app-box text-center">
                                                     <div class="app-icon">
-                                                        <img src="{{ asset('assets/images/app/behance.png') }}"
+                                                        <img src="{{ asset('assets/img/app/behance.png') }}"
                                                             width="30" alt="">
                                                     </div>
                                                     <div class="app-name">
@@ -183,7 +183,7 @@
                                             <a href="javascript:;">
                                                 <div class="app-box text-center">
                                                     <div class="app-icon">
-                                                        <img src="{{ asset('assets/images/app/google-drive.png') }}"
+                                                        <img src="{{ asset('assets/img/app/google-drive.png') }}"
                                                             width="30" alt="">
                                                     </div>
                                                     <div class="app-name">
@@ -196,7 +196,7 @@
                                             <a href="javascript:;">
                                                 <div class="app-box text-center">
                                                     <div class="app-icon">
-                                                        <img src="{{ asset('assets/images/app/outlook.png') }}"
+                                                        <img src="{{ asset('assets/img/app/outlook.png') }}"
                                                             width="30" alt="">
                                                     </div>
                                                     <div class="app-name">
