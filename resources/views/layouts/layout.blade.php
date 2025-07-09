@@ -61,7 +61,14 @@
     <!--<< Main.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
+    <!-- Cropper CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
+
+
+
     {{-- end fron end links  --}}
+
+
 
 
 
@@ -72,7 +79,8 @@
 
 </head>
 
-<body>
+<body data-success-message="{{ session('success') }}" data-error-message="{{ session('error') }}">
+
     <!--wrapper-->
     <div class="wrapper">
         <!--sidebar wrapper -->
@@ -965,6 +973,8 @@
             </div>
         </div>
     </div>
+
+
     <!--end switcher-->
     <!-- ✅ jQuery must be first -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
@@ -1013,6 +1023,9 @@
 
     <script src="{{ asset('assets/js/gsap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <!-- Cropper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
 
 

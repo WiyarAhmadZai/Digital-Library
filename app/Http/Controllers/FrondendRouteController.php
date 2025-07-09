@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Review;
+use App\Models\Author;
 
 use Illuminate\Http\Request;
 
@@ -12,14 +13,24 @@ class FrondendRouteController extends Controller
     //
     public function home()
     {
-        $books = Book::whereNotNull('discount')  // Has discount price
+        $books = Book::whereNotNull('discount')
             ->select('*')
             ->selectRaw('(price - discount) as discount_amount')
-            ->orderByDesc('discount_amount')   // Sort by biggest discount
-            ->limit(8)  // top 8 books
+            ->orderByDesc('discount_amount')
+            ->limit(8)
             ->get();
-        return view('frontend.home.index', compact('books'));
+
+        $bestSellers = Book::withCount(['reviews'])
+            ->withAvg(['reviews' => fn($q) => $q->whereNotNull('rating')], 'rating')
+            ->orderByDesc('reviews_count')
+            ->limit(3)
+            ->get();
+
+        $authors = Author::withCount('books')->latest()->limit(6)->get(); // Load top 6 authors
+
+        return view('frontend.home.index', compact('books', 'bestSellers', 'authors'));
     }
+
 
     public function contact()
     {
@@ -57,7 +68,7 @@ class FrondendRouteController extends Controller
     }
     public function shoplistData($id)
     {
-        $book = Book::with(['category', 'author'])
+        $book = Book::with(['author'])
             ->withCount([
                 'reviews as reviews_count' => fn($q) => $q->whereNotNull('rating')
             ])
@@ -66,8 +77,16 @@ class FrondendRouteController extends Controller
             ], 'rating')
             ->findOrFail($id);
 
-        return view('frontend.shop.shopDetails', compact('book'));
+        // Related books by the same author, excluding current book
+        $relatedBooks = Book::with('author')
+            ->where('author_id', $book->author_id)
+            ->where('id', '<>', $book->id)
+            ->take(5)
+            ->get();
+
+        return view('frontend.shop.shopDetails', compact('book', 'relatedBooks'));
     }
+
     public function update(Request $request, $id)
     {
         $request->validate([

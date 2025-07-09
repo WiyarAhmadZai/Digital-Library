@@ -53,8 +53,9 @@
 
                             <label class="form-label mt-3">Author</label>
                             <select name="author_id" x-model="form.author_id"
-                                @change="errors.author_id = null; updateProgress()" class="form-select"
-                                :class="errors.author_id ? 'is-invalid' : (form.author_id ? 'is-valid' : '')">
+                                @change="clearError('author_id'); updateProgress()" class="form-select"
+                                :class="errors.author_id ? 'is-invalid' : (form.author_id && form.author_id !== '' ?
+                                    'is-valid' : '')">
                                 <option value="">Select Author</option>
                                 @foreach ($authors as $author)
                                     <option value="{{ $author->id }}">{{ $author->name }}</option>
@@ -64,7 +65,6 @@
                             @error('author_id')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
-
 
                             <button type="button" @click="nextStep()" class="btn btn-success mt-4">Next</button>
                         </div>
@@ -119,7 +119,8 @@
                             <label class="form-label">Publish Year</label>
                             <input type="date" name="publish_year" x-model="form.publish_year"
                                 @input="errors.publish_year = null; updateProgress()" class="form-control"
-                                :class="errors.publish_year ? 'is-invalid' : (form.publish_year ? 'is-valid' : '')" />
+                                :class="errors.publish_year ? 'is-invalid' : (form.publish_year ? 'is-valid' : '')"
+                                value="{{ old('publish_year', isset($book) ? $book->publish_year : '') }}" />
                             <div class="text-danger" x-show="errors.publish_year" x-text="errors.publish_year"></div>
                             @error('publish_year')
                                 <div class="text-danger">{{ $message }}</div>
@@ -253,10 +254,11 @@
                 totalSteps: 5,
                 progress: 0,
                 discountedPrice: 0,
+
                 form: {
                     name: @json(old('name', $book->name ?? '')),
                     description: @json(old('description', $book->description ?? '')),
-                    author_id: @json(old('author_id', $book->author_id ?? '')),
+                    author_id: @json((string) old('author_id', $book->author_id ?? '')),
                     category: @json(old('category', $book->category ?? '')),
                     price: @json(old('price', $book->price ?? '')),
                     currency_type: @json(old('currency_type', $book->currency_type ?? '')),
@@ -269,8 +271,10 @@
                     country: @json(old('country', $book->country ?? '')),
                     discount: @json(old('discount', $book->discount ?? '')),
                     tags: @json(old('tags', $book->tags ?? '')),
-                    image_path: @json(old('image_path', $book->image_path ?? [])),
+                    image_path: @json(isset($book) ? collect($book->image_path)->map(fn($img) => ['url' => asset('storage/books/' . $img)]) : [])
+
                 },
+
                 errors: {
                     name: null,
                     description: null,
@@ -287,7 +291,7 @@
                     country: null,
                     discount: null,
                     tags: null,
-                    // etc.
+                    images: null,
                 },
 
                 requiredFieldsPerStep: {
@@ -306,44 +310,63 @@
                         }));
                     }
                     this.updateProgress();
+
+                    // Watch author_id changes to clear errors automatically
+                    this.$watch('form.author_id', value => {
+                        if (value && value.toString().trim() !== '') {
+                            this.errors.author_id = null;
+                        }
+                    });
                 },
+
                 nextStep() {
                     this.errors = {};
-
                     const fieldsToValidate = this.requiredFieldsPerStep[this.step] || [];
                     let hasError = false;
 
                     fieldsToValidate.forEach(field => {
-                        if (!this.form[field] || this.form[field].toString().trim() === '') {
-                            this.errors[field] = 'This field is required.';
+                        const value = this.form[field];
+                        if (value === null || value === undefined || value.toString().trim() === '') {
+                            if (field === 'author_id') {
+                                this.errors[field] = 'Please select an author.';
+                            } else {
+                                this.errors[field] = 'This field is required.';
+                            }
                             hasError = true;
                         }
                     });
 
-                    if (!hasError) {
-                        if (this.step < this.totalSteps) this.step++;
+                    if (hasError) {
                         window.scrollTo(0, 0);
-                    } else {
-                        window.scrollTo(0, 0);
+                        return;
                     }
+
+                    if (this.step < this.totalSteps) this.step++;
+                    window.scrollTo(0, 0);
                 },
+
                 prevStep() {
                     if (this.step > 1) this.step--;
                     window.scrollTo(0, 0);
                 },
+
                 clearError(field) {
                     if (this.errors[field]) {
                         delete this.errors[field];
                     }
                 },
+
                 updateProgress() {
                     let filled = 0;
-                    const fields = ['name', 'description', 'author_id', 'category', 'price', 'currency_type', 'language',
+                    const fields = [
+                        'name', 'description', 'author_id', 'category', 'price', 'currency_type', 'language',
                         'publish_year', 'status', 'total_pages', 'sku', 'format', 'country', 'discount', 'tags'
                     ];
+
                     fields.forEach(field => {
                         if (this.form[field] && this.form[field].toString().trim() !== '') filled++;
                     });
+
                     this.progress = (filled / fields.length) * 100;
                     this.updateDiscountedPrice();
                 },
@@ -355,6 +378,7 @@
                             this.errors.images = 'Maximum 11 images allowed.';
                             return;
                         }
+
                         const reader = new FileReader();
                         reader.onload = e => {
                             this.form.image_path.push({
@@ -366,22 +390,27 @@
                         reader.readAsDataURL(files[i]);
                     }
                 },
+
                 removeImage(index) {
                     this.form.image_path.splice(index, 1);
                     this.validateImages();
                 },
+
                 validateImages() {
                     this.errors.images = this.form.image_path.length < 2 ? 'Minimum 2 images required.' : null;
                 },
+
                 dragStart(e, index) {
                     e.dataTransfer.setData('text/plain', index);
                 },
+
                 dragDrop(e, index) {
                     const draggedIndex = e.dataTransfer.getData('text/plain');
                     const draggedImage = this.form.image_path[draggedIndex];
                     this.form.image_path.splice(draggedIndex, 1);
                     this.form.image_path.splice(index, 0, draggedImage);
                 },
+
                 replaceImage(index) {
                     const input = document.createElement('input');
                     input.type = 'file';
@@ -389,22 +418,23 @@
                     input.onchange = e => {
                         const file = e.target.files[0];
                         const reader = new FileReader();
-                        reader.onload = ev => this.form.image_path[index] = {
-                            file,
-                            url: ev.target.result
+                        reader.onload = ev => {
+                            this.form.image_path[index] = {
+                                file,
+                                url: ev.target.result
+                            };
                         };
                         reader.readAsDataURL(file);
                     };
                     input.click();
                 },
+
                 updateDiscountedPrice() {
                     const price = parseFloat(this.form.price || 0);
                     const discount = parseFloat(this.form.discount || 0);
                     const discountAmount = (price * discount) / 100;
                     this.discountedPrice = price - discountAmount;
-                    this.updateProgress();
                 }
-
             }
         }
     </script>

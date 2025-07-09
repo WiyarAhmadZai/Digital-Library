@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FrondendRouteController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\AuthorController;
 
 
 
@@ -48,20 +49,32 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::middleware(['admin'])->group(function () {});
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin/')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::prefix('book/')->group(function () {
             Route::get('create', [BookController::class, 'create'])->name('admin.book.create');
+            // Route::get('edit/{id}', [BookController::class, 'formEdit'])->name('books.edit');
             Route::post('store', [BookController::class, 'store'])->name('admin.book.store');
             Route::get('list', [BookController::class, 'bookList'])->name('admin.book.list');
             Route::get('books-data', [BookController::class, 'getBooksData'])->name('books.data');
             Route::delete('delete/{id}', [BookController::class, 'destroy'])->name('books.destroy');
-            Route::get('books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+            Route::get('books/{book}/edit', [BookController::class, 'formEdit'])->name('books.edit');
+            Route::put('update/{id}', [BookController::class, 'BookUpdate'])->name('admin.book.update');
             Route::get('view/{id}', [BookController::class, 'bookView'])->name('admin.book.view');
             Route::post('/reviews', [BookController::class, 'reviewStore'])->name('reviews.store');
             Route::get('/edit/{id}', [BookController::class, 'reviewsEdit'])->name('reviews.edit');
             Route::delete('/review/delete/{id}', [BookController::class, 'reviewsDelete'])->name('reviews.destroy');
             Route::post('/review/update/{id}', [BookController::class, 'update'])->name('reviews.update');
+        });
+        Route::prefix('author/')->group(function () {
+            Route::get('create', [AuthorController::class, 'create'])->name('admin.author.create');
+            Route::post('store', [AuthorController::class, 'store'])->name('admin.author.store');
+            Route::get('index', [AuthorController::class, 'index'])->name('admin.author.index');
+            Route::get('list-data', [AuthorController::class, 'listData'])->name('admin.author.list-data');
+            Route::get('edit/{id}', [AuthorController::class, 'edit'])->name('admin.author.edit');
+            Route::put('update/{id}', [AuthorController::class, 'update'])->name('admin.author.update');
+            Route::delete('delete/{id}', [AuthorController::class, 'destroy'])->name('admin.author.delete');
+            Route::get('view/{id}', [AuthorController::class, 'authorView'])->name('admin.author.view');
         });
     });
 

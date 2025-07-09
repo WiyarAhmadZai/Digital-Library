@@ -163,21 +163,102 @@
     </section>
 
     <!-- Featured Books Section Start -->
-    <section class="featured-books-section pt-100  fix section-bg">
+    <section class="featured-books-section pt-100 pb-145 fix section-bg">
         <div class="container">
             <div class="section-title-area justify-content-center">
                 <div class="section-title wow fadeInUp" data-wow-delay=".3s">
                     <h2>Featured Books</h2>
                 </div>
             </div>
+
             <div class="swiper featured-books-slider">
-                <div class="swiper-wrapper" id="featured-book-swiper-wrapper">
-                    <!-- JS will inject slides here -->
+                <div class="swiper-wrapper">
+
+                    @foreach ($books as $book)
+                        @php
+                            // Decode author images array and get first image or fallback
+                            $authorImages = json_decode($book->author->image_paths ?? '[]', true);
+                            $authorImage = $authorImages[0] ?? 'default-author.png';
+
+                            // Book image path (single string)
+                            $bookImage = $book->image_path ?? 'default-book.png';
+
+                            // Calculate average rating stars (optional, if you have reviews relationship)
+                            $avgRating = round($book->reviews_avg_rating ?? 0);
+
+                            // Stock info example (you can add it to DB and model)
+                            $stockCount = $book->stock ?? 25; // fallback 25 if not present
+                        @endphp
+
+                        <div class="swiper-slide">
+                            <div class="shop-box-items style-4 wow fadeInUp" data-wow-delay=".2s">
+                                <div class="book-thumb center">
+                                    <a href="{{ route('frontend.shopDetailsData', $book->id) }}">
+                                        <img src="{{ asset('storage/' . $bookImage) }}" alt="img">
+                                    </a>
+                                </div>
+
+                                <div class="shop-content">
+                                    <ul class="book-category">
+                                        <li class="book-category-badge">{{ $book->category }}</li>
+                                        <li>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $avgRating)
+                                                    <i class="fa-solid fa-star"></i>
+                                                @else
+                                                    <i class="fa-regular fa-star"></i>
+                                                @endif
+                                            @endfor
+                                            ({{ $book->reviews_count ?? 0 }})
+                                        </li>
+                                    </ul>
+
+                                    <h3><a
+                                            href="{{ route('frontend.shopDetailsData', $book->id) }}">{{ $book->name }}</a>
+                                    </h3>
+
+                                    <ul class="author-post">
+                                        <li class="authot-list">
+                                            <span class="thumb">
+                                                <img src="{{ asset('storage/' . $authorImage) }}" alt="img">
+                                            </span>
+                                            <span class="content">{{ $book->author->name }}
+                                                {{ $book->author->last_name }}</span>
+                                        </li>
+                                    </ul>
+
+                                    <div class="book-availablity">
+                                        <div class="details">
+                                            <ul class="price-list">
+                                                <li>${{ number_format($book->final_price, 2) }}</li>
+                                                @if ($book->discount > 0)
+                                                    <li><del>${{ number_format($book->price, 2) }}</del></li>
+                                                @endif
+                                            </ul>
+
+                                            {{-- You can customize the progress bar here --}}
+                                            <div class="progress-line"></div>
+                                            <p>{{ $stockCount }} Books in stock</p>
+                                        </div>
+
+                                        <div class="shop-btn">
+                                            <a href="">
+                                                <i class="fa-regular fa-basket-shopping"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
                 </div>
+
                 <div class="swiper-pagination"></div>
             </div>
         </div>
     </section>
+
 
 
 
@@ -189,106 +270,75 @@
                 <div class="section-title wow fadeInUp" data-wow-delay=".3s">
                     <h2>Best Sellers</h2>
                 </div>
-                <a href="shop.html" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Explore More <i
-                        class="fa-solid fa-arrow-right-long"></i></a>
+                <a href="{" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">
+                    Explore More <i class="fa-solid fa-arrow-right-long"></i>
+                </a>
             </div>
+
             <div class="book-shop-wrapper style-2">
-                <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".2s">
-                    <div class="book-thumb center">
-                        <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/07.png') }}"
-                                alt="img"></a>
-                    </div>
-                    <div class="shop-content">
-                        <ul class="book-category">
-                            <li class="book-category-badge">Adventure</li>
-                            <li>
-                                <i class="fa-solid fa-star"></i>
-                                3.4 (25)
-                            </li>
-                        </ul>
-                        <h3><a href="shop-details.html">The Hidden Mystery <br> Behind</a></h3>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="content">Wilson</span>
-                            </li>
-                        </ul>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <div class="shop-button">
-                            <a href="shop-details.html" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
-                                Add To Cart</a>
+                @foreach ($bestSellers as $index => $book)
+                    @php
+                        // Decode author images and get first image or fallback
+                        $authorImages = json_decode($book->author->image_paths ?? '[]', true);
+                        $authorImage = $authorImages[0] ?? 'default-author.png';
+
+                        // Rating rounded
+                        $avgRating = number_format($book->reviews_avg_rating ?? 0, 1);
+
+                        // Number of reviews
+                        $reviewsCount = $book->reviews_count ?? 0;
+
+                        // Delay for animation increment (0.2s, 0.4s, 0.6s, ...)
+                        $delay = 0.2 + $index * 0.2;
+
+                        // Calculate final price considering discount (assuming discount is percentage)
+                        $finalPrice =
+                            $book->discount > 0 ? $book->price - $book->price * ($book->discount / 100) : $book->price;
+                    @endphp
+
+                    <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay="{{ $delay }}s">
+                        <div class="book-thumb center">
+                            <a href="{{ route('frontend.shopDetailsData', $book->id) }}">
+                                <img src="{{ asset('storage/' . $book->image_path) }}" alt="{{ $book->name }}">
+                            </a>
+                        </div>
+
+                        <div class="shop-content">
+                            <ul class="book-category">
+                                <li class="book-category-badge">{{ $book->category }}</li>
+                                <li>
+                                    <i class="fa-solid fa-star"></i>
+                                    {{ $avgRating }} ({{ $reviewsCount }})
+                                </li>
+                            </ul>
+
+                            <h3><a href="{{ route('frontend.shopDetailsData', $book->id) }}">{{ $book->name }}</a></h3>
+
+                            <ul class="author-post">
+                                <li class="authot-list">
+                                    <span class="content">{{ $book->author->name ?? 'Unknown Author' }}</span>
+                                </li>
+                            </ul>
+
+                            <ul class="price-list">
+                                <li>${{ number_format($finalPrice, 2) }}</li>
+                                @if ($book->discount > 0)
+                                    <li><del>${{ number_format($book->price, 2) }}</del></li>
+                                @endif
+                            </ul>
+
+                            <div class="shop-button">
+                                <a href="" class="theme-btn">
+                                    <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".4s">
-                    <div class="book-thumb center">
-                        <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/08.png') }}"
-                                alt="img"></a>
-                    </div>
-                    <div class="shop-content">
-                        <ul class="book-category">
-                            <li class="book-category-badge">Adventure</li>
-                            <li>
-                                <i class="fa-solid fa-star"></i>
-                                3.4 (25)
-                            </li>
-                        </ul>
-                        <h3><a href="shop-details.html">Qple GPad With <br> Retina Sisplay </a></h3>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="content">Wilson</span>
-                            </li>
-                        </ul>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <div class="shop-button">
-                            <a href="shop-details.html" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
-                                Add To Cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="shop-box-items style-3 wow fadeInUp" data-wow-delay=".6s">
-                    <div class="book-thumb center">
-                        <a href="shop-details-2.html"><img src="{{ asset('assets/img/book/09.png') }}"
-                                alt="img"></a>
-                    </div>
-                    <div class="shop-content">
-                        <ul class="book-category">
-                            <li class="book-category-badge">Adventure</li>
-                            <li>
-                                <i class="fa-solid fa-star"></i>
-                                3.4 (25)
-                            </li>
-                        </ul>
-                        <h3><a href="shop-details.html">Simple Things You <br> To Save BOOK </a></h3>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="content">Wilson</span>
-                            </li>
-                        </ul>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <div class="shop-button">
-                            <a href="shop-details.html" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
-                                Add To Cart</a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
+
 
     <!-- Feature Section Start -->
     <section class="feature-section fix section-padding pt-0">
@@ -814,115 +864,55 @@
     </section>
 
     <!-- Team Section Start -->
-    <section class="team-section fix section-padding pt-0 margin-bottom-30">
+    <section class="team-section fix section-padding ">
         <div class="container">
             <div class="section-title text-center">
-                <h2 class="mb-3 wow fadeInUp" data-wow-delay=".3s">Featured Author</h2>
-                <p class="wow fadeInUp" data-wow-delay=".5s">Interdum et malesuada fames ac ante ipsum primis in
-                    faucibus. <br> Donec at nulla nulla. Duis posuere ex lacus</p>
+                <h2 class="mb-3 wow fadeInUp" data-wow-delay=".3s">Featured Authors</h2>
+                <p class="wow fadeInUp" data-wow-delay=".5s">
+                    Interdum et malesuada fames ac ante ipsum primis in faucibus. <br> Donec at nulla nulla. Duis posuere ex
+                    lacus
+                </p>
             </div>
+
             <div class="array-button">
                 <button class="array-prev"><i class="fal fa-arrow-left"></i></button>
                 <button class="array-next"><i class="fal fa-arrow-right"></i></button>
             </div>
+
             <div class="swiper team-slider">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="team-box-items">
-                            <div class="team-image">
-                                <div class="thumb">
-                                    <img src="{{ asset('assets/img/team/01.jpg') }}" alt="img">
+                    @foreach ($authors as $author)
+                        @php
+                            $images = json_decode($author->image_paths, true);
+                            $firstImage = !empty($images) && is_array($images) ? $images[0] : null;
+                            $imageUrl =
+                                $firstImage && Storage::disk('public')->exists($firstImage)
+                                    ? Storage::url($firstImage)
+                                    : asset($firstImage ?? 'assets/img/avatars/avatar-1.png');
+                        @endphp
+                        <div class="swiper-slide">
+                            <div class="team-box-items">
+                                <div class="team-image d-flex justify-content-center">
+                                    <div class="rounded overflow-hidden " style="width: 120px; height: 120px;">
+                                        <img src="{{ $imageUrl }}" alt="author image"
+                                            class="w-100 h-100 object-fit-cover" style="border-radius: 10rem">
+                                    </div>
+                                    <div class="shape-img">
+                                        <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="shape">
+                                    </div>
                                 </div>
-                                <div class="shape-img">
-                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="img">
+                                <div class="team-content text-center mt-3">
+                                    <h6>
+                                        <a href="{{ route('admin.author.view', $author->id) }}">
+                                            {{ $author->name }} {{ $author->last_name }}
+                                        </a>
+                                    </h6>
+                                    <p>{{ $author->books_count }} Published
+                                        Book{{ $author->books_count !== 1 ? 's' : '' }}</p>
                                 </div>
-                            </div>
-                            <div class="team-content text-center">
-                                <h6><a href="team-details.html">Esther Howard</a></h6>
-                                <p>10 Published Books</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="team-box-items">
-                            <div class="team-image">
-                                <div class="thumb">
-                                    <img src="{{ asset('assets/img/team/02.jpg') }}" alt="img">
-                                </div>
-                                <div class="shape-img">
-                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="img">
-                                </div>
-                            </div>
-                            <div class="team-content text-center">
-                                <h6><a href="team-details.html">Shikhon Islam</a></h6>
-                                <p>07 Published Books</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="team-box-items">
-                            <div class="team-image">
-                                <div class="thumb">
-                                    <img src="{{ asset('assets/img/team/03.jpg') }}" alt="img">
-                                </div>
-                                <div class="shape-img">
-                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="img">
-                                </div>
-                            </div>
-                            <div class="team-content text-center">
-                                <h6><a href="team-details.html">Kawser Ahmed</a></h6>
-                                <p>04 Published Books</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="team-box-items">
-                            <div class="team-image">
-                                <div class="thumb">
-                                    <img src="{{ asset('assets/img/team/04.jpg') }}" alt="img">
-                                </div>
-                                <div class="shape-img">
-                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="img">
-                                </div>
-                            </div>
-                            <div class="team-content text-center">
-                                <h6><a href="team-details.html">Brooklyn Simmons</a></h6>
-                                <p>15 Published Books</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="team-box-items">
-                            <div class="team-image">
-                                <div class="thumb">
-                                    <img src="{{ asset('assets/img/team/05.jpg') }}" alt="img">
-                                </div>
-                                <div class="shape-img">
-                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="img">
-                                </div>
-                            </div>
-                            <div class="team-content text-center">
-                                <h6><a href="team-details.html">Leslie Alexander</a></h6>
-                                <p>05 Published Books</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="team-box-items">
-                            <div class="team-image">
-                                <div class="thumb">
-                                    <img src="{{ asset('assets/img/team/06.jpg') }}" alt="img">
-                                </div>
-                                <div class="shape-img">
-                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="img">
-                                </div>
-                            </div>
-                            <div class="team-content text-center">
-                                <h6><a href="team-details.html">Guy Hawkins</a></h6>
-                                <p>12 Published Books</p>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

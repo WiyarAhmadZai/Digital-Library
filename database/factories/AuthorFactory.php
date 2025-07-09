@@ -15,12 +15,12 @@ class AuthorFactory extends Factory
             'name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'biography' => $this->faker->paragraph(),
-            'image_path' => $this->faker->imageUrl(200, 200, 'people'),
             'country' => $this->faker->country(),
             'email' => $this->faker->unique()->safeEmail(),
             'website' => $this->faker->url(),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'image_paths' => json_encode([
+                'uploads/authors/' . $this->faker->image('storage/app/public/uploads/authors', 200, 200, null, false),
+            ]),
         ];
     }
 }

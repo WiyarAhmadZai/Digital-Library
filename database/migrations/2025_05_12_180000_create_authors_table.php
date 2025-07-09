@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('last_name')->nullable();
             $table->text('biography')->nullable();
-            $table->string('image_path')->nullable();
+            $table->json('image_paths')->nullable();
             $table->string('country')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('website')->nullable();

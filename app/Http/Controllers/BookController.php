@@ -84,6 +84,59 @@ class BookController extends Controller
             return response('error', 'خطا در ثبت کتاب', 500);
         }
     }
+    public function formEdit($id)
+    {
+        $book = Book::find($id);
+        $authors = Author::all();
+        return view('admin.books.create', compact('book', 'authors'));
+    }
+
+    public function BookUpdate(StoreBookRequest $request, $id)
+    {
+        // Get validated data
+        $validated = $request->validated();
+
+        // Find the book record
+        $book = Book::findOrFail($id);
+
+        // Calculate final price after discount
+        $discount = $validated['discount'] ?? 0;
+        $price = $validated['price'];
+        $finalPrice = $price - ($price * $discount / 100);
+        $validated['final_price'] = $finalPrice;
+
+        $savedImages = [];
+
+        // Handle uploaded images
+        if ($request->hasFile('image_path')) {
+            foreach ($request->file('image_path') as $file) {
+                if ($file->isValid()) {
+                    $filename = uniqid('book_') . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('uploads/books'), $filename);
+                    $savedImages[] = 'uploads/books/' . $filename;
+                }
+            }
+        }
+
+        // If new images are uploaded, overwrite image_path; otherwise keep existing
+        if (!empty($savedImages)) {
+            $validated['image_path'] = json_encode($savedImages);
+        } else {
+            $validated['image_path'] = $book->image_path; // preserve existing images
+        }
+
+        // Update the book instance (not the class!)
+        $updated = $book->update($validated);
+
+        if ($updated) {
+            return redirect()->route('admin.book.list')->with('success', 'کتاب با موفقیت ویرایش شد.');
+        } else {
+            return redirect()->back()->with('error', 'خطا در ویرایش کتاب');
+        }
+    }
+
+
+
     public function getDat()
     {
         $books = Book::latest()->get();
