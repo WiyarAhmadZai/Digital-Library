@@ -24,10 +24,9 @@ class Book extends Model
     protected $fillable = [
         'name',
         'description',
-        'author_id',
         'category',
-        'final_price',
         'price',
+        'final_price',
         'currency_type',
         'language',
         'publish_year',
@@ -38,7 +37,9 @@ class Book extends Model
         'country',
         'discount',
         'tags',
-        'image_path'
+        'author_id',
+        'image_paths',   // << Add this
+        'pdf_path',      // << Add this
     ];
 
     public function author()

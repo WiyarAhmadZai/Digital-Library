@@ -88,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/about', [FrondendRouteController::class, 'about'])->name('frontend.about.index');
         Route::get('/author', [FrondendRouteController::class, 'author'])->name('frontend.author.author');
         Route::get('/error', [FrondendRouteController::class, 'error'])->name('frontend.error.index');
+        Route::get('/shop-list', [FrondendRouteController::class, 'shopList'])->name('frontend.shop-list');
     });
 });
 Route::prefix('book')->group(function () {

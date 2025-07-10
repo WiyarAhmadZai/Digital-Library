@@ -20,6 +20,7 @@ class Author extends Model
     ];
 
 
+
     protected $casts = [
         'image_paths' => 'array',  // this tells Laravel to auto JSON encode/decode
     ];

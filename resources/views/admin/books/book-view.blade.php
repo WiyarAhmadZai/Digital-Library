@@ -1,4 +1,36 @@
 @extends('layouts.layout')
+<style>
+    .swiper-container.thumbnail-swiper {
+        overflow: hidden;
+        padding-bottom: 10px;
+    }
+
+    .thumbnail-swiper .swiper-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .thumbnail-swiper .swiper-slide {
+        flex-shrink: 0;
+        width: 80px !important;
+        height: 80px;
+        margin-right: 10px;
+    }
+
+    .thumbnail-swiper .swiper-button-prev,
+    .thumbnail-swiper .swiper-button-next {
+        top: 35%;
+        color: #333;
+    }
+
+    .swiper-slide img.img-thumbnail {
+        transition: transform 0.3s ease;
+    }
+
+    .swiper-slide img.img-thumbnail:hover {
+        transform: scale(1.05);
+    }
+</style>
 
 @section('content')
     {{-- Include Swiper CSS --}}
@@ -8,15 +40,16 @@
         <section class="book-details-section">
             <div class="container">
                 @php
-                    $images = json_decode($book->image_path ?? ($book->image ?? '[]'), true);
+                    $images = json_decode($book->image_paths ?? '[]', true);
                     if (!is_array($images) || count($images) === 0) {
                         $images = ['assets/img/default-book.png'];
                     }
                     function getImageUrl($img)
                     {
-                        return filter_var($img, FILTER_VALIDATE_URL) ? $img : asset($img);
+                        return filter_var($img, FILTER_VALIDATE_URL) ? $img : asset('storage/' . $img);
                     }
                 @endphp
+
 
                 <div class="row g-4">
                     {{-- Left: Image gallery --}}
@@ -51,7 +84,7 @@
 
                             {{-- Adaptive muted text --}}
                             <h5 class="text-muted mb-4">
-                                Stock availability: <span class="fw-bold">{{ $book->availability ?? 'In stock' }}</span>
+                                Stock availability: <span class="fw-bold">{{ $book->status ?? 'In stock' }}</span>
                             </h5>
 
 
@@ -85,12 +118,7 @@
                             </h3>
 
                             <div class="d-flex flex-wrap align-items-center gap-3 mb-5">
-                                <div class="input-group w-auto" style="max-width: 140px;">
-                                    <button class="btn btn-outline-secondary" type="button" id="qtyMinus">−</button>
-                                    <input type="number" name="qty" id="qty2" min="1" step="1"
-                                        value="1" class="form-control text-center">
-                                    <button class="btn btn-outline-secondary" type="button" id="qtyPlus">+</button>
-                                </div>
+
 
                                 <button type="button" class="btn btn-outline-info px-4" data-bs-toggle="modal"
                                     data-bs-target="#readMoreModal" style="white-space: nowrap;">
@@ -100,12 +128,14 @@
 
                             <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
                                 <div><strong>SKU:</strong> {{ $book->sku ?? 'N/A' }}</div>
-                                <div><strong>Category:</strong> {{ $book->category->name ?? 'N/A' }}</div>
+                                <div><strong>Category:</strong> {{ $book->category ?? 'N/A' }}</div>
                                 <div><strong>Tags:</strong> {{ $book->tags ?? 'N/A' }}</div>
                                 <div><strong>Format:</strong> {{ $book->format ?? 'N/A' }}</div>
                                 <div><strong>Total Pages:</strong> {{ $book->total_pages ?? 'N/A' }}</div>
                                 <div><strong>Language:</strong> {{ $book->language ?? 'N/A' }}</div>
-                                <div><strong>Publish Year:</strong> {{ $book->publish_year ?? 'N/A' }}</div>
+                                <div><strong>Publish Year:</strong>
+                                    {{ $book->publish_year ? \Carbon\Carbon::parse($book->publish_year)->format('Y') : 'N/A' }}
+                                </div>
                                 <div><strong>Country:</strong> {{ $book->country ?? 'N/A' }}</div>
                             </div>
 
@@ -364,6 +394,15 @@
                 }
                 updateTotalPrice(val);
             });
+            var thumbnailSwiper = new Swiper('.thumbnail-swiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+
         });
     </script>
 @endsection

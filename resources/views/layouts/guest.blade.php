@@ -1,41 +1,63 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<!doctype html>
+<html lang="en">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Digital Library</title>
+    <link rel="icon" href="{{ asset('assets/img/favicon-32x32.png') }}" type="image/png" />
+    <link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('assets/js/pace.min.js') }}"></script>
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap-extended.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
+</head>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+<body>
+    <div class="wrapper">
+        <div class="section-authentication-cover">
+            <div class="">
+                <div class="row g-0">
 
-        <link rel="stylesheet" href="{{ asset('vendor/css/source-sans-3.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/overlayscrollbars.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-icons.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/select2.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/persian-datepicker.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/dataTables.bootstrap5.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/jquery.dataTables.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/css/buttons.dataTables.min.css') }}">
-
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/" style="font-weight: bold; text-decoration: none; text-align: center;">
-                    <h1>Welcome to our Digital Library</h1>
-                    <h4>Enter your Credential Info For login</h4>
-                </a>
-            </div>
-
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+                    <div class="col-xl-12 col-xxl-12 auth-cover-right d-flex align-items-center justify-content-center">
+                        <div class="card m-3 shadow-none bg-transparent rounded-0 w-100">
+                            <div class="card-body p-sm-5">
+                                {{ $slot }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </body>
+    </div>
+
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $("#show_hide_password a").on('click', function(event) {
+                event.preventDefault();
+                const input = $('#show_hide_password input');
+                const icon = $('#show_hide_password i');
+                if (input.attr("type") == "text") {
+                    input.attr('type', 'password');
+                    icon.addClass("bx-hide").removeClass("bx-show");
+                } else {
+                    input.attr('type', 'text');
+                    icon.removeClass("bx-hide").addClass("bx-show");
+                }
+            });
+        });
+    </script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+</body>
+
 </html>

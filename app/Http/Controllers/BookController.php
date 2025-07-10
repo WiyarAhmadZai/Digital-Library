@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Post;
 use App\Models\Author;
+use App\Models\Category;
 use App\Http\Requests\StoreBookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -55,40 +56,48 @@ class BookController extends Controller
 
         $savedImages = [];
 
-        // Handle image uploads from real files (input name 'image_path[]')
+        // Handle multiple image uploads for 'image_path[]'
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {
                 if ($file->isValid()) {
-                    // Generate unique filename with original extension
-                    $filename = uniqid('book_') . '.' . $file->getClientOriginalExtension();
-
-                    // Move the file to public/uploads/books directory
-                    $file->move(public_path('uploads/books'), $filename);
-
-                    // Save relative path
-                    $savedImages[] = 'uploads/books/' . $filename;
+                    // Store file in 'public/uploads/books' (storage/app/public/uploads/books)
+                    $path = $file->store('uploads/books', 'public');
+                    $savedImages[] = $path;
                 }
             }
         }
 
-        // Store saved image paths as JSON string
-        $validated['image_path'] = json_encode($savedImages);
+        // Save images paths as JSON string in DB column 'image_paths'
+        $validated['image_paths'] = json_encode($savedImages);
 
-        // Create the book record with all data including images
+        // Handle PDF upload 'pdf_file'
+        if ($request->hasFile('pdf_file') && $request->file('pdf_file')->isValid()) {
+            $pdfPath = $request->file('pdf_file')->store('uploads/pdf', 'public');
+            $validated['pdf_path'] = $pdfPath;
+        } else {
+            $validated['pdf_path'] = null;
+        }
+
+        // Remove keys that are not actual DB columns but form inputs, if any
+        unset($validated['image_path']); // just in case
+
+        // Create the book record with all data
         $book = Book::create($validated);
 
-        // Redirect back with success message or error
+        // Redirect back with success message
         if ($book) {
             return redirect()->route('admin.book.list')->with('success', 'کتاب با موفقیت ذخیره شد.');
         } else {
-            return response('error', 'خطا در ثبت کتاب', 500);
+            return response('خطا در ثبت کتاب', 500);
         }
     }
+
     public function formEdit($id)
     {
         $book = Book::find($id);
         $authors = Author::all();
-        return view('admin.books.create', compact('book', 'authors'));
+        $categories = Category::all();
+        return view('admin.books.create', compact('book', 'authors', 'categories'));
     }
 
     public function BookUpdate(StoreBookRequest $request, $id)
@@ -107,25 +116,35 @@ class BookController extends Controller
 
         $savedImages = [];
 
-        // Handle uploaded images
+        // Handle uploaded images (multiple)
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {
                 if ($file->isValid()) {
-                    $filename = uniqid('book_') . '.' . $file->getClientOriginalExtension();
-                    $file->move(public_path('uploads/books'), $filename);
-                    $savedImages[] = 'uploads/books/' . $filename;
+                    $path = $file->store('uploads/books', 'public');
+                    $savedImages[] = $path;
                 }
             }
         }
 
-        // If new images are uploaded, overwrite image_path; otherwise keep existing
+        // If new images uploaded, overwrite image_paths; else keep existing images
         if (!empty($savedImages)) {
-            $validated['image_path'] = json_encode($savedImages);
+            $validated['image_paths'] = json_encode($savedImages);
         } else {
-            $validated['image_path'] = $book->image_path; // preserve existing images
+            $validated['image_paths'] = $book->image_paths;  // keep old images JSON
         }
 
-        // Update the book instance (not the class!)
+        // Handle PDF upload
+        if ($request->hasFile('pdf_file') && $request->file('pdf_file')->isValid()) {
+            $pdfPath = $request->file('pdf_file')->store('uploads/pdf', 'public');
+            $validated['pdf_path'] = $pdfPath;
+        } else {
+            $validated['pdf_path'] = $book->pdf_path; // preserve existing pdf path
+        }
+
+        // Remove keys not in DB columns
+        unset($validated['image_path']);
+
+        // Update book record
         $updated = $book->update($validated);
 
         if ($updated) {
@@ -157,8 +176,9 @@ class BookController extends Controller
 
     public function create()
     {
-        $authors = Author::all();
-        return view('admin.books.create', compact('authors'));
+        $authors = Author::all();  // make sure Author model and DB is OK
+        $categories = Category::all();
+        return view('admin.books.create', compact('authors', 'categories'));
     }
 
     public function bookList()
@@ -181,15 +201,12 @@ class BookController extends Controller
             ->addColumn('final_price', fn($row) => $row->final_price ?? '')
             ->addColumn('author', fn($row) => optional($row->author)->name ?? '')
             ->addColumn('photo', function ($book) {
-                $imagePaths = json_decode($book->image_path, true);
+                $imagePaths = json_decode($book->image_paths, true);
 
                 if (is_array($imagePaths) && count($imagePaths) > 0) {
                     $slidesHtml = '';
                     foreach ($imagePaths as $img) {
-                        // Check if $img is a valid URL
-                        $url = filter_var($img, FILTER_VALIDATE_URL) ? $img : asset($img);
-
-                        // Add style to remove blue borders (outline, border, box-shadow)
+                        $url = filter_var($img, FILTER_VALIDATE_URL) ? $img : asset('storage/' . $img);
                         $slidesHtml .= '<div class="swiper-slide">
                             <img src="' . e($url) . '" alt="Book Image" style="width: 60px; height: 50px; object-fit: cover; border-radius: 4px; border:none; outline:none; box-shadow:none;" />
                         </div>';
@@ -202,11 +219,11 @@ class BookController extends Controller
                         <div class="swiper-wrapper">' . $slidesHtml . '</div>
                     </div>';
                 } else {
-                    // Fallback image if none exists
                     $url = asset('assets/img/avatars/avatar-1.png');
                     return '<img src="' . e($url) . '" alt="Default Avatar" style="width: 60px; height: 50px; object-fit: cover; border-radius: 4px; border:none; outline:none; box-shadow:none;" />';
                 }
             })
+
             ->addColumn('book_id', fn($row) => '#' . ($row->id ?? ''))
             ->addColumn('status', fn($row) => '<span class="badge bg-success">' . e($row->status) . '</span>')
             ->addColumn('amount', fn($row) => $row->currency_type . ' ' . $row->final_price)

@@ -7,10 +7,9 @@
                 <div class="col-md-8">
                     <form method="POST"
                         action="{{ isset($author) ? route('admin.author.update', $author) : route('admin.author.store') }}"
-                        enctype="multipart/form-data" @submit.prevent="$el.submit()" x-data="authorForm()"
-                        x-init="init()">
-
+                        enctype="multipart/form-data" x-data="authorForm()" x-init="init()">
                         @csrf
+
                         @if (isset($author))
                             @method('PUT')
                         @endif

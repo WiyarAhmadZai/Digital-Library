@@ -15,7 +15,8 @@
                 <div class="col-md-6">
                     <form method="POST"
                         action="{{ isset($book) ? route('admin.book.update', $book) : route('admin.book.store') }}"
-                        enctype="multipart/form-data" @submit.prevent="$el.submit()">
+                        enctype="multipart/form-data">
+
                         @csrf
                         @if (isset($book))
                             @method('PUT')
@@ -32,39 +33,28 @@
                         <!-- STEP 1 -->
                         <div x-show="step === 1" class="mb-4">
                             <label class="form-label">Book Name</label>
-                            <input type="text" x-model="form.name" @input="errors.name = null; updateProgress()"
+                            <input type="text" x-model="form.name"
                                 :class="errors.name ? 'is-invalid' : (form.name.trim().length > 0 ? 'is-valid' : '')"
-                                class="form-control" name="name" />
+                                class="form-control" name="name" @input="errors.name=null; updateProgress()" />
                             <div class="text-danger" x-show="errors.name" x-text="errors.name"></div>
 
-                            @error('name')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-
                             <label class="form-label mt-3">Description</label>
-                            <textarea name="description" x-model="form.description" @input="errors.description = null; updateProgress()"
-                                rows="3" class="form-control"
+                            <textarea name="description" x-model="form.description" rows="3" class="form-control"
                                 :class="errors.description ? 'is-invalid' : (form.description.trim().length > 0 ? 'is-valid' :
-                                    '')"></textarea>
+                                    '')"
+                                @input="errors.description=null; updateProgress()"></textarea>
                             <div class="text-danger" x-show="errors.description" x-text="errors.description"></div>
-                            @error('description')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
 
                             <label class="form-label mt-3">Author</label>
-                            <select name="author_id" x-model="form.author_id"
-                                @change="clearError('author_id'); updateProgress()" class="form-select"
-                                :class="errors.author_id ? 'is-invalid' : (form.author_id && form.author_id !== '' ?
-                                    'is-valid' : '')">
-                                <option value="">Select Author</option>
+                            <select name="author_id" x-model="form.author_id" class="form-select"
+                                :class="errors.author_id ? 'is-invalid' : (form.author_id ? 'is-valid' : '')"
+                                @change="handleAuthorChange($event)">
+                                <option value=""> Select Author</option>
                                 @foreach ($authors as $author)
                                     <option value="{{ $author->id }}">{{ $author->name }}</option>
                                 @endforeach
                             </select>
                             <div class="text-danger" x-show="errors.author_id" x-text="errors.author_id"></div>
-                            @error('author_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
 
                             <button type="button" @click="nextStep()" class="btn btn-success mt-4">Next</button>
                         </div>
@@ -203,49 +193,47 @@
 
                         <!-- STEP 5 -->
                         <div x-show="step === 5" class="mb-4">
-                            <label class="form-label">Book Images (2-11 images)</label>
-                            <input type="file" multiple accept="image/*" name="image_path[]" class="form-control"
+                            <label class="form-label">Upload Book PDF</label>
+                            <input type="file" name="pdf_file" accept="application/pdf"
+                                @change="handlePdfUpload($event)"
+                                :class="errors.pdf_file ? 'is-invalid' : (form.pdf_file ? 'is-valid' : '')"
+                                class="form-control" />
+                            <div class="text-danger" x-show="errors.pdf_file" x-text="errors.pdf_file"></div>
+
+                            <label class="form-label mt-3">Book Images (2-11 images)</label>
+                            <input type="file" name="image_path[]" multiple accept="image/*"
+                                @change="handleFiles($event)"
                                 :class="errors.images ? 'is-invalid' : (form.image_path.length >= 2 ? 'is-valid' : '')"
-                                @change="errors.images = null; handleFiles($event)" />
+                                class="form-control" />
+                            <div class="text-danger" x-show="errors.images" x-text="errors.images"></div>
 
-                            <template x-if="errors.images">
-                                <div class="text-danger mt-2" x-text="errors.images"></div>
-                            </template>
-
-                            <div class="row mt-3 g-2" @dragover.prevent @drop.prevent="handleDrop($event)">
+                            <div class="row mt-3 g-2">
                                 <template x-for="(image, index) in form.image_path" :key="index">
                                     <div class="col-4">
-                                        <div class="border position-relative" draggable="true"
-                                            @dragstart="dragStart($event, index)" @drop.prevent="dragDrop($event, index)"
-                                            @click="replaceImage(index)">
+                                        <div class="border position-relative">
                                             <img :src="image.url" class="img-fluid"
-                                                style="height: 120px; object-fit: cover;">
-                                            <button type="button" @click.stop="removeImage(index)"
+                                                style="height:120px; object-fit:cover;" />
+                                            <button type="button"
+                                                @click="form.image_path.splice(index,1); validateImages();"
                                                 class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1">&times;</button>
                                         </div>
                                     </div>
                                 </template>
                             </div>
 
-
                             <button type="button" @click="prevStep()" class="btn btn-secondary mt-3">Previous</button>
-                            <button type="submit" class="btn btn-primary mt-3 ms-2">
-                                {{ isset($book) ? 'Update Book' : 'Create Book' }}
-                            </button>
+                            <button type="submit" class="btn btn-primary mt-3 ms-2">Submit</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Right side: Image (changes per step) -->
                 <div class="col-md-6 d-flex align-items-center justify-content-center">
-                    <!-- 📸 Change these image files in /public/assets/img/book/01.png ... 05.png -->
                     <img :src="'{{ asset('assets/img/book') }}/' + String(step).padStart(2, '0') + '.png'"
                         class="img-fluid rounded shadow" alt="Book Image" style="max-height: 450px;">
                 </div>
-
             </div>
         </div>
-
     </div>
     <script>
         function bookForm() {
@@ -258,7 +246,7 @@
                 form: {
                     name: @json(old('name', $book->name ?? '')),
                     description: @json(old('description', $book->description ?? '')),
-                    author_id: @json((string) old('author_id', $book->author_id ?? '')),
+                    author_id: @json(old('author_id', $book->author_id ?? '')),
                     category: @json(old('category', $book->category ?? '')),
                     price: @json(old('price', $book->price ?? '')),
                     currency_type: @json(old('currency_type', $book->currency_type ?? '')),
@@ -271,8 +259,8 @@
                     country: @json(old('country', $book->country ?? '')),
                     discount: @json(old('discount', $book->discount ?? '')),
                     tags: @json(old('tags', $book->tags ?? '')),
-                    image_path: @json(isset($book) ? collect($book->image_path)->map(fn($img) => ['url' => asset('storage/books/' . $img)]) : [])
-
+                    image_path: @json(isset($book) ? collect($book->image_path)->map(fn($img) => ['url' => asset('storage/books/' . $img)]) : []),
+                    pdf_file: null
                 },
 
                 errors: {
@@ -292,6 +280,7 @@
                     discount: null,
                     tags: null,
                     images: null,
+                    pdf_file: null
                 },
 
                 requiredFieldsPerStep: {
@@ -303,45 +292,61 @@
                 },
 
                 init() {
-                    if (this.form.image_path && this.form.image_path.length && typeof this.form.image_path[0] ===
-                        'string') {
-                        this.form.image_path = this.form.image_path.map(url => ({
-                            url
-                        }));
+                    // Ensure author_id is properly initialized
+                    if (this.form.author_id !== null && this.form.author_id !== undefined) {
+                        this.form.author_id = this.form.author_id.toString();
                     }
                     this.updateProgress();
+                },
 
-                    // Watch author_id changes to clear errors automatically
-                    this.$watch('form.author_id', value => {
-                        if (value && value.toString().trim() !== '') {
-                            this.errors.author_id = null;
-                        }
-                    });
+                handleAuthorChange(event) {
+                    this.form.author_id = event.target.value;
+                    this.errors.author_id = null;
+                    this.updateProgress();
                 },
 
                 nextStep() {
+                    // Clear previous errors
                     this.errors = {};
+
+                    // Validate fields of current step
                     const fieldsToValidate = this.requiredFieldsPerStep[this.step] || [];
                     let hasError = false;
 
                     fieldsToValidate.forEach(field => {
                         const value = this.form[field];
-                        if (value === null || value === undefined || value.toString().trim() === '') {
-                            if (field === 'author_id') {
-                                this.errors[field] = 'Please select an author.';
-                            } else {
-                                this.errors[field] = 'This field is required.';
-                            }
+
+                        // Special handling for author_id
+                        if (field === 'author_id') {
+                            // if (value || value.toString().trim() !== '') {
+                            //     this.errors.author_id = 'Please select an author.';
+                            //     hasError = true;
+                            // }
+                        }
+                        // Standard validation for other fields
+                        else if (!value || value.toString().trim() === '') {
+                            this.errors[field] = 'This field is required.';
                             hasError = true;
                         }
                     });
+
+                    // Additional validation on step 5
+                    if (this.step === 5) {
+                        this.validateImages();
+                        this.validatePdf();
+                        if (this.errors.images || this.errors.pdf_file) {
+                            hasError = true;
+                        }
+                    }
 
                     if (hasError) {
                         window.scrollTo(0, 0);
                         return;
                     }
 
-                    if (this.step < this.totalSteps) this.step++;
+                    if (this.step < this.totalSteps) {
+                        this.step++;
+                    }
                     window.scrollTo(0, 0);
                 },
 
@@ -350,24 +355,28 @@
                     window.scrollTo(0, 0);
                 },
 
-                clearError(field) {
-                    if (this.errors[field]) {
-                        delete this.errors[field];
-                    }
-                },
-
                 updateProgress() {
                     let filled = 0;
-                    const fields = [
-                        'name', 'description', 'author_id', 'category', 'price', 'currency_type', 'language',
-                        'publish_year', 'status', 'total_pages', 'sku', 'format', 'country', 'discount', 'tags'
-                    ];
+                    const totalFields = 15; // Total number of fields in your form
 
-                    fields.forEach(field => {
-                        if (this.form[field] && this.form[field].toString().trim() !== '') filled++;
-                    });
+                    // Check each field individually
+                    if (this.form.name && this.form.name.trim() !== '') filled++;
+                    if (this.form.description && this.form.description.trim() !== '') filled++;
+                    if (this.form.author_id && this.form.author_id.toString().trim() !== '') filled++;
+                    if (this.form.category && this.form.category.trim() !== '') filled++;
+                    if (this.form.price && this.form.price.toString().trim() !== '') filled++;
+                    if (this.form.currency_type && this.form.currency_type.trim() !== '') filled++;
+                    if (this.form.language && this.form.language.trim() !== '') filled++;
+                    if (this.form.publish_year) filled++;
+                    if (this.form.status) filled++;
+                    if (this.form.total_pages && this.form.total_pages.toString().trim() !== '') filled++;
+                    if (this.form.sku && this.form.sku.trim() !== '') filled++;
+                    if (this.form.format && this.form.format.trim() !== '') filled++;
+                    if (this.form.country && this.form.country.trim() !== '') filled++;
+                    if (this.form.discount && this.form.discount.toString().trim() !== '') filled++;
+                    if (this.form.tags && this.form.tags.trim() !== '') filled++;
 
-                    this.progress = (filled / fields.length) * 100;
+                    this.progress = (filled / totalFields) * 100;
                     this.updateDiscountedPrice();
                 },
 
@@ -391,42 +400,27 @@
                     }
                 },
 
-                removeImage(index) {
-                    this.form.image_path.splice(index, 1);
-                    this.validateImages();
-                },
-
                 validateImages() {
                     this.errors.images = this.form.image_path.length < 2 ? 'Minimum 2 images required.' : null;
                 },
 
-                dragStart(e, index) {
-                    e.dataTransfer.setData('text/plain', index);
+                handlePdfUpload(event) {
+                    const file = event.target.files[0];
+                    if (!file || file.type !== 'application/pdf') {
+                        this.errors.pdf_file = 'Invalid PDF file.';
+                        this.form.pdf_file = null;
+                    } else {
+                        this.form.pdf_file = file;
+                        this.errors.pdf_file = null;
+                    }
                 },
 
-                dragDrop(e, index) {
-                    const draggedIndex = e.dataTransfer.getData('text/plain');
-                    const draggedImage = this.form.image_path[draggedIndex];
-                    this.form.image_path.splice(draggedIndex, 1);
-                    this.form.image_path.splice(index, 0, draggedImage);
-                },
-
-                replaceImage(index) {
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.accept = 'image/*';
-                    input.onchange = e => {
-                        const file = e.target.files[0];
-                        const reader = new FileReader();
-                        reader.onload = ev => {
-                            this.form.image_path[index] = {
-                                file,
-                                url: ev.target.result
-                            };
-                        };
-                        reader.readAsDataURL(file);
-                    };
-                    input.click();
+                validatePdf() {
+                    if (!this.form.pdf_file) {
+                        this.errors.pdf_file = 'Please upload a PDF file.';
+                    } else {
+                        this.errors.pdf_file = null;
+                    }
                 },
 
                 updateDiscountedPrice() {

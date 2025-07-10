@@ -23,6 +23,7 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
+        // Validate input fields
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -30,23 +31,30 @@ class AuthorController extends Controller
             'country' => 'required|string|max:255',
             'email' => 'required|email|unique:authors,email',
             'website' => 'nullable|url',
-            'image_path' => 'required|array|min:1',      // input name
-            'image_path.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_path' => 'required',  // At least one image must be uploaded
+            'image_path.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate each file
         ]);
 
+        // Store image paths
         $imagePaths = [];
 
+        // Check and store each uploaded image
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {
                 $imagePaths[] = $file->store('uploads/authors', 'public');
             }
         }
 
-        $validated['image_paths'] = json_encode($imagePaths);  // Save in DB column image_paths
-        unset($validated['image_path']);                        // Remove image_path key (input name)
+        // Save the image paths as JSON in the database
+        $validated['image_paths'] = json_encode($imagePaths);
 
+        // Remove the original input name since it's not a DB column
+        unset($validated['image_path']);
+
+        // Create the author record
         Author::create($validated);
 
+        // Redirect to index with success message
         return redirect()->route('admin.author.index')->with('success', 'Author created successfully!');
     }
 

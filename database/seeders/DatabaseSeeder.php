@@ -8,6 +8,7 @@ use App\Models\PasswordResetToken;
 use App\Models\Session;
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\Category;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,5 +22,8 @@ class DatabaseSeeder extends Seeder
 
         // Create 50 books (make sure authors exist before books)
         Book::factory(50)->create();
+
+        // Create 50 categories
+        Category::factory(50)->create();
     }
 }

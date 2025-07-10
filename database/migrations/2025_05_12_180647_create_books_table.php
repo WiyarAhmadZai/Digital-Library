@@ -13,24 +13,32 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+
             $table->string('name');
             $table->text('description');
-            $table->string('image_path');
+
+            // Multiple images stored as JSON array
+            $table->json('image_paths')->nullable();
+
             $table->string('category');
 
-            $table->decimal('price', 10, 2); // ✅ ADD THIS
-            $table->decimal('final_price', 10, 2)->nullable(); // ✅ Keep this
+            $table->decimal('price', 10, 2);
+            $table->decimal('final_price', 10, 2)->nullable();
 
             $table->string('currency_type');
             $table->string('language');
             $table->date('publish_year');
-            $table->string('status');
+            $table->string('status')->default('active');
             $table->integer('total_pages');
             $table->string('sku');
             $table->string('format');
             $table->string('country');
-            $table->string('discount');
+            $table->integer('discount')->default(0);
             $table->text('tags');
+
+            // New column for storing PDF file path
+            $table->string('pdf_path')->nullable();
+
             $table->softDeletes();
 
             $table->foreignId('author_id')
@@ -41,10 +49,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
-
-
-
 
     /**
      * Reverse the migrations.

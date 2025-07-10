@@ -94,15 +94,24 @@
                         </li>
                     </ul>
                 </li>
-                <li> <a href="ecommerce-add-new-products.html"><i class='bx bx-radio-circle'></i>
-                        <span
-                            style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
-                        </span> Employee </a>
-                </li>
-                <li> <a href="ecommerce-orders.html"><i class='bx bx-radio-circle'></i>
-                        <span
-                            style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
-                        </span> Post </a>
+                <li>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class='bx bx-book'></i>
+                        </div>
+                        <div class="menu-title">
+                            <span
+                                style="color: black; margin-right: 5px; font-size: 12px; background-color: goldenrod; font-weight: bold; padding: 2px 4px; border-radius: 5px;">New
+                            </span> Posts
+                        </div>
+                    </a>
+                    <ul>
+                        <li> <a href="{{ route('admin.author.create') }}"><i class='bx bx-radio-circle'></i>
+                                create </a>
+                        </li>
+                        <li> <a href="{{ route('admin.author.index') }}"><i class='bx bx-radio-circle'></i>
+                                View Post </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </li>
