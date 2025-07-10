@@ -105,10 +105,10 @@
                         </div>
                     </a>
                     <ul>
-                        <li> <a href="{{ route('admin.author.create') }}"><i class='bx bx-radio-circle'></i>
+                        <li> <a href="{{ route('admin.post.create') }}"><i class='bx bx-radio-circle'></i>
                                 create </a>
                         </li>
-                        <li> <a href="{{ route('admin.author.index') }}"><i class='bx bx-radio-circle'></i>
+                        <li> <a href="{{ route('posts.index') }}"><i class='bx bx-radio-circle'></i>
                                 View Post </a>
                         </li>
                     </ul>

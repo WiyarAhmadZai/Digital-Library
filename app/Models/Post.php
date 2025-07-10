@@ -12,28 +12,15 @@ class Post extends Model
 {
     //
     use HasFactory;
+    protected $fillable = ['user_id', 'body', 'images', 'pdfs', 'visibility'];
 
-    protected $fillable = [
-        'user_id',
-        'title',
-        'body',
-        'image',
+    protected $casts = [
+        'images' => 'array',
+        'pdfs' => 'array',
     ];
 
-     public function up(): void
+    public function user()
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->text('body');
-            $table->string('image')->nullable();
-            $table->timestamps();
-        });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('posts');
+        return $this->belongsTo(User::class);
     }
 }

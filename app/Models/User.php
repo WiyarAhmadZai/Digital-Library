@@ -45,6 +45,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // In User model
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
+
     public function isAdmin()
     {
         return $this->role === 'admin';

@@ -11,6 +11,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\FrondendRouteController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\PostController;
 
 
 
@@ -77,9 +78,29 @@ Route::middleware(['auth'])->group(function () {
             Route::get('view/{id}', [AuthorController::class, 'authorView'])->name('admin.author.view');
         });
         Route::prefix('post/')->group(function () {
-            Route::get('create', [PostController::class, 'create'])->name('admin.author.create');
+            Route::get('create', [PostController::class, 'create'])->name('admin.post.create');
+            Route::post('store', [PostController::class, 'store'])->name('admin.post.store');
+            Route::get('edit/{id}', [PostController::class, 'edit'])->name('admin.post.edit');
+            Route::put('update/{id}', [PostController::class, 'update'])->name('admin.post.update');
         });
     });
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+        Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
+        Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+        Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+        Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+        Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+
+        // ✅ Add this line for delete support:
+        Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    });
+
+
+
+
+
 
     Route::prefix('frontend/')->group(function () {
         Route::get('/contact', [FrondendRouteController::class, 'contact'])->name('frontend.contact.index');
