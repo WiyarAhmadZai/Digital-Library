@@ -76,6 +76,9 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('delete/{id}', [AuthorController::class, 'destroy'])->name('admin.author.delete');
             Route::get('view/{id}', [AuthorController::class, 'authorView'])->name('admin.author.view');
         });
+        Route::prefix('post/')->group(function () {
+            Route::get('create', [PostController::class, 'create'])->name('admin.author.create');
+        });
     });
 
     Route::prefix('frontend/')->group(function () {

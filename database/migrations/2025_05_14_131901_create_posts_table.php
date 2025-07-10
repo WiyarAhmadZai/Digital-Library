@@ -9,10 +9,15 @@ return new class extends Migration {
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->text('body');
-            $table->string('image')->nullable();
+
+            $table->text('body')->nullable();             // Text content
+            $table->json('images')->nullable();           // Multiple image paths (as array)
+            $table->json('pdfs')->nullable();             // Multiple PDF file paths (as array)
+
+            $table->enum('visibility', ['public', 'private'])->default('public'); // Only public/private
+
             $table->timestamps();
         });
     }
