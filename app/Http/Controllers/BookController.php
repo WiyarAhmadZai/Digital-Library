@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use App\Models\Review;
+use App\Models\UserProfile;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 
@@ -301,5 +303,136 @@ class BookController extends Controller
         Review::create($validated);
 
         return redirect()->back()->with('success', 'Your review or reply has been submitted.');
+    }
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $books = Book::with(['author', 'category'])
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%")
+                    ->orWhere('price', 'like', "%{$query}%")
+                    ->orWhere('final_price', 'like', "%{$query}%")
+                    ->orWhere('currency_type', 'like', "%{$query}%")
+                    ->orWhere('language', 'like', "%{$query}%")
+                    ->orWhere('publish_year', 'like', "%{$query}%")
+                    ->orWhere('status', 'like', "%{$query}%")
+                    ->orWhere('sku', 'like', "%{$query}%")
+                    ->orWhere('format', 'like', "%{$query}%")
+                    ->orWhere('country', 'like', "%{$query}%")
+                    ->orWhere('discount', 'like', "%{$query}%")
+                    ->orWhere('tags', 'like', "%{$query}%")
+                    ->orWhere('category', 'like', "%{$query}%");
+            })
+            ->orWhereHas('author', function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%");
+            })
+            ->paginate(12)
+            ->appends(['query' => $query]);  // <<< append the query param
+
+        return view('frontend.partials.search_results', compact('books'))->render();
+    }
+
+
+
+    public function downloadAndPurchase($id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json(['error' => 'کتاب یافت نشد.'], 404);
+        }
+
+        $user = auth()->user();
+
+        if (!$user || !$user->profile) {
+            return response()->json(['error' => 'کاربر یافت نشد یا پروفایلی ندارد.'], 403);
+        }
+
+        // Store book in purchased_books
+        $purchasedBooks = $user->profile->purchased_books ?? '[]';
+        $purchasedBooks = is_array($purchasedBooks) ? $purchasedBooks : json_decode($purchasedBooks, true);
+
+        if (!in_array($book->id, $purchasedBooks)) {
+            $purchasedBooks[] = $book->id;
+            $user->profile->purchased_books = json_encode($purchasedBooks);
+            $user->profile->save();
+        }
+
+        // Serve PDF or fallback
+        if ($book->pdf_path && Storage::disk('public')->exists($book->pdf_path)) {
+            return response()->download(storage_path('app/public/' . $book->pdf_path));
+        }
+
+        $fallbackPath = public_path('khan.pdf');
+
+        if (!file_exists($fallbackPath)) {
+            return response()->json(['error' => 'هیچ فایل موجود نیست.'], 404);
+        }
+
+        return response()->download($fallbackPath, 'default-book.pdf');
+    }
+    public function myDownloads()
+    {
+        $user = auth()->user();
+
+        $purchased = $user->profile->purchased_books ?? '[]';
+        $purchased = is_array($purchased) ? $purchased : json_decode($purchased, true);
+
+        $books = Book::whereIn('id', $purchased)->get();
+
+        return view('frontend.books.downloads', compact('books'));
+    }
+    public function removeDownload($id)
+    {
+        $user = auth()->user();
+
+        if (!$user || !$user->profile) {
+            return response()->json(['success' => false, 'message' => 'کاربر یافت نشد یا پروفایلی ندارد.'], 403);
+        }
+
+        $purchased = $user->profile->purchased_books ?? '[]';
+        $purchased = is_array($purchased) ? $purchased : json_decode($purchased, true);
+
+        $id = (int)$id;
+
+        if (($key = array_search($id, $purchased)) !== false) {
+            unset($purchased[$key]);
+            $user->profile->purchased_books = json_encode(array_values($purchased));
+            $user->profile->save();
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+
+    public function viewPdf($id)
+    {
+        $book = Book::findOrFail($id);
+        $user = auth()->user();
+
+        if (!$user || !$user->profile) {
+            abort(403, 'Unauthorized');
+        }
+
+        $purchasedBooks = json_decode($user->profile->purchased_books ?? '[]', true);
+
+        if (!in_array($book->id, $purchasedBooks)) {
+            abort(403, 'شما این کتاب را خریداری نکرده‌اید.');
+        }
+
+        if ($book->pdf_path && Storage::disk('public')->exists($book->pdf_path)) {
+            // Serve file from storage/app/public/uploads/pdf/...
+            return response()->file(storage_path('app/public/' . $book->pdf_path));
+        }
+
+        // fallback: public/khan.pdf
+        $fallbackPath = public_path('khan.pdf');
+        if (!file_exists($fallbackPath)) {
+            abort(404, 'فایل PDF یافت نشد.');
+        }
+
+        return response()->file($fallbackPath);
     }
 }

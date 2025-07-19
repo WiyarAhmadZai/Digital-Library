@@ -9,6 +9,7 @@
     <!-- ========== Meta Tags ========== -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="gramentheme">
     <meta name="description" content="Bookle - Book Store WooCommerce Html Template ">
@@ -39,12 +40,23 @@
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
 
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
+
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Cropper CSS -->
+    <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet" />
+
     {{-- Include Swiper CSS (put in your layout head ideally) --}}
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" /> --}}
 
 </head>
 
 <body>
+
 
     <!-- Cursor follower -->
     <div class="cursor-follower"></div>
@@ -266,67 +278,87 @@
                             </div>
                         </div>
                         @auth
-                            <div class="col-6 col-xl-3">
-                                <div class="header-right">
-                                    <div class="category-oneadjust gap-6 d-flex align-items-center">
-                                        <div class="icon">
-                                            <i class="fa-sharp fa-solid fa-grid-2"></i>
+                            <div class="col-6 col-xl-3 d-flex align-items-center justify-content-end gap-3">
+                                <!-- Search form -->
+                                <form id="search-form" action="{{ route('frontend.book.search') }}" method="GET"
+                                    class="me-3 position-relative" style="width: 320px; min-width: 250px;">
+                                    <div class="input-group rounded-3 shadow-sm position-relative">
+                                        <input type="text" class="form-control border-end-0" name="query"
+                                            id="search-query" placeholder="Search by author, title, or description"
+                                            aria-label="Search" aria-describedby="search-button" autocomplete="off">
+                                        <button
+                                            class="btn btn-outline-primary border-start-0 d-flex align-items-center justify-content-center"
+                                            type="submit" id="search-button" style="width: 45px;">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                        <!-- Clear button -->
+                                        <button type="button" id="clear-search"
+                                            class="btn btn-outline-secondary position-absolute"
+                                            style="top: 50%; right: 55px; transform: translateY(-50%); display: none; padding: 0 8px; border-radius: 0 0.375rem 0.375rem 0; z-index: 10;">
+                                            &times;
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- User dropdown -->
+                                @php
+                                    $user = auth()->user();
+                                    $defaultImage = asset('assets/img/avatars/avatar-2.png');
+
+                                    // Get profile image from userProfile if exists, else default
+                                    $profileImage =
+                                        $user && $user->userProfile && $user->userProfile->profile_image
+                                            ? asset('storage/' . $user->userProfile->profile_image)
+                                            : $defaultImage;
+
+                                    $userName = $user ? $user->name : 'Guest User';
+
+                                    // Get profession from userProfile or default string
+                                    $userProfession =
+                                        $user && $user->userProfile && $user->userProfile->profession
+                                            ? $user->userProfile->profession
+                                            : 'Professional';
+                                @endphp
+
+                                <div class="user-box dropdown">
+                                    <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                        <img src="{{ $profileImage }}" class="user-img rounded-circle" alt="user avatar"
+                                            style="width:40px; height:40px; object-fit:cover;">
+
+                                        <div class="user-info d-none d-xl-block">
+                                            <p class="user-name mb-0 fw-semibold">{{ $userName }}</p>
+                                            <p class="designattion mb-0 text-muted small">{{ $userProfession }}</p>
                                         </div>
+                                    </a>
 
-                                        <form id="search-form" class="search-toggle-box d-md-block" action="#"
-                                            method="GET">
-                                            <div class="input-area">
-                                                <input type="text" name="query" id="search-query"
-                                                    placeholder="Search by author, title, or description">
-                                                <button type="submit" class="cmn-btn">
-                                                    <i class="far fa-search"></i>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('frontend.profile.show', $user->id) }}"><i
+                                                    class="bx bx-user fs-5 me-2"></i>Profile</a></li>
+                                        <li><a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('user-dashboard') }}"><i
+                                                    class="bx bx-home-circle fs-5 me-2"></i>Dashboard</a></li>
+                                        <li><a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('books.downloads') }}"><i
+                                                    class="bx bx-download fs-5 me-2"></i>Downloads</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <form method="POST" action="{{ route('logout') }}">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item d-flex align-items-center">
+                                                    <i class="bx bx-log-out-circle fs-5 me-2"></i>Logout
                                                 </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="user-box dropdown px-3">
-                                        <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
-                                            href="#" role="button" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            <img src="{{ asset('assets/img/avatars/avatar-2.png') }}"
-                                                class="user-img img profile" alt="user avatar">
-                                            <div class="user-info">
-                                                <p class="user-name mb-0">Pauline Seitz</p>
-                                                <p class="designattion mb-0">Web Designer</p>
-                                            </div>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                        class="bx bx-user fs-5"></i><span>Profile</span></a>
-                                            </li>
-                                            <li><a class="dropdown-item d-flex align-items-center"
-                                                    href="{{ route('user-dashboard') }}"><i
-                                                        class="bx bx-home-circle fs-5"></i><span>Dashboard</span></a>
-                                            </li>
-                                            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                        class="bx bx-download fs-5"></i><span>Downloads</span></a>
-                                            </li>
-                                            <li>
-                                                <div class="dropdown-divider mb-0"></div>
-                                            </li>
-
-                                            <li>
-                                                <form method="POST" action="{{ route('logout') }}">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        style="background: none; border: none; padding: 0; color: inherit; cursor: pointer;">
-                                            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                                        class="bx bx-log-out-circle"></i><span>Logout</span></a>
-                                            </li>
-                                            </button>
                                             </form>
-                                            </li>
-
-                                        </ul>
-                                    </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         @endauth
+
                     </div>
                 </div>
 
@@ -691,44 +723,139 @@
     <script src="{{ asset('assets/js/gsap.min.js') }}"></script>
     <!--<< Main.js >>-->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <!-- Alpine.js -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <!-- Cropper JS -->
+    <script src="https://unpkg.com/cropperjs"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const form = document.getElementById("search-form");
-            const queryInput = document.getElementById("search-query");
+            const input = document.getElementById("search-query");
             const resultsDiv = document.getElementById("search-results");
+            const defaultSection = document.getElementById("default-book-section");
+            let debounceTimer;
+            let currentQuery = "";
 
-            function fetchResults(url = null) {
-                const query = queryInput.value.trim();
-                if (query.length === 0) {
-                    resultsDiv.innerHTML = "";
-                    document.getElementById("default-book-section").style.display = "block";
-                    return;
-                }
+            // Live search as you type
+            input.addEventListener("input", function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    const query = input.value.trim();
+                    currentQuery = query; // store current query
 
-                const fetchUrl = url || `{{ route('frontend.book.search') }}?query=${encodeURIComponent(query)}`;
+                    if (query.length === 0) {
+                        resultsDiv.innerHTML = "";
+                        defaultSection.style.display = "block";
+                        return;
+                    }
 
-                fetch(fetchUrl)
-                    .then(response => response.text())
-                    .then(html => {
-                        resultsDiv.innerHTML = html;
-                        document.getElementById("default-book-section").style.display = "none";
-                    });
-            }
-
-            form.addEventListener("submit", function(e) {
-                e.preventDefault();
-                fetchResults();
+                    fetchResults(
+                        `{{ route('frontend.book.search') }}?query=${encodeURIComponent(query)}`
+                    );
+                }, 300); // 300ms debounce
             });
 
-            // Pagination link handling (delegate click)
+            // AJAX pagination handling - delegate click on links inside #search-results
             resultsDiv.addEventListener("click", function(e) {
-                if (e.target.matches(".pagination a")) {
+                // Check if clicked element is a pagination link
+                if (e.target.tagName === "A" && e.target.closest(".pagination")) {
                     e.preventDefault();
-                    fetchResults(e.target.href);
+                    let url = e.target.getAttribute("href");
+
+                    // Ensure current query is included in pagination URL
+                    const urlObj = new URL(url, window.location.origin);
+                    if (currentQuery) {
+                        urlObj.searchParams.set('query', currentQuery);
+                    }
+                    url = urlObj.toString();
+
+                    fetchResults(url);
                 }
+            });
+
+            function fetchResults(url) {
+                fetch(url)
+                    .then(res => {
+                        if (!res.ok) throw new Error('Network response was not ok');
+                        return res.text();
+                    })
+                    .then(html => {
+                        resultsDiv.innerHTML = html;
+                        defaultSection.style.display = "none";
+                        // Scroll to results smoothly
+                        resultsDiv.scrollIntoView({
+                            behavior: "smooth"
+                        });
+                    })
+                    .catch(err => {
+                        console.error("Search failed:", err);
+                        resultsDiv.innerHTML = "<p class='text-danger'>Something went wrong.</p>";
+                    });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('welcome_message'))
+        <script>
+            Swal.fire({
+                title: '🎉 Welcome, {{ session('welcome_message') }}!',
+                text: 'You’ve taken the first step toward something amazing!',
+                icon: 'success',
+                confirmButtonText: 'Let’s Go!'
+            });
+        </script>
+        @php
+            session()->forget('welcome_message');
+        @endphp
+    @endif
+
+    @if (session('login_message'))
+        <script>
+            Swal.fire({
+                title: '👋 Welcome back, {{ session('login_message') }}!',
+                text: 'We’re happy to see you again!',
+                icon: 'info',
+                confirmButtonText: 'Continue'
+            });
+        </script>
+        @php
+            session()->forget('login_message');
+        @endphp
+    @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-query');
+            const clearBtn = document.getElementById('clear-search');
+
+            // Optional: Prevent form submission if you want to handle search with JS
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // You can add search logic here if needed
+                // alert('Form submit prevented! You can implement search logic here.');
+            });
+
+            // Show or hide clear button based on input value
+            searchInput.addEventListener('input', () => {
+                clearBtn.style.display = searchInput.value.length > 0 ? 'block' : 'none';
+            });
+
+            // Clear input on clear button click
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                clearBtn.style.display = 'none';
+                searchInput.focus();
             });
         });
     </script>
+
+
+
 
 </body>
 

@@ -65,6 +65,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 
 
@@ -83,6 +84,8 @@
 </head>
 
 <body data-success-message="{{ session('success') }}" data-error-message="{{ session('error') }}">
+
+
 
     <!--wrapper-->
     <div class="wrapper">
@@ -737,31 +740,67 @@
                         </li>
                     </ul>
                 </div>
-                <div class="user-box dropdown px-3">
-                    <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
-                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('assets/img/avatars/avatar-2.png') }}" class="user-img"
-                            alt="user avatar">
-                        <div class="user-info">
-                            <p class="user-name mb-0">Pauline Seitz</p>
-                            <p class="designattion mb-0">Web Designer</p>
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                    class="bx bx-user fs-5"></i><span>Profile</span></a>
-                        </li>
-                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                    class="bx bx-download fs-5"></i><span>Downloads</span></a>
-                        </li>
-                        <li>
-                            <div class="dropdown-divider mb-0"></div>
-                        </li>
-                        <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
-                                    class="bx bx-log-out-circle"></i><span>Logout</span></a>
-                        </li>
-                    </ul>
-                </div>
+                @auth
+
+
+                    <!-- User dropdown -->
+                    @php
+                        $user = auth()->user();
+                        $defaultImage = asset('assets/img/avatars/avatar-2.png');
+
+                        // Get profile image from userProfile if exists, else default
+                        $profileImage =
+                            $user && $user->userProfile && $user->userProfile->profile_image
+                                ? asset('storage/' . $user->userProfile->profile_image)
+                                : $defaultImage;
+
+                        $userName = $user ? $user->name : 'Guest User';
+
+                        // Get profession from userProfile or default string
+                        $userProfession =
+                            $user && $user->userProfile && $user->userProfile->profession
+                                ? $user->userProfile->profession
+                                : 'Professional';
+                    @endphp
+
+                    <div class="user-box dropdown">
+                        <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <img src="{{ $profileImage }}" class="user-img rounded-circle" alt="user avatar"
+                                style="width:40px; height:40px; object-fit:cover;">
+
+                            <div class="user-info d-none d-xl-block">
+                                <p class="user-name mb-0 fw-semibold">{{ $userName }}</p>
+                                <p class="designattion mb-0 text-muted small">{{ $userProfession }}</p>
+                            </div>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item d-flex align-items-center"
+                                    href="{{ route('frontend.profile.show', $user->id) }}"><i
+                                        class="bx bx-user fs-5 me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item d-flex align-items-center"
+                                    href="{{ route('user-dashboard') }}"><i
+                                        class="bx bx-home-circle fs-5 me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item d-flex align-items-center"
+                                    href="{{ route('books.downloads') }}"><i
+                                        class="bx bx-download fs-5 me-2"></i>Downloads</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item d-flex align-items-center">
+                                        <i class="bx bx-log-out-circle fs-5 me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @endauth
+
             </nav>
         </div>
     </header>
@@ -787,87 +826,36 @@
     <!--end wrapper-->
 
     <!-- search modal -->
-    <div class="modal" id="SearchModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down">
+    <!-- Search Modal -->
+    <!-- Search Modal -->
+    <div class="modal" id="SearchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-md-down">
             <div class="modal-content">
                 <div class="modal-header gap-2">
                     <div class="position-relative popup-search w-100">
-                        <input class="form-control form-control-lg ps-5 border border-3 border-primary" type="search"
-                            placeholder="Search">
-                        <span
-                            class="position-absolute top-50 search-show ms-3 translate-middle-y start-0 top-50 fs-4"><i
-                                class='bx bx-search'></i></span>
+                        <input id="globalSearchInput"
+                            class="form-control form-control-lg ps-5 border border-3 border-primary" type="search"
+                            placeholder="Search" autocomplete="off" />
+                        <span class="position-absolute top-50 ms-3 translate-middle-y start-0 fs-4">
+                            <i class='bx bx-search'></i>
+                        </span>
+                        <button id="clearSearchBtn"
+                            class="btn btn-sm btn-outline-secondary position-absolute end-0 top-50 translate-middle-y me-2"
+                            style="display:none;">&times;</button>
                     </div>
                     <button type="button" class="btn-close d-md-none" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="search-list">
-                        <p class="mb-1">Html Templates</p>
-                        <div class="list-group">
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action active align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-angular fs-4'></i>Best Html Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-vuejs fs-4'></i>Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-magento fs-4'></i>Responsive Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-shopify fs-4'></i>eCommerce Html Templates</a>
-                        </div>
-                        <p class="mb-1 mt-3">Web Designe Company</p>
-                        <div class="list-group">
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-windows fs-4'></i>Best Html Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-dropbox fs-4'></i>Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-opera fs-4'></i>Responsive Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-wordpress fs-4'></i>eCommerce Html Templates</a>
-                        </div>
-                        <p class="mb-1 mt-3">Software Development</p>
-                        <div class="list-group">
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-mailchimp fs-4'></i>Best Html Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-zoom fs-4'></i>Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-sass fs-4'></i>Responsive Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-vk fs-4'></i>eCommerce Html Templates</a>
-                        </div>
-                        <p class="mb-1 mt-3">Online Shoping Portals</p>
-                        <div class="list-group">
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-slack fs-4'></i>Best Html Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-skype fs-4'></i>Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-twitter fs-4'></i>Responsive Html5 Templates</a>
-                            <a href="javascript:;"
-                                class="list-group-item list-group-item-action align-items-center d-flex gap-2 py-1"><i
-                                    class='bx bxl-vimeo fs-4'></i>eCommerce Html Templates</a>
-                        </div>
-                    </div>
+                    <div id="searchResults" class="d-flex flex-wrap gap-3"></div>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+
     <!-- end search modal -->
 
 
@@ -1023,11 +1011,139 @@
 
     <!-- Add before </body> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            const $input = $('#globalSearchInput');
+            const $results = $('#searchResults');
+            const $clearBtn = $('#clearSearchBtn');
 
+            function renderResults(data) {
+                $results.empty();
 
+                if (!data || (
+                        data.authors.length === 0 &&
+                        data.books.length === 0 &&
+                        data.users.length === 0 &&
+                        data.posts.length === 0
+                    )) {
+                    $results.html('<p class="text-muted">No results found.</p>');
+                    return;
+                }
 
+                // Helper to create a card
+                function createCard(title, subtitle, route) {
+                    return `
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title">${title}</h5>
+                            <p class="card-text">${subtitle}</p>
+                        </div>
+                        <a href="${route}" class="btn btn-primary mt-auto">View Details</a>
+                    </div>
+                </div>
+            `;
+                }
 
+                // Authors
+                if (data.authors.length) {
+                    $results.append('<h5 class="w-100 mt-2">Authors</h5>');
+                    data.authors.forEach(author => {
+                        const card = createCard(
+                            author.name,
+                            `Books count: ${author.books_count ?? 'N/A'}`,
+                            `/authors/${author.id}` // Adjust your route here
+                        );
+                        $results.append(card);
+                    });
+                }
+
+                // Books
+                if (data.books.length) {
+                    $results.append('<h5 class="w-100 mt-3">Books</h5>');
+                    data.books.forEach(book => {
+                        const card = createCard(
+                            book.title,
+                            `Author: ${book.author ? book.author.name : 'N/A'}`,
+                            `/books/${book.id}` // Adjust your route here
+                        );
+                        $results.append(card);
+                    });
+                }
+
+                // Users
+                if (data.users.length) {
+                    $results.append('<h5 class="w-100 mt-3">Users</h5>');
+                    data.users.forEach(user => {
+                        const card = createCard(
+                            user.name,
+                            user.email,
+                            `/users/${user.id}` // Adjust your route here
+                        );
+                        $results.append(card);
+                    });
+                }
+
+                // Posts
+                if (data.posts.length) {
+                    $results.append('<h5 class="w-100 mt-3">Posts</h5>');
+                    data.posts.forEach(post => {
+                        const card = createCard(
+                            post.title,
+                            '', // No subtitle
+                            `/posts/${post.id}` // Adjust your route here
+                        );
+                        $results.append(card);
+                    });
+                }
+            }
+
+            function clearResults() {
+                $results.empty();
+                $clearBtn.hide();
+            }
+
+            $input.on('input', function() {
+                const query = $(this).val().trim();
+
+                if (query.length === 0) {
+                    clearResults();
+                    return;
+                }
+
+                $clearBtn.show();
+
+                $.ajax({
+                    url: "{{ route('search.global') }}",
+                    data: {
+                        q: query
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        renderResults(data);
+                    },
+                    error: function() {
+                        $results.html('<p class="text-danger">Error loading results.</p>');
+                    }
+                });
+            });
+
+            $clearBtn.on('click', function() {
+                $input.val('');
+                clearResults();
+                $input.focus();
+            });
+
+            // Optional: clear results and input when modal closes
+            $('#SearchModal').on('hidden.bs.modal', function() {
+                $input.val('');
+                clearResults();
+            });
+        });
+    </script>
 
 
 </body>
@@ -1048,6 +1164,38 @@
         'cp_cl': '8'
     }) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (session('welcome_message'))
+    <script>
+        Swal.fire({
+            title: '🎉 Welcome, {{ session('welcome_message') }}!',
+            text: 'You’ve taken the first step toward something amazing!',
+            icon: 'success',
+            confirmButtonText: 'Let’s Go!'
+        });
+    </script>
+    @php
+        session()->forget('welcome_message');
+    @endphp
+@endif
+
+@if (session('login_message'))
+    <script>
+        Swal.fire({
+            title: '👋 Welcome back, {{ session('login_message') }}!',
+            text: 'We’re happy to see you again!',
+            icon: 'info',
+            confirmButtonText: 'Continue'
+        });
+    </script>
+    @php
+        session()->forget('login_message');
+    @endphp
+@endif
+
+
 
 
 <script src='../../../../img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js'></script>

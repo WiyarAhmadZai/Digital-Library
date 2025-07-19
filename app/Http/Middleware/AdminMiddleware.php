@@ -4,23 +4,16 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\AdminDashboardController;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (auth()->user() && auth()->user()->isAdmin()) {
+        // Assuming you store role in 'role' column or 'is_admin' boolean
+        if (auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->is_admin)) {
             return $next($request);
         }
-        return redirect('/home')->with('error', 'You do not have admin access');
-    }
 
+        abort(403, 'Unauthorized');
+    }
 }

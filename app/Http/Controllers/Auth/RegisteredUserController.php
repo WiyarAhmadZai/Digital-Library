@@ -45,6 +45,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        session(['welcome_message' => $user->name]);
+
+
         return redirect(route('user-dashboard', absolute: false));
     }
 }

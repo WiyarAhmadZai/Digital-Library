@@ -1875,7 +1875,7 @@ span {
         width: 325px;
     }
 }
-@media (max-width: 1399px) {
+@media (max-width: 999px) {
     .header-2-wrapper .category-oneadjust .search-toggle-box {
         display: none !important;
     }

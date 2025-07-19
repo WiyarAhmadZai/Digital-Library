@@ -3,41 +3,41 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
 @section('content')
-    <div id="search-results" class="mt-4"></div>
     <!-- Hero Section start  -->
-    <section id="default-book-section" class="shop-section section-padding fix pt-0">
-        <div class="hero-section hero-2 fix">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-xl-6 col-lg-6">
-                        <div class="hero-items">
-                            <div class="frame-shape1 float-bob-x">
-                                <img src="{{ asset('assets/img/hero/hero2-shape1.png') }}" alt="shape-img">
-                            </div>
-                            <div class="frame-shape2 float-bob-y">
-                                <img src="{{ asset('assets/img/hero/hero2-shape2.png') }}" alt="shape-img">
-                            </div>
-                            <div class="book-image">
-                                <img src="{{ asset('assets/img/hero/hero-book.png') }}" alt="img">
-                            </div>
-                            <div class="hero-content">
-                                <h6 class="wow fadeInUp" data-wow-delay=".3s">Explore the books</h6>
-                                <h1 class="wow fadeInUp" data-wow-delay=".5s">Expand Your Mind <br> Reading a Book </h1>
-                                <p class="text-capitalize">Sed ac arcu sed felis vulputate molestie. Nullam at urna in velit
-                                    finibus vestibulum euismod a <br> urna. Sed quis aliquam leo. Duis iaculis lorem mauris,
-                                    et convallis dui efficitur</p>
-                                <div class="form-clt wow fadeInUp mt-5" data-wow-delay=".9s">
-                                    <button type="submit" class="theme-btn">
-                                        Shop Now <i class="fa-solid fa-arrow-right-long"></i>
-                                    </button>
-                                </div>
-                            </div>
-
+    <div class="hero-section hero-2 fix">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-xl-6 col-lg-6">
+                    <div class="hero-items">
+                        <div class="frame-shape1 float-bob-x">
+                            <img src="{{ asset('assets/img/hero/hero2-shape1.png') }}" alt="shape-img">
                         </div>
+                        <div class="frame-shape2 float-bob-y">
+                            <img src="{{ asset('assets/img/hero/hero2-shape2.png') }}" alt="shape-img">
+                        </div>
+                        <div class="book-image">
+                            <img src="{{ asset('assets/img/hero/hero-book.png') }}" alt="img">
+                        </div>
+                        <div class="hero-content">
+                            <h6 class="wow fadeInUp" data-wow-delay=".3s">Explore the books</h6>
+                            <h1 class="wow fadeInUp" data-wow-delay=".5s">Expand Your Mind <br> Reading a Book </h1>
+                            <p class="text-capitalize">Sed ac arcu sed felis vulputate molestie. Nullam at urna in velit
+                                finibus vestibulum euismod a <br> urna. Sed quis aliquam leo. Duis iaculis lorem mauris,
+                                et convallis dui efficitur</p>
+                            <div class="form-clt wow fadeInUp mt-5" data-wow-delay=".9s">
+                                <button type="submit" class="theme-btn">
+                                    Shop Now <i class="fa-solid fa-arrow-right-long"></i>
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div id="search-results" class="mt-4"></div>
+    <section id="default-book-section" class="shop-section section-padding fix pt-0">
         <!-- Book Banner Section start  -->
         <section class="book-banner-section fix section-padding">
             <div class="container">
@@ -98,8 +98,8 @@
                     <div class="section-title">
                         <h2 class="wow fadeInUp" data-wow-delay=".3s">Top Category Books</h2>
                     </div>
-                    <a href="shop.html" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">Explore More <i
-                            class="fa-solid fa-arrow-right-long"></i></a>
+                    <a href="{{ route('frontend.shop-list') }}" class="theme-btn transparent-btn wow fadeInUp"
+                        data-wow-delay=".5s">Explore More <i class="fa-solid fa-arrow-right-long"></i></a>
                 </div>
                 <div class="swiper book-slider">
                     <div class="swiper-wrapper">
@@ -126,9 +126,13 @@
                                                         class="far fa-eye"></i></a></li>
                                         </ul>
                                         <div class="shop-button">
-                                            <a href="#" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i>
-                                                Add
-                                                To Cart</a>
+                                            <button type="button" class="theme-btn add-to-cart-btn"
+                                                data-book-id="{{ $book->id }}"
+                                                data-book-title="{{ $book->title }}">
+                                                <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                            </button>
+
+
                                         </div>
                                     </div>
                                     <div class="shop-content">
@@ -335,9 +339,14 @@
                                 </ul>
 
                                 <div class="shop-button">
-                                    <a href="" class="theme-btn">
+                                    <button type="button" class="theme-btn add-to-cart-btn"
+                                        data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
                                         <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
+                                    </button>
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -421,9 +430,13 @@
                                     <li><a href="#"><i class="far fa-eye"></i></a></li>
                                 </ul>
                                 <div class="shop-button">
-                                    <a href="#" class="theme-btn"><i class="fa-solid fa-basket-shopping"></i> Add
-                                        To
-                                        Cart</a>
+                                    <button type="button" class="theme-btn add-to-cart-btn"
+                                        data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
+                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                    </button>
+
+
+
                                 </div>
                             </div>
                             <div class="shop-content">
@@ -525,8 +538,14 @@
                                         </li>
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="shop-details.html" class="theme-btn"><i
-                                                class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
+                                        <button type="button" class="theme-btn add-to-cart-btn"
+                                            data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
+                                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                        </button>
+
+
+
+
                                     </div>
                                 </div>
                                 <div class="shop-content">
@@ -574,8 +593,14 @@
                                         </li>
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="shop-details.html" class="theme-btn"><i
-                                                class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
+                                        <button type="button" class="theme-btn add-to-cart-btn"
+                                            data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
+                                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                        </button>
+
+
+
+
                                     </div>
                                 </div>
                                 <div class="shop-content">
@@ -619,8 +644,14 @@
                                         </li>
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="shop-details.html" class="theme-btn"><i
-                                                class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
+                                        <button type="button" class="theme-btn add-to-cart-btn"
+                                            data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
+                                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                        </button>
+
+
+
+
                                     </div>
                                 </div>
                                 <div class="shop-content">
@@ -672,8 +703,14 @@
                                         </li>
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="shop-details.html" class="theme-btn"><i
-                                                class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
+                                        <button type="button" class="theme-btn add-to-cart-btn"
+                                            data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
+                                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                        </button>
+
+
+
+
                                     </div>
                                 </div>
                                 <div class="shop-content">
@@ -717,8 +754,14 @@
                                         </li>
                                     </ul>
                                     <div class="shop-button">
-                                        <a href="shop-details.html" class="theme-btn"><i
-                                                class="fa-solid fa-basket-shopping"></i> Add To Cart</a>
+                                        <button type="button" class="theme-btn add-to-cart-btn"
+                                            data-book-id="{{ $book->id }}" data-book-title="{{ $book->title }}">
+                                            <i class="fa-solid fa-basket-shopping"></i> Add To Cart
+                                        </button>
+
+
+
+
                                     </div>
                                 </div>
                                 <div class="shop-content">
@@ -765,42 +808,45 @@
                     <button class="array-next"><i class="fal fa-arrow-right"></i></button>
                 </div>
 
-                <div class="swiper team-slider">
-                    <div class="swiper-wrapper">
-                        @foreach ($authors as $author)
-                            @php
-                                $images = json_decode($author->image_paths, true);
-                                $firstImage = !empty($images) && is_array($images) ? $images[0] : null;
-                                $imageUrl =
-                                    $firstImage && Storage::disk('public')->exists($firstImage)
-                                        ? Storage::url($firstImage)
-                                        : asset($firstImage ?? 'assets/img/avatars/avatar-1.png');
-                            @endphp
-                            <div class="swiper-slide">
-                                <div class="team-box-items">
-                                    <div class="team-image d-flex justify-content-center">
-                                        <div class="rounded overflow-hidden " style="width: 120px; height: 120px;">
-                                            <img src="{{ $imageUrl }}" alt="author image"
-                                                class="w-100 h-100 object-fit-cover" style="border-radius: 10rem">
-                                        </div>
-                                        <div class="shape-img">
-                                            <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="shape">
-                                        </div>
-                                    </div>
-                                    <div class="team-content text-center mt-3">
-                                        <h6>
-                                            <a href="{{ route('admin.author.view', $author->id) }}">
-                                                {{ $author->name }} {{ $author->last_name }}
-                                            </a>
-                                        </h6>
-                                        <p>{{ $author->books_count }} Published
-                                            Book{{ $author->books_count !== 1 ? 's' : '' }}</p>
-                                    </div>
+                @foreach ($authors as $author)
+                    @php
+                        // Remove json_decode
+                        $images = $author->image_paths;
+
+                        // Ensure it's an array in case of null or wrong data
+$images = is_array($images) ? $images : [];
+
+$firstImage = !empty($images) ? $images[0] : null;
+
+$imageUrl =
+    $firstImage && Storage::disk('public')->exists($firstImage)
+        ? Storage::url($firstImage)
+        : asset('assets/img/avatars/avatar-1.png');
+                    @endphp
+                    <div class="swiper-slide">
+                        <div class="team-box-items">
+                            <div class="team-image d-flex justify-content-center">
+                                <div class="rounded overflow-hidden " style="width: 120px; height: 120px;">
+                                    <img src="{{ $imageUrl }}" alt="author image"
+                                        class="w-100 h-100 object-fit-cover" style="border-radius: 10rem">
+                                </div>
+                                <div class="shape-img">
+                                    <img src="{{ asset('assets/img/team/shape-img.png') }}" alt="shape">
                                 </div>
                             </div>
-                        @endforeach
+                            <div class="team-content text-center mt-3">
+                                <h6>
+                                    <a href="{{ route('admin.author.view', $author->id) }}">
+                                        {{ $author->name }} {{ $author->last_name }}
+                                    </a>
+                                </h6>
+                                <p>{{ $author->books_count }} Published
+                                    Book{{ $author->books_count !== 1 ? 's' : '' }}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
+
             </div>
         </section>
 
@@ -929,5 +975,39 @@
 @section('scripts')
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script></script>
+    <script>
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const bookId = this.dataset.bookId;
+                fetch(`/book/download/${bookId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(async response => {
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            alert(errorData.error || 'خطا در دانلود');
+                            return;
+                        }
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = "book.pdf";
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('خطا در دانلود فایل.');
+                    });
+            });
+        });
+    </script>
 @endsection

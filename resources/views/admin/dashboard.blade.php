@@ -11,40 +11,52 @@
                         <div class="card-header">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <h6 class="mb-0">Sales Overview</h6>
+                                    <h6 class="mb-0">Books & Downloads Last 7 Days</h6>
                                 </div>
                                 <div class="dropdown ms-auto">
                                     <a class="dropdown-toggle dropdown-toggle-nocaret" href="#"
-                                        data-bs-toggle="dropdown"><i
-                                            class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
+                                        data-bs-toggle="dropdown">
+                                        <i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
+                                        @if (!empty($dropdownItems) && is_array($dropdownItems))
+                                            @foreach ($dropdownItems as $item)
+                                                @if (isset($item['divider']) && $item['divider'] === true)
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                @else
+                                                    <li><a class="dropdown-item"
+                                                            href="{{ $item['url'] ?? 'javascript:;' }}">{{ $item['label'] ?? 'Action' }}</a>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <li><a class="dropdown-item" href="javascript:;">Action</a></li>
+                                            <li><a class="dropdown-item" href="javascript:;">Another action</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="javascript:;">Something else here</a></li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="chart-container-0">
+                            <div class="chart-container-0" style="height: 350px;">
                                 <canvas id="chart1"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-12 col-lg-4">
                     <div class="card radius-10">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <h6 class="mb-0">Order Status</h6>
+                                    <h6 class="mb-0">Books & Downloads</h6>
                                 </div>
                                 <div class="dropdown ms-auto">
                                     <a class="dropdown-toggle dropdown-toggle-nocaret" href="#"
@@ -52,23 +64,28 @@
                                             class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
+                                        @foreach ($dropdownItems as $item)
+                                            @if (isset($item['divider']) && $item['divider'])
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                            @else
+                                                <li><a class="dropdown-item"
+                                                        href="{{ $item['url'] }}">{{ $item['label'] }}</a></li>
+                                            @endif
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="chart-container-0">
+                            <div class="chart-container-0" style="height: 300px;">
                                 <canvas id="chart2"></canvas>
                             </div>
+                            <p class="mt-3 text-center">
+                                <strong>Total Books:</strong> {{ $totalBooks }}<br>
+                                <strong>Total Downloaded Books:</strong> {{ $totalDownloadedBooks }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -79,103 +96,151 @@
                 <div class="col-12 col-lg-4">
                     <div class="card radius-10">
                         <div class="card-body">
-                            <div class="">
+                            <div>
                                 <div id="chart3" style="height:250px;"></div>
                             </div>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li
-                                class="list-group-item d-flex bg-transparent justify-content-between align-items-center border-top">
-                                Apple <span class="badge bg-danger rounded-pill">20</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">
-                                Samsung <span class="badge bg-primary rounded-pill">15</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">
-                                Nokia <span class="badge bg-success rounded-pill">30</span>
-                            </li>
+                            @foreach (['Pashto', 'English', 'Dari'] as $language)
+                                @php
+                                    $badgeClass = match ($language) {
+                                        'Pashto' => 'bg-danger',
+                                        'English' => 'bg-primary',
+                                        'Dari' => 'bg-success',
+                                        default => 'bg-secondary',
+                                    };
+                                    $count = $booksByLanguage[$language] ?? 0;
+                                @endphp
+                                <li
+                                    class="list-group-item d-flex bg-transparent justify-content-between align-items-center {{ $loop->first ? 'border-top' : '' }}">
+                                    {{ $language }}
+                                    <span class="badge {{ $badgeClass }} rounded-pill">{{ $count }}</span>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
+
                 <div class="col-12 col-lg-8">
                     <div class="card radius-10">
                         <div class="card-body">
                             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-2 g-3">
                                 <div class="col">
-                                    <div class="card radius-10 overflow-hidden mb-0 shadow-none border">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <p class="mb-0 text-secondary font-14">Total Orders</p>
-                                                    <h5 class="my-0">8052</h5>
-                                                </div>
-                                                <div class="text-primary ms-auto font-30"><i class='bx bx-cart-alt'></i>
+                                    <a href="{{ route('admin.user.list') }}">
+                                        <div class="card radius-10 overflow-hidden mb-0 shadow-none border">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center">
+                                                    <div>
+                                                        <p class="mb-0 text-secondary font-14">Total Users</p>
+                                                        <h5 class="my-0">{{ $totalUsers ?? 0 }}</h5>
+                                                    </div>
+                                                    <div class="text-primary ms-auto font-30">
+                                                        <i class="bx bx-user"></i>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="mt-1" id="chart4"></div>
+                                            <div class="position-absolute end-0 bottom-0 m-2">
+                                                <span class="text-success">{{ $usersPercentageChange ?? '+0%' }}</span>
+                                            </div>
                                         </div>
-                                        <div class="mt-1" id="chart4"></div>
-                                        <div class="position-absolute end-0 bottom-0 m-2"><span
-                                                class="text-success">+25%</span></div>
-                                    </div>
+                                    </a>
+
                                 </div>
+
                                 <div class="col">
                                     <div class="card radius-10 overflow-hidden mb-0 shadow-none border">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div>
                                                     <p class="mb-0 text-secondary font-14">Total Revenue</p>
-                                                    <h5 class="my-0">$6.2K</h5>
+                                                    <h5 class="my-0">${{ number_format($totalRevenue ?? 0, 2) }}</h5>
                                                 </div>
-                                                <div class="text-danger ms-auto font-30"><i class='bx bx-dollar'></i>
+                                                <div class="text-danger ms-auto font-30">
+                                                    <i class="bx bx-dollar"></i>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="mt-1" id="chart5"></div>
-                                        <div class="position-absolute end-0 bottom-0 m-2"><span
-                                                class="text-success">+15%</span></div>
+
+                                        <div class="position-absolute end-0 bottom-0 m-2">
+                                            <span class="text-success">
+                                                @if (isset($revenuePercentageChange))
+                                                    {{ $revenuePercentageChange }}%
+                                                @else
+                                                    +0%
+                                                @endif
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="col">
                                     <div class="card radius-10 overflow-hidden mb-0 shadow-none border">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div>
                                                     <p class="mb-0 text-secondary font-14">New Users</p>
-                                                    <h5 class="my-0">1.3K</h5>
+                                                    <h5 class="my-0">{{ number_format($newUsersCount ?? 0) }}</h5>
                                                 </div>
-                                                <div class="text-success ms-auto font-30"><i class='bx bx-group'></i>
+                                                <div
+                                                    class="{{ ($newUsersPercentageChange ?? 0) >= 0 ? 'text-success' : 'text-danger' }} ms-auto font-30">
+                                                    <i class='bx bx-group'></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mt-1" id="chart6"></div>
-                                        <div class="position-absolute end-0 bottom-0 m-2"><span
-                                                class="text-danger">-10%</span></div>
+                                        <div class="position-absolute end-0 bottom-0 m-2">
+                                            @if (isset($newUsersPercentageChange))
+                                                @if ($newUsersPercentageChange >= 0)
+                                                    <span class="text-success">+{{ $newUsersPercentageChange }}%</span>
+                                                @else
+                                                    <span class="text-danger">{{ $newUsersPercentageChange }}%</span>
+                                                @endif
+                                            @else
+                                                <span class="text-secondary">0%</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="col">
                                     <div class="card radius-10 overflow-hidden mb-0 shadow-none border">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div>
                                                     <p class="mb-0 text-secondary font-14">Sold Items</p>
-                                                    <h5 class="my-0">956</h5>
+                                                    <h5 class="my-0">{{ number_format($downloadsCount ?? 0) }}</h5>
                                                 </div>
-                                                <div class="text-warning ms-auto font-30"><i class='bx bx-beer'></i>
+                                                <div
+                                                    class="{{ ($downloadsPercentageChange ?? 0) >= 0 ? 'text-success' : 'text-danger' }} ms-auto font-30">
+                                                    <i class='bx bx-beer'></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mt-1" id="chart7"></div>
-                                        <div class="position-absolute end-0 bottom-0 m-2"><span
-                                                class="text-danger">-14%</span></div>
+                                        <div class="position-absolute end-0 bottom-0 m-2">
+                                            @if (isset($downloadsPercentageChange))
+                                                @if ($downloadsPercentageChange >= 0)
+                                                    <span class="text-success">+{{ $downloadsPercentageChange }}%</span>
+                                                @else
+                                                    <span class="text-danger">{{ $downloadsPercentageChange }}%</span>
+                                                @endif
+                                            @else
+                                                <span class="text-secondary">0%</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="col">
                                     <div class="card radius-10 overflow-hidden mb-0 shadow-none border">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div>
                                                     <p class="mb-0 text-secondary font-14">Total Visits</p>
-                                                    <h5 class="my-0">12M</h5>
+                                                    <h5 class="my-0">79</h5>
                                                 </div>
                                                 <div class="text-info ms-auto font-30"><i class='bx bx-camera-movie'></i>
                                                 </div>
@@ -183,7 +248,7 @@
                                         </div>
                                         <div class="mt-1" id="chart8"></div>
                                         <div class="position-absolute end-0 bottom-0 m-2"><span
-                                                class="text-success">+28%</span></div>
+                                                class="text-success">+18%</span></div>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -244,7 +309,8 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="{{ asset('assets/img/county/01.png') }}" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/01.png') }}" width="35"
+                                            alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">United States <span class="float-end">50%</span></p>
@@ -259,7 +325,8 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="{{ asset('assets/img/county/02.png') }}" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/02.png') }}" width="35"
+                                            alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">65%</span></p>
@@ -274,7 +341,8 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="{{ asset('assets/img/county/03.png') }}" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/03.png') }}" width="35"
+                                            alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">75%</span></p>
@@ -288,7 +356,8 @@
                             <div class="mb-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="{{ asset('assets/img/county/04.png') }}" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/04.png') }}" width="35"
+                                            alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">85%</span></p>
@@ -302,7 +371,8 @@
                             <div class="mb-0">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="country-icon">
-                                        <img src="{{ asset('assets/img/county/05.png') }}" width="35" alt="">
+                                        <img src="{{ asset('assets/img/county/05.png') }}" width="35"
+                                            alt="">
                                     </div>
                                     <div class="flex-grow-1">
                                         <p class="mb-2">England <span class="float-end">95%</span></p>
@@ -373,24 +443,7 @@
                 <div class="card-header bg-transparent">
                     <div class="d-flex align-items-center">
                         <div>
-                            <h6 class="mb-0">Recent Orders</h6>
-                        </div>
-                        <div class="dropdown ms-auto">
-                            <a class="dropdown-toggle dropdown-toggle-nocaret" href="#"
-                                data-bs-toggle="dropdown"><i
-                                    class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                </li>
-                                <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                </li>
-                            </ul>
+                            <h6 class="mb-0">Recently Uploaded Books</h6>
                         </div>
                     </div>
                 </div>
@@ -399,127 +452,142 @@
                         <table class="table align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Photo</th>
-                                    <th>Product ID</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th>Shipping</th>
+                                    <th>Title</th>
+                                    <th>Cover</th>
+                                    <th>ID</th>
+                                    <th>Author</th>
+                                    <th>Language</th>
+                                    <th>Price</th>
+                                    <th>Uploaded At</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Iphone 5</td>
-                                    <td><img src="{{ asset('assets/img/products/01.png') }}" class="product-img-2"
-                                            alt="product img">
-                                    </td>
-                                    <td>#9405822</td>
-                                    <td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span>
-                                    </td>
-                                    <td>$1250.00</td>
-                                    <td>03 Feb 2020</td>
-                                    <td>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-gradient-quepal" role="progressbar"
-                                                style="width: 100%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach ($recentBooks as $book)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('admin.book.list', ['id' => $book->id]) }}">
+                                                {{ $book->name }}
+                                            </a>
+                                        </td>
 
-                                <tr>
-                                    <td>Earphone GL</td>
-                                    <td><img src="{{ asset('assets/img/products/02.png') }}" class="product-img-2"
-                                            alt="product img">
-                                    </td>
-                                    <td>#8304620</td>
-                                    <td><span class="badge bg-gradient-blooker text-white shadow-sm w-100">Pending</span>
-                                    </td>
-                                    <td>$1500.00</td>
-                                    <td>05 Feb 2020</td>
-                                    <td>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-gradient-blooker" role="progressbar"
-                                                style="width: 60%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>HD Hand Camera</td>
-                                    <td><img src="{{ asset('assets/img/products/03.png') }}" class="product-img-2"
-                                            alt="product img">
-                                    </td>
-                                    <td>#4736890</td>
-                                    <td><span class="badge bg-gradient-bloody text-white shadow-sm w-100">Failed</span>
-                                    </td>
-                                    <td>$1400.00</td>
-                                    <td>06 Feb 2020</td>
-                                    <td>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-gradient-bloody" role="progressbar"
-                                                style="width: 70%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Clasic Shoes</td>
-                                    <td><img src="{{ asset('assets/img/products/04.png"') }} class="product-img-2"
-                                            alt="product img">
-                                    </td>
-                                    <td>#8543765</td>
-                                    <td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span>
-                                    </td>
-                                    <td>$1200.00</td>
-                                    <td>14 Feb 2020</td>
-                                    <td>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-gradient-quepal" role="progressbar"
-                                                style="width: 100%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sitting Chair</td>
-                                    <td><img src="{{ asset('assets/img/products/06.png') }}" class="product-img-2"
-                                            alt="product img">
-                                    </td>
-                                    <td>#9629240</td>
-                                    <td><span class="badge bg-gradient-blooker text-white shadow-sm w-100">Pending</span>
-                                    </td>
-                                    <td>$1500.00</td>
-                                    <td>18 Feb 2020</td>
-                                    <td>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-gradient-blooker" role="progressbar"
-                                                style="width: 60%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Hand Watch</td>
-                                    <td><img src="{{ asset('assets/img/products/05.png') }}" class="product-img-2"
-                                            alt="product img">
-                                    </td>
-                                    <td>#8506790</td>
-                                    <td><span class="badge bg-gradient-bloody text-white shadow-sm w-100">Failed</span>
-                                    </td>
-                                    <td>$1800.00</td>
-                                    <td>21 Feb 2020</td>
-                                    <td>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-gradient-bloody" role="progressbar"
-                                                style="width: 40%"></div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            @php
+                                                $cover = json_decode($book->image_paths ?? '[]')[0] ?? null;
+                                            @endphp
+                                            @if ($cover)
+                                                <img src="{{ asset('storage/' . $cover) }}" class="product-img-2"
+                                                    style="width: 60px; height: auto;" alt="Book Cover">
+                                            @else
+                                                <span class="text-muted">No Image</span>
+                                            @endif
+                                        </td>
+                                        <td>#{{ $book->id }}</td>
+                                        <td>{{ $book->author->name ?? 'Unknown' }}</td>
+                                        <td>{{ $book->language ?? 'N/A' }}</td>
+                                        <td>${{ number_format($book->price, 2) }}</td>
+                                        <td>{{ $book->created_at->format('d M Y') }}</td>
+                                    </tr>
+                                @endforeach
+                                @if ($recentBooks->isEmpty())
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No recent books found.</td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+
         </div>
     </div>
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('chart1').getContext('2d');
+
+        const labels = @json($dates);
+        const booksData = @json($booksData);
+        const downloadsData = @json($downloadsData);
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                        label: 'Books Added',
+                        data: booksData,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                    },
+                    {
+                        label: 'Books Downloaded',
+                        data: downloadsData,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                stacked: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Books Added and Downloaded Per Day (Last 7 Days)'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('chart2').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Books', 'Downloaded Books'],
+                datasets: [{
+                    data: [{{ $totalBooks }}, {{ $totalDownloadedBooks }}],
+                    backgroundColor: ['#4e73df', '#1cc88a'],
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+</script>

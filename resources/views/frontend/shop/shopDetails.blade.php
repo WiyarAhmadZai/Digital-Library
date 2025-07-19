@@ -72,7 +72,10 @@
                             <div class="tab-content">
                                 @foreach ($images as $index => $image)
                                     @php
-                                        $imageUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image);
+                                        // If $image is a full URL, use it; else assume stored in storage/app/public
+                                        $imageUrl = filter_var($image, FILTER_VALIDATE_URL)
+                                            ? $image
+                                            : asset('storage/' . $image);
                                     @endphp
                                     <div id="thumb{{ $index + 1 }}"
                                         class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}">
@@ -88,7 +91,9 @@
                             <ul class="nav flex-nowrap overflow-auto mt-3" style="gap: 5px;">
                                 @foreach ($images as $index => $image)
                                     @php
-                                        $thumbUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image);
+                                        $thumbUrl = filter_var($image, FILTER_VALIDATE_URL)
+                                            ? $image
+                                            : asset('storage/' . $image);
                                     @endphp
                                     <li class="nav-item" style="flex: 0 0 auto;">
                                         <a href="#thumb{{ $index + 1 }}" data-bs-toggle="tab"
@@ -101,6 +106,7 @@
                             </ul>
                         </div>
                     </div>
+
 
 
                     {{-- === RIGHT SIDE BOOK DETAILS === --}}
@@ -146,6 +152,10 @@
                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#readMoreModal">
                                     Read A Little
+                                </button>
+                                <button type="button" class="theme-btn add-to-cart-btn" data-book-id="{{ $book->id }}"
+                                    data-book-title="{{ $book->title }}">
+                                    <i class="fa-solid fa-basket-shopping"></i> Add To Cart
                                 </button>
 
                             </div>
@@ -598,76 +608,115 @@ $bookImage = $related->image_path ?? 'default-book.png';
     </section>
 
 @endsection
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const minusBtn = document.querySelector(".qtyminus");
-        const plusBtn = document.querySelector(".qtyplus");
-        const qtyInput = document.getElementById("qty2");
-        const totalPriceEl = document.getElementById("totalPrice");
-        const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+@section('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const minusBtn = document.querySelector(".qtyminus");
+            const plusBtn = document.querySelector(".qtyplus");
+            const qtyInput = document.getElementById("qty2");
+            const totalPriceEl = document.getElementById("totalPrice");
+            const unitPrice = parseFloat(document.getElementById("unitPrice").value);
 
-        function updatePrice() {
-            const qty = Math.max(1, parseInt(qtyInput.value) || 1);
-            totalPriceEl.textContent = (qty * unitPrice).toFixed(2);
-        }
+            function updatePrice() {
+                const qty = Math.max(1, parseInt(qtyInput.value) || 1);
+                totalPriceEl.textContent = (qty * unitPrice).toFixed(2);
+            }
 
-        minusBtn.addEventListener("click", () => {
-            let current = parseInt(qtyInput.value);
-            if (current > 1) {
-                qtyInput.value = current - 1;
+            minusBtn.addEventListener("click", () => {
+                let current = parseInt(qtyInput.value);
+                if (current > 1) {
+                    qtyInput.value = current - 1;
+                    updatePrice();
+                }
+            });
+
+            plusBtn.addEventListener("click", () => {
+                let current = parseInt(qtyInput.value);
+                qtyInput.value = current + 1;
                 updatePrice();
-            }
+            });
+
+            qtyInput.addEventListener("input", updatePrice);
         });
+    </script>
 
-        plusBtn.addEventListener("click", () => {
-            let current = parseInt(qtyInput.value);
-            qtyInput.value = current + 1;
-            updatePrice();
-        });
+    <script>
+        $(document).ready(function() {
+            const showMoreBtn = $('#showMoreReviewsBtn');
+            const reviewItems = $('.review-item');
 
-        qtyInput.addEventListener("input", updatePrice);
-    });
-</script>
+            // Ensure only the first 3 reviews are shown initially
+            reviewItems.each(function(index) {
+                if (index < 3) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
 
-<script>
-    $(document).ready(function() {
-        const showMoreBtn = $('#showMoreReviewsBtn');
-        const reviewItems = $('.review-item');
-
-        // Ensure only the first 3 reviews are shown initially
-        reviewItems.each(function(index) {
-            if (index < 3) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-
-        showMoreBtn.on('click', function() {
-            if ($(this).text().trim() === "Show more reviews") {
-                reviewItems.show();
-                $(this).text("Hide reviews");
-            } else {
-                reviewItems.each(function(index) {
-                    if (index < 3) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-                $(this).text("Show more reviews");
-            }
-        });
-    });
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.show-more-replies').forEach(button => {
-            button.addEventListener('click', function() {
-                const reviewId = this.getAttribute('data-review-id');
-                // Optional: Add AJAX fetch if lazy loading is preferred
-                this.style.display = 'none';
+            showMoreBtn.on('click', function() {
+                if ($(this).text().trim() === "Show more reviews") {
+                    reviewItems.show();
+                    $(this).text("Hide reviews");
+                } else {
+                    reviewItems.each(function(index) {
+                        if (index < 3) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                    $(this).text("Show more reviews");
+                }
             });
         });
-    });
-</script>
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.show-more-replies').forEach(button => {
+                button.addEventListener('click', function() {
+                    const reviewId = this.getAttribute('data-review-id');
+                    // Optional: Add AJAX fetch if lazy loading is preferred
+                    this.style.display = 'none';
+                });
+            });
+        });
+    </script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const bookId = this.dataset.bookId;
+                fetch(`/book/download/${bookId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(async response => {
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            alert(errorData.error || 'خطا در دانلود');
+                            return;
+                        }
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = "book.pdf";
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('خطا در دانلود فایل.');
+                    });
+            });
+        });
+    </script>
+@endsection

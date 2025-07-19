@@ -50,7 +50,7 @@ class PostController extends Controller
             'visibility' => $data['visibility'],
         ]);
 
-        return redirect()->route('admin.post.create')->with('success', 'Post created!');
+        return redirect()->route('admin.posts.index')->with('success', 'Post created!');
     }
     public function index(Request $request)
     {
@@ -70,15 +70,17 @@ class PostController extends Controller
         return view('admin.post.index', compact('posts'));
     }
 
-    public function edit(Post $post)
+    public function edit($id)
     {
-        $this->authorize('update', $post);
+        $post = Post::findOrFail($id);
         return view('admin.post.create', compact('post'));
     }
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        $this->authorize('update', $post);
+        $post = Post::findOrFail($id);
+
+        $this->authorize('update', $post); // Fix: use $post, not $id
 
         $data = $request->validate([
             'body' => 'required|string',
@@ -95,7 +97,7 @@ class PostController extends Controller
             }
             $data['images'] = json_encode($imagePaths);
         } else {
-            $data['images'] = $post->images;
+            $data['images'] = $post->images; // Keep existing if not uploaded
         }
 
         // Handle PDF uploads
@@ -111,8 +113,9 @@ class PostController extends Controller
 
         $post->update($data);
 
-        return redirect()->route('posts.index')->with('success', 'Post updated successfully!');
+        return redirect()->route('admin.post.index', $post->id)->with('success', 'Post updated successfully!');
     }
+
 
     public function search(Request $request)
     {

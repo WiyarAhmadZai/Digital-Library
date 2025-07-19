@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'role',
     ];
 
     /**
@@ -47,6 +49,7 @@ class User extends Authenticatable
     }
     // In User model
     protected $casts = [
+        'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
     ];
 
@@ -56,6 +59,14 @@ class User extends Authenticatable
     }
 
     public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+    public function LoggedInUserProfile()
+    {
+        return $this->hasOne(LoggedInUserProfile::class);
+    }
+    public function userProfile()
     {
         return $this->hasOne(UserProfile::class);
     }

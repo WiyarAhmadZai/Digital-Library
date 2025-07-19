@@ -54,6 +54,14 @@
         });
     });
 </script>
+<script>
+    $(document).on('click', '.post-image', function() {
+        const fullImage = $(this).data('full');
+        $('#modalImage').attr('src', fullImage);
+        $('#imageModal').modal('show');
+    });
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/sweetAlert.js') }}"></script>
