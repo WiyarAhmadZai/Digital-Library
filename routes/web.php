@@ -30,7 +30,7 @@ Route::get('/', [FrondendRouteController::class, 'home']);
 
 Route::get('/user-dashboard', function () {
     return view('/user-dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('user-dashboard');
 
 
 // Route::middleware(['auth', 'admin'])->group(function () {
@@ -118,6 +118,7 @@ Route::middleware(['auth'])->group(function () {
 Route::prefix('book')->group(function () {
     Route::get('/getBooks', [BookController::class, 'getBooks'])->name('book.getBooks');
     Route::get('/getFeaturedBooks', [BookController::class, 'getFeaturedBooks'])->name('book.getFeaturedBooks');
+    Route::get('/search-books', [BookController::class, 'search'])->name('frontend.book.search');
 });
 
 Route::group(['prefix' => 'books/'], function () {

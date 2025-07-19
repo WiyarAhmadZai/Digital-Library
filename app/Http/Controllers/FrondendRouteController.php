@@ -68,7 +68,7 @@ class FrondendRouteController extends Controller
     }
     public function shoplistData($id)
     {
-        $book = Book::with(['author'])
+        $book = Book::with(['author', 'reviews'])
             ->withCount([
                 'reviews as reviews_count' => fn($q) => $q->whereNotNull('rating')
             ])
@@ -77,14 +77,16 @@ class FrondendRouteController extends Controller
             ], 'rating')
             ->findOrFail($id);
 
-        // Related books by the same author, excluding current book
+        // Parse image_paths (if it's stored as JSON)
+        $images = is_array($book->image_paths) ? $book->image_paths : json_decode($book->image_paths, true) ?? [];
+
         $relatedBooks = Book::with('author')
             ->where('author_id', $book->author_id)
             ->where('id', '<>', $book->id)
             ->take(5)
             ->get();
 
-        return view('frontend.shop.shopDetails', compact('book', 'relatedBooks'));
+        return view('frontend.shop.shopDetails', compact('book', 'relatedBooks', 'images'));
     }
 
     public function update(Request $request, $id)

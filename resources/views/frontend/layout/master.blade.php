@@ -35,6 +35,10 @@
     <!--<< Main.css >>-->
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
+
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
     {{-- Include Swiper CSS (put in your layout head ideally) --}}
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" /> --}}
 
@@ -249,6 +253,10 @@
                                                         </form>
                                                     </li>
                                                 @endauth
+                                                @guest
+                                                    <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                                                @endguest
+
 
 
                                             </ul>
@@ -257,40 +265,68 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 col-xl-3">
-                            <div class="header-right">
-                                <div class="category-oneadjust gap-6 d-flex align-items-center">
-                                    <div class="icon">
-                                        <i class="fa-sharp fa-solid fa-grid-2"></i>
-                                    </div>
-
-                                    <form action="#" class="search-toggle-box d-md-block">
-                                        <div class="input-area">
-                                            <input type="text" placeholder="Author">
-                                            <button class="cmn-btn">
-                                                <i class="far fa-search"></i>
-                                            </button>
+                        @auth
+                            <div class="col-6 col-xl-3">
+                                <div class="header-right">
+                                    <div class="category-oneadjust gap-6 d-flex align-items-center">
+                                        <div class="icon">
+                                            <i class="fa-sharp fa-solid fa-grid-2"></i>
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="menu-cart">
-                                    <a href="wishlist.html" class="cart-icon">
-                                        <i class="fa-regular fa-heart"></i>
-                                    </a>
-                                    <a href="shop-cart.html" class="cart-icon">
-                                        <i class="fa-regular fa-cart-shopping"></i>
-                                    </a>
-                                    <div class="header-humbager ml-30">
-                                        <a class="sidebar__toggle" href="javascript:void(0)">
-                                            <div class="bar-icon-2">
-                                                <img src="{{ asset('assets/img/icon/icon-13.svg') }}" alt="img"
-                                                    class="mt-3">
+
+                                        <form id="search-form" class="search-toggle-box d-md-block" action="#"
+                                            method="GET">
+                                            <div class="input-area">
+                                                <input type="text" name="query" id="search-query"
+                                                    placeholder="Search by author, title, or description">
+                                                <button type="submit" class="cmn-btn">
+                                                    <i class="far fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="user-box dropdown px-3">
+                                        <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                                            href="#" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <img src="{{ asset('assets/img/avatars/avatar-2.png') }}"
+                                                class="user-img img profile" alt="user avatar">
+                                            <div class="user-info">
+                                                <p class="user-name mb-0">Pauline Seitz</p>
+                                                <p class="designattion mb-0">Web Designer</p>
                                             </div>
                                         </a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                                        class="bx bx-user fs-5"></i><span>Profile</span></a>
+                                            </li>
+                                            <li><a class="dropdown-item d-flex align-items-center"
+                                                    href="{{ route('user-dashboard') }}"><i
+                                                        class="bx bx-home-circle fs-5"></i><span>Dashboard</span></a>
+                                            </li>
+                                            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                                        class="bx bx-download fs-5"></i><span>Downloads</span></a>
+                                            </li>
+                                            <li>
+                                                <div class="dropdown-divider mb-0"></div>
+                                            </li>
+
+                                            <li>
+                                                <form method="POST" action="{{ route('logout') }}">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        style="background: none; border: none; padding: 0; color: inherit; cursor: pointer;">
+                                            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                                                        class="bx bx-log-out-circle"></i><span>Logout</span></a>
+                                            </li>
+                                            </button>
+                                            </form>
+                                            </li>
+
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endauth
                     </div>
                 </div>
 
@@ -655,6 +691,45 @@
     <script src="{{ asset('assets/js/gsap.min.js') }}"></script>
     <!--<< Main.js >>-->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("search-form");
+            const queryInput = document.getElementById("search-query");
+            const resultsDiv = document.getElementById("search-results");
+
+            function fetchResults(url = null) {
+                const query = queryInput.value.trim();
+                if (query.length === 0) {
+                    resultsDiv.innerHTML = "";
+                    document.getElementById("default-book-section").style.display = "block";
+                    return;
+                }
+
+                const fetchUrl = url || `{{ route('frontend.book.search') }}?query=${encodeURIComponent(query)}`;
+
+                fetch(fetchUrl)
+                    .then(response => response.text())
+                    .then(html => {
+                        resultsDiv.innerHTML = html;
+                        document.getElementById("default-book-section").style.display = "none";
+                    });
+            }
+
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                fetchResults();
+            });
+
+            // Pagination link handling (delegate click)
+            resultsDiv.addEventListener("click", function(e) {
+                if (e.target.matches(".pagination a")) {
+                    e.preventDefault();
+                    fetchResults(e.target.href);
+                }
+            });
+        });
+    </script>
+
 </body>
 
 

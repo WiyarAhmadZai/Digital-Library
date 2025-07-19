@@ -70,9 +70,10 @@
                         <div class="shop-details-image">
                             {{-- Main Images --}}
                             <div class="tab-content">
-                                @php $images = json_decode($book->image_path, true); @endphp
                                 @foreach ($images as $index => $image)
-                                    @php $imageUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image); @endphp
+                                    @php
+                                        $imageUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image);
+                                    @endphp
                                     <div id="thumb{{ $index + 1 }}"
                                         class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}">
                                         <div class="shop-details-thumb">
@@ -86,7 +87,9 @@
                             {{-- Thumbnail Tabs --}}
                             <ul class="nav flex-nowrap overflow-auto mt-3" style="gap: 5px;">
                                 @foreach ($images as $index => $image)
-                                    @php $thumbUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image); @endphp
+                                    @php
+                                        $thumbUrl = filter_var($image, FILTER_VALIDATE_URL) ? $image : asset($image);
+                                    @endphp
                                     <li class="nav-item" style="flex: 0 0 auto;">
                                         <a href="#thumb{{ $index + 1 }}" data-bs-toggle="tab"
                                             class="nav-link {{ $index == 0 ? 'active' : '' }}">
@@ -98,6 +101,7 @@
                             </ul>
                         </div>
                     </div>
+
 
                     {{-- === RIGHT SIDE BOOK DETAILS === --}}
                     <div class="col-lg-7">
@@ -136,23 +140,14 @@
                                     <input type="hidden" id="unitPrice" value="{{ $book->final_price }}">
                                 </div>
 
-                                {{-- Quantity Input --}}
-                                <div class="quantity-basket d-flex align-items-center">
-                                    <button class="qtyminus btn btn-outline-secondary btn-sm" type="button">−</button>
-                                    <input type="number" name="qty" id="qty2"
-                                        class="form-control form-control-sm mx-2" min="1" max="10"
-                                        value="1" style="width: 60px;">
-                                    <button class="qtyplus btn btn-outline-secondary btn-sm" type="button">+</button>
-                                </div>
+
 
                                 {{-- Buttons --}}
                                 <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#readMoreModal">
                                     Read A Little
                                 </button>
-                                <a href="#" class="btn btn-success btn-sm">
-                                    <i class="fa-solid fa-basket-shopping me-1"></i> Add To Cart
-                                </a>
+
                             </div>
 
                             {{-- Read More Modal --}}
@@ -196,7 +191,7 @@
                                                 $tags = is_array($book->tags) ? $book->tags : explode(',', $book->tags);
                                             @endphp
                                             @foreach ($tags as $tag)
-                                                <span class="badge bg-secondary me-1">{{ trim($tag) }}</span>
+                                                <span class="me-1">{{ trim($tag) }}</span>
                                             @endforeach
                                         </li>
                                         <li><span>Format:</span> {{ $book->format ?? 'Hardcover' }}</li>
